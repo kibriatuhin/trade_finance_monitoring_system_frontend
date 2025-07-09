@@ -1,2 +1,41 @@
-<h1>Hello Angular</h1>
-<button mat-flat-button >Click Me</button>
+<app-header (sideBarToggle)="drawer.toggle()"></app-header>
+<mat-drawer-container autosize>
+    <mat-drawer #drawer mode="side" [opened]="isSidebarOpen">
+
+        <div class="bg-white h-screen!">
+            <mat-list role="list">
+                <mat-list-item role="listitem">
+                    <a routerLinkActive="bg-blue-600 text-white rounded-lg" [routerLinkActiveOptions]="{ exact: true }"
+                        class="flex items-center gap-3 px-4 py-2 w-full rounded-lg transition-all duration-200 hover:bg-blue-100"
+                        routerLink="/import">
+                        <mat-icon>dashboard</mat-icon>
+                        <span> DashBoard</span>
+                    </a>
+                </mat-list-item>
+                <mat-list-item role="listitem">
+                    <a routerLinkActive="bg-blue-600 text-white rounded-lg" [routerLinkActiveOptions]="{ exact: true }"
+                        class="flex items-center gap-3 px-4 py-2 w-full rounded-lg transition-all duration-200 hover:bg-blue-100"
+                        routerLink="/export">
+                        <mat-icon>dashboard</mat-icon>
+                        <span>DashBoard2</span>
+                    </a>
+                </mat-list-item>
+                <mat-list-item role="listitem">
+                    <a routerLinkActive="bg-blue-600 text-white rounded-lg" [routerLinkActiveOptions]="{ exact: true }"
+                        class="flex items-center gap-3 px-4 py-2 w-full rounded-lg transition-all duration-200 hover:bg-blue-100"
+                        routerLink="/setting">
+                        <mat-icon>dashboard</mat-icon>
+                        <span>DashBoard3</span>
+                    </a>
+                </mat-list-item>
+            </mat-list>
+        </div>
+    </mat-drawer>
+    <mat-drawer-content>
+        <div class="h-screen!  " style="background-color: rgb(242, 247, 250);">
+            <router-outlet></router-outlet>
+        </div>
+
+    </mat-drawer-content>
+
+</mat-drawer-container>

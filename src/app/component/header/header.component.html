@@ -1,1 +1,15 @@
-<p>header works!</p>
+<mat-toolbar class="bg-gray-50!">
+  <button matIconButton class="example-icon"  (click)="sideBarToggleButton()">
+    <mat-icon class="mt-1.5! text-blue-600!">menu</mat-icon>
+
+  </button>
+  <span class="ml-2! text-blue-600"> Sonali Intellect Ltd. </span>
+  <span class="example-spacer"></span>
+  <button matIconButton class="example-icon favorite-icon" [matMenuTriggerFor]="menu" >
+    <mat-icon>people</mat-icon>
+  </button>
+  <mat-menu #menu="matMenu">
+  <button mat-menu-item>Setting</button>
+  <button mat-menu-item>Logout</button>
+</mat-menu>
+</mat-toolbar>
