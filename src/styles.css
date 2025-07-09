@@ -1,4 +1,25 @@
 /* You can add global styles to this file, and also import other style files */
 @import "tailwindcss";
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html, body { 
+      height: 100%; /* Show only 90% of the body height */
+      overflow: hidden; /* Hide the rest if needed */
+}
+ 
+@font-face {
+  font-display: swap;
+  font-family: 'Poppins';
+  font-weight: 300;
+  font-style: normal;
+  src: url('app/assets/fonts/poppins-v23-latin-300.woff2') format('woff2');
+}
+
+body {
+    margin: 0;
+    font-family: "Poppins", serif;
+    font-weight: 300;
+    font-style: normal;
+  
+}
+* {
+    box-sizing: border-box;
+}

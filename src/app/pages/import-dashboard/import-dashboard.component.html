@@ -1,1 +1,101 @@
-<p>import-dashboard works!</p>
+<!-- <div class="main-content">
+            <div class="header">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <h1>Trade Finance Dashboard</h1>
+                        <p>Real-time monitoring and analytics</p>
+                    </div>
+                    <button class="refresh-btn" onclick="refreshData()">🔄 Refresh</button>
+                </div>
+            </div>
+            
+</div> -->
+<!-- 
+
+bg-gradient-to-br from-indigo-500 via-purple-500 to-purple-600
+
+
+-->
+
+<div class="min-h-screen  p-6">
+    <div class="max-w-6xl mx-auto">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <!-- Total Trade Volume Card -->
+            <mat-card
+                class="bg-white/90 backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden">
+                <mat-card-content class="p-6">
+                    <div class="text-4xl font-bold text-blue-600 mb-2">$ {{ totalLcAmount }}</div>
+                    <div class="text-gray-600 text-base font-medium mb-3">Total Trade Volume of 2025</div>
+                    <div
+                        class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-green-100 text-green-700">
+                        +12.5% vs last month
+                    </div>
+                </mat-card-content>
+            </mat-card>
+
+            <!-- Active Transactions Card -->
+            <mat-card
+                class="bg-white/90 backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden">
+                <mat-card-content class="p-6">
+                    <div class="text-4xl font-bold text-blue-600 mb-2">&#x09F3; {{totalLcCommAmount }}</div>
+                    <div class="text-gray-600 text-base font-medium mb-3">Total Trade Commission</div>
+                    <div
+                        class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-green-100 text-green-700">
+                        +8.3% vs Last year
+                    </div>
+                </mat-card-content>
+            </mat-card>
+
+             <!-- Active Transactions Card -->
+            <mat-card
+                class="bg-white/90 backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden">
+                <mat-card-content class="p-6">
+                    <div class="text-4xl font-bold text-blue-600 mb-2">&#x09F3; {{totalLcSwftAmount}}</div>
+                    <div class="text-gray-600 text-base font-medium mb-3">Total Swift Charge</div>
+                    <div
+                        class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-green-100 text-green-700">
+                        +8.3% vs Last year
+                    </div>
+                </mat-card-content>
+            </mat-card>
+             <!-- Active Transactions Card -->
+            <mat-card
+                class="bg-white/90 backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden">
+                <mat-card-content class="p-6">
+                    <div class="text-4xl font-bold text-blue-600 mb-2">&#x09F3; 1,261</div>
+                    <div class="text-gray-600 text-base font-medium mb-3">Total Source Tax on Import A/C</div>
+                    <div
+                        class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-green-100 text-green-700">
+                        +8.3% vs Last year
+                    </div>
+                </mat-card-content>
+            </mat-card>
+            
+            <!-- Pending L/Cs Card -->
+            <mat-card
+                class="bg-white/90 backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden">
+                <mat-card-content class="p-6">
+                    <div class="text-4xl font-bold text-blue-600 mb-2">89</div>
+                    <div class="text-gray-600 text-base font-medium mb-3">Pending L/Cs</div>
+                    <div
+                        class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-red-100 text-red-700">
+                        -5.2% vs yesterday
+                    </div>
+                </mat-card-content>
+            </mat-card>
+
+            <!-- Average Risk Score Card -->
+            <mat-card
+                class="bg-white/90 backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden">
+                <mat-card-content class="p-6">
+                    <div class="text-4xl font-bold text-blue-600 mb-2">7.2</div>
+                    <div class="text-gray-600 text-base font-medium mb-3">Average Risk Score</div>
+                    <div
+                        class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-green-100 text-green-700">
+                        -0.8 vs last week
+                    </div>
+                </mat-card-content>
+            </mat-card>
+        </div>
+    </div>
+</div>
