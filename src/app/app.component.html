@@ -1,36 +1,73 @@
 <app-header (sideBarToggle)="drawer.toggle()"></app-header>
-<mat-drawer-container autosize>
-    <mat-drawer #drawer mode="side" [opened]="isSidebarOpen">
+<mat-drawer-container autosize >
+    
+    <mat-drawer #drawer mode="side" [opened]="isSidebarOpen" class="w-70!">
+        <div class="bg-white h-screen! ">
+            <mat-list>
 
-        <div class="bg-white h-screen!">
-            <mat-list role="list">
-                <mat-list-item role="listitem">
-                    <a routerLinkActive="bg-blue-600 text-white rounded-lg" [routerLinkActiveOptions]="{ exact: true }"
-                        class="flex items-center gap-3 px-4 py-2 w-full rounded-lg transition-all duration-200 hover:bg-blue-100"
-                        routerLink="/import">
-                        <mat-icon>dashboard</mat-icon>
-                        <span> DashBoard</span>
-                    </a>
+                <!-- Main Menu Item with Submenu -->
+                <mat-list-item>
+                    <button
+                        class="flex items-center justify-between w-full px-4 py-2 rounded-lg hover:bg-blue-100 transition-all"
+                        (click)="toggleSubmenu()">
+                        <div class="flex items-center gap-3">
+                            <mat-icon>dashboard</mat-icon>
+                            <span>DashBoard</span>
+                        </div>
+                        <mat-icon>{{ isSubmenuOpen ? 'expand_less' : 'expand_more' }}</mat-icon>
+                    </button>
                 </mat-list-item>
-                <mat-list-item role="listitem">
-                    <a routerLinkActive="bg-blue-600 text-white rounded-lg" [routerLinkActiveOptions]="{ exact: true }"
-                        class="flex items-center gap-3 px-4 py-2 w-full rounded-lg transition-all duration-200 hover:bg-blue-100"
-                        routerLink="/export">
+
+                <!-- Submenu Items -->
+                <div *ngIf="isSubmenuOpen" class="relative ml-12   space-y-2">
+                    <!-- Vertical Line -->
+                    <div class="absolute left-0 top-0 h-22 w-px bg-gray-500"></div>
+                
+                    <!-- Import Item -->
+                    <mat-list-item class="relative pl-1 flex items-center">
+                        <!-- Horizontal Line -->
+                        <div class="absolute -left-6 h-px w-6 bg-gray-500 top-1/2 transform -translate-y-1/2 pl-10"></div>
+                        <a routerLink="/import" routerLinkActive="text-blue-950 font-bold"
+                            class="block py-1 rounded-4xl  transition-all pl-2">
+                            Import
+                        </a>
+                    </mat-list-item>
+                
+                    <!-- Export Item -->
+                    <mat-list-item class="relative pl-0 flex items-center">
+                        <!-- Horizontal Line -->
+                        <div class="absolute -left-6 h-px w-6 bg-gray-500 top-1/2 transform -translate-y-1/2 pl-10"></div>
+                        <a routerLink="/import/history" routerLinkActive="bg-blue-400 text-white"
+                            class="block py-1  transition-all pl-2">
+                            Export
+                        </a>
+                    </mat-list-item>
+                </div>
+
+
+                <!-- Other Items -->
+                <mat-list-item>
+                    <a routerLink="/export" routerLinkActive="bg-blue-600 text-white rounded-full"
+                        [routerLinkActiveOptions]="{ exact: true }"
+                        class="flex items-center gap-3 px-4 py-2 w-full rounded-lg transition-all duration-200 hover:bg-blue-100">
                         <mat-icon>dashboard</mat-icon>
                         <span>DashBoard2</span>
                     </a>
                 </mat-list-item>
-                <mat-list-item role="listitem">
-                    <a routerLinkActive="bg-blue-600 text-white rounded-lg" [routerLinkActiveOptions]="{ exact: true }"
-                        class="flex items-center gap-3 px-4 py-2 w-full rounded-lg transition-all duration-200 hover:bg-blue-100"
-                        routerLink="/setting">
+
+                <mat-list-item>
+                    <a routerLink="/setting" routerLinkActive="bg-blue-600 text-white rounded-full"
+                        [routerLinkActiveOptions]="{ exact: true }"
+                        class="flex items-center gap-3 px-4 py-2 w-full rounded-lg transition-all duration-200 hover:bg-blue-100">
                         <mat-icon>dashboard</mat-icon>
                         <span>DashBoard3</span>
                     </a>
                 </mat-list-item>
+
             </mat-list>
         </div>
     </mat-drawer>
+
     <mat-drawer-content>
         <div class="h-screen!  " style="background-color: rgb(242, 247, 250);">
             <router-outlet></router-outlet>

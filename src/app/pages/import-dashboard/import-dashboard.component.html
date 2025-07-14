@@ -18,27 +18,57 @@ bg-gradient-to-br from-indigo-500 via-purple-500 to-purple-600
 -->
 
 <div class="min-h-screen  p-6">
-    <div class="max-w-6xl mx-auto">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+    <div class="max-w-6xl mx-auto ">
+        <div class="flex flex-row ">
+            <mat-form-field  appearance="fill">
+                <mat-label >Financial Year</mat-label>
+                <mat-select [(value)]="selectedYear" (selectionChange)="onYearChange()">
+                    <mat-option *ngFor="let year of years" [value]="year">
+                        {{ year }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
             <!-- Total Trade Volume Card -->
             <mat-card
-                class="bg-white/90 backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden">
+                class="bg-blue-950! backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden">
                 <mat-card-content class="p-6">
-                    <div class="text-4xl font-bold text-blue-600 mb-2">$ {{ totalLcAmount }}</div>
-                    <div class="text-gray-600 text-base font-medium mb-3">Total Trade Volume of 2025</div>
+                    <div class="text-3xl font-bold text-white mb-2">&#x09F3; {{ totalLcAmount }}</div>
+                    <div class="text-gray-100 text-xs font-medium mb-3">Total Trade Volume</div>
+                    <div class="flex flex-row  justify-between">
+                        <div
+                            class="inline-flex items-center px-3 py-1 text-xs rounded-full  font-semibold bg-green-100 text-green-700">
+                            +12.5% vs last year
+                        </div>
+                        <div
+                            class="inline-flex items-center px-3 py-1 text-xs rounded-full  font-semibold bg-green-100 text-green-700">
+                            <button mat-button (click)="openDialog()" class="cursor-pointer">Details</button>
+                        </div>
+                    </div>
+
+                </mat-card-content>
+            </mat-card>
+            <!-- Os Liability Card -->
+            <mat-card
+                class="bg-blue-950! backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden">
+                <mat-card-content class="p-6">
+                    <div class="text-3xl font-bold text-white mb-2">&#x09F3; {{totalLcOsAmount }}</div>
+                    <div class="text-gray-100 text-xs font-medium mb-3">Total O/S Liability</div>
                     <div
                         class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-green-100 text-green-700">
-                        +12.5% vs last month
+                        +8.3% vs Last year
                     </div>
                 </mat-card-content>
             </mat-card>
 
             <!-- Active Transactions Card -->
             <mat-card
-                class="bg-white/90 backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden">
+                class="bg-blue-950! backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden">
                 <mat-card-content class="p-6">
-                    <div class="text-4xl font-bold text-blue-600 mb-2">&#x09F3; {{totalLcCommAmount }}</div>
-                    <div class="text-gray-600 text-base font-medium mb-3">Total Trade Commission</div>
+                    <div class="text-3xl font-bold text-white mb-2">&#x09F3; {{totalLcCommAmount }}</div>
+                    <div class="text-gray-100 text-xs font-medium mb-3">Total Payment Amount</div>
                     <div
                         class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-green-100 text-green-700">
                         +8.3% vs Last year
@@ -46,37 +76,50 @@ bg-gradient-to-br from-indigo-500 via-purple-500 to-purple-600
                 </mat-card-content>
             </mat-card>
 
-             <!-- Active Transactions Card -->
+            <!-- Active Transactions Card -->
             <mat-card
-                class="bg-white/90 backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden">
+                class="bg-blue-950! backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden">
                 <mat-card-content class="p-6">
-                    <div class="text-4xl font-bold text-blue-600 mb-2">&#x09F3; {{totalLcSwftAmount}}</div>
-                    <div class="text-gray-600 text-base font-medium mb-3">Total Swift Charge</div>
+                    <div class="text-3xl font-bold text-white mb-2">&#x09F3; {{totalLcCommAmount }}</div>
+                    <div class="text-gray-100 text-xs font-medium mb-3">Total Trade Commission</div>
                     <div
                         class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-green-100 text-green-700">
                         +8.3% vs Last year
                     </div>
                 </mat-card-content>
             </mat-card>
-             <!-- Active Transactions Card -->
+
+            <!-- Active Transactions Card -->
             <mat-card
-                class="bg-white/90 backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden">
+                class="bg-blue-950! backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden">
                 <mat-card-content class="p-6">
-                    <div class="text-4xl font-bold text-blue-600 mb-2">&#x09F3; 1,261</div>
-                    <div class="text-gray-600 text-base font-medium mb-3">Total Source Tax on Import A/C</div>
+                    <div class="text-3xl font-bold text-white mb-2">&#x09F3; {{totalLcSwftAmount}}</div>
+                    <div class="text-gray-100 text-xs font-medium mb-3">Total Swift Charge</div>
                     <div
                         class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-green-100 text-green-700">
                         +8.3% vs Last year
                     </div>
                 </mat-card-content>
             </mat-card>
-            
+            <!-- Active Transactions Card -->
+            <mat-card
+                class="bg-blue-950! backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden">
+                <mat-card-content class="p-6">
+                    <div class="text-3xl font-bold text-white mb-2">&#x09F3; 1,261</div>
+                    <div class="text-gray-100 text-xs font-medium mb-3">Total Source Tax on Import A/C</div>
+                    <div
+                        class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-green-100 text-green-700">
+                        +8.3% vs Last year
+                    </div>
+                </mat-card-content>
+            </mat-card>
+
             <!-- Pending L/Cs Card -->
             <mat-card
-                class="bg-white/90 backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden">
+                class="bg-blue-950! backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden">
                 <mat-card-content class="p-6">
-                    <div class="text-4xl font-bold text-blue-600 mb-2">89</div>
-                    <div class="text-gray-600 text-base font-medium mb-3">Pending L/Cs</div>
+                    <div class="text-3xl font-bold text-white mb-2">89</div>
+                    <div class="text-gray-100 text-xs font-medium mb-3">Pending L/Cs</div>
                     <div
                         class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-red-100 text-red-700">
                         -5.2% vs yesterday
@@ -86,10 +129,10 @@ bg-gradient-to-br from-indigo-500 via-purple-500 to-purple-600
 
             <!-- Average Risk Score Card -->
             <mat-card
-                class="bg-white/90 backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden">
+                class="bg-blue-950! backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden">
                 <mat-card-content class="p-6">
-                    <div class="text-4xl font-bold text-blue-600 mb-2">7.2</div>
-                    <div class="text-gray-600 text-base font-medium mb-3">Average Risk Score</div>
+                    <div class="text-3xl font-bold text-white mb-2">7.2</div>
+                    <div class="text-gray-100 text-xs font-medium mb-3">Average Risk Score</div>
                     <div
                         class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-green-100 text-green-700">
                         -0.8 vs last week

@@ -9,18 +9,19 @@ export class DashboardDataService {
 
   constructor(private http: HttpClient) {}
 
-  fetchFormattedAmount(apiUrl: string): Observable<string> {
-    return this.http.get<any>(apiUrl).pipe(
-      map(result => {
-        const raw = Number(result.message);
-        return this.formatAmountShort(raw);
-      }),
-      catchError(err => {
-        console.error('API error:', err);
-        return of('N/A');
-      })
-    );
-  }
+  fetchFormattedAmount(url: string, params?: any): Observable<string> {
+  return this.http.get<any>(url, { params }).pipe(
+    map(result => {
+      const raw = Number(result.message);
+      return this.formatAmountShort(raw);
+    }),
+    catchError(err => {
+      console.error('API error:', err);
+      return of('N/A');
+    })
+  );
+}
+
 
   private formatAmountShort(amount: number): string {
     if (amount >= 10000000) {

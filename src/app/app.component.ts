@@ -7,19 +7,25 @@ import {MatListModule} from '@angular/material/list';
 import {MatIconModule} from '@angular/material/icon';
 import {BreakpointObserver, Breakpoints, LayoutModule} from '@angular/cdk/layout';
 import { inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [RouterOutlet, MatButtonModule, RouterModule,
-     HeaderComponent,HeaderComponent,MatSidenavModule, MatListModule, MatIconModule],
+     HeaderComponent,HeaderComponent,MatSidenavModule, MatListModule, MatIconModule,CommonModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
 export class AppComponent {
   title = 'TF_Monitoring_System';
   isSidebarOpen: boolean = true;
+  isSubmenuOpen = false;
+
+  toggleSubmenu() {
+    this.isSubmenuOpen = !this.isSubmenuOpen;
+  }
 
   private breakpointObserver = inject(BreakpointObserver); // ✅ Correct way to use inject()
 
