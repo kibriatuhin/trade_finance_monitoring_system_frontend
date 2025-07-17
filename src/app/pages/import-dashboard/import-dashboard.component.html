@@ -33,18 +33,16 @@ bg-gradient-to-br from-indigo-500 via-purple-500 to-purple-600
         <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
             <!-- Total Trade Volume Card -->
             <mat-card
-                class="bg-blue-950! backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden">
+                class="bg-emerald-900! backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden ">
                 <mat-card-content class="p-6">
-                    <div class="text-3xl font-bold text-white mb-2">&#x09F3; {{ totalLcAmount }}</div>
+                    <div class="text-2xl font-bold text-white mb-2 ">&#x09F3; {{ totalLcAmount }}</div>
                     <div class="text-gray-100 text-xs font-medium mb-3">Total Trade Volume</div>
-                    <div class="flex flex-row  justify-between">
+                    <div class="w-53! bg-amber-50! h-px! mb-1"></div>
+                    <div class="flex flex-row  justify-center">
+                        
                         <div
-                            class="inline-flex items-center px-3 py-1 text-xs rounded-full  font-semibold bg-green-100 text-green-700">
-                            +12.5% vs last year
-                        </div>
-                        <div
-                            class="inline-flex items-center px-3 py-1 text-xs rounded-full  font-semibold bg-green-100 text-green-700">
-                            <button mat-button (click)="openDialog()" class="cursor-pointer">Details</button>
+                            class="inline-flex items-center px-3 py-2 text-1xl  font-medium  text-white">
+                            <button mat-button (click)="openDialog()" class="cursor-pointer">View Details</button>
                         </div>
                     </div>
 
@@ -52,35 +50,60 @@ bg-gradient-to-br from-indigo-500 via-purple-500 to-purple-600
             </mat-card>
             <!-- Os Liability Card -->
             <mat-card
-                class="bg-blue-950! backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden">
+                class="bg-emerald-900! backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden">
                 <mat-card-content class="p-6">
-                    <div class="text-3xl font-bold text-white mb-2">&#x09F3; {{totalLcOsAmount }}</div>
-                    <div class="text-gray-100 text-xs font-medium mb-3">Total O/S Liability</div>
-                    <div
-                        class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-green-100 text-green-700">
-                        +8.3% vs Last year
+                    <div class="text-2xl font-bold text-white mb-2">&#x09F3; {{totalLcOsAmount }}</div>
+                    <div class="text-gray-100 text-xs font-medium mb-3">Total O/S Liability on Import Lc</div>
+                    <div class="w-53! bg-amber-50! h-px! mb-1"></div>
+                    <div class="flex flex-row  justify-center">
+                        
+                        <div
+                            class="inline-flex items-center px-3 py-2 text-1xl  font-medium  text-white">
+                            <button mat-button  class="cursor-pointer">View Details</button>
+                        </div>
                     </div>
                 </mat-card-content>
             </mat-card>
 
             <!-- Active Transactions Card -->
             <mat-card
-                class="bg-blue-950! backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden">
+                class="bg-emerald-900! backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden">
                 <mat-card-content class="p-6">
-                    <div class="text-3xl font-bold text-white mb-2">&#x09F3; {{totalLcCommAmount }}</div>
+                    <div class="text-2xl font-bold text-white mb-2">&#x09F3; {{totalLcPayAmount }}</div>
                     <div class="text-gray-100 text-xs font-medium mb-3">Total Payment Amount</div>
-                    <div
-                        class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-green-100 text-green-700">
-                        +8.3% vs Last year
+                    <div class="w-53! bg-amber-50! h-px! mb-1"></div>
+                    <div class="flex flex-row  justify-center">
+                        
+                        <div
+                            class="inline-flex items-center px-3 py-2 text-1xl  font-medium  text-white">
+                            <button mat-button  class="cursor-pointer">View Details</button>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+
+                   <!-- Active Transactions Card -->
+            <mat-card
+                class="bg-emerald-900! backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden">
+                <mat-card-content class="p-6">
+                    <div class="text-2xl font-bold text-white mb-2">&#x09F3; {{total_ImportOsAmount}}</div>
+                    <div class="text-gray-100 text-xs font-medium mb-3">Total Pad O/S on Import Payment</div>
+                   <div class="w-53! bg-amber-50! h-px! mb-1"></div>
+                    <div class="flex flex-row  justify-center">
+                        
+                        <div
+                            class="inline-flex items-center px-3 py-2 text-1xl  font-medium  text-white">
+                            <button mat-button  class="cursor-pointer">View Details</button>
+                        </div>
                     </div>
                 </mat-card-content>
             </mat-card>
 
             <!-- Active Transactions Card -->
             <mat-card
-                class="bg-blue-950! backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden">
+                class="bg-emerald-900! backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden">
                 <mat-card-content class="p-6">
-                    <div class="text-3xl font-bold text-white mb-2">&#x09F3; {{totalLcCommAmount }}</div>
+                    <div class="text-2xl font-bold text-white mb-2">&#x09F3; {{totalLcCommAmount }}</div>
                     <div class="text-gray-100 text-xs font-medium mb-3">Total Trade Commission</div>
                     <div
                         class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-green-100 text-green-700">
@@ -91,9 +114,9 @@ bg-gradient-to-br from-indigo-500 via-purple-500 to-purple-600
 
             <!-- Active Transactions Card -->
             <mat-card
-                class="bg-blue-950! backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden">
+                class="bg-emerald-900! backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden">
                 <mat-card-content class="p-6">
-                    <div class="text-3xl font-bold text-white mb-2">&#x09F3; {{totalLcSwftAmount}}</div>
+                    <div class="text-2xl font-bold text-white mb-2">&#x09F3; {{totalLcSwftAmount}}</div>
                     <div class="text-gray-100 text-xs font-medium mb-3">Total Swift Charge</div>
                     <div
                         class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-green-100 text-green-700">
@@ -101,12 +124,13 @@ bg-gradient-to-br from-indigo-500 via-purple-500 to-purple-600
                     </div>
                 </mat-card-content>
             </mat-card>
+            
             <!-- Active Transactions Card -->
             <mat-card
-                class="bg-blue-950! backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden">
+                class="bg-emerald-900! backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden">
                 <mat-card-content class="p-6">
-                    <div class="text-3xl font-bold text-white mb-2">&#x09F3; 1,261</div>
-                    <div class="text-gray-100 text-xs font-medium mb-3">Total Source Tax on Import A/C</div>
+                    <div class="text-2xl font-bold text-white mb-2">&#x09F3; {{totalLcPayChgAmount}}</div>
+                    <div class="text-gray-100 text-xs font-medium mb-3">Total Charges on Import Payment</div>
                     <div
                         class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-green-100 text-green-700">
                         +8.3% vs Last year
@@ -114,31 +138,33 @@ bg-gradient-to-br from-indigo-500 via-purple-500 to-purple-600
                 </mat-card-content>
             </mat-card>
 
+             
+
             <!-- Pending L/Cs Card -->
             <mat-card
-                class="bg-blue-950! backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden">
+                class="bg-emerald-900! backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden">
                 <mat-card-content class="p-6">
-                    <div class="text-3xl font-bold text-white mb-2">89</div>
+                    <div class="text-2xl font-bold text-white mb-2">{{totalPendingLc}}</div>
                     <div class="text-gray-100 text-xs font-medium mb-3">Pending L/Cs</div>
                     <div
                         class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-red-100 text-red-700">
-                        -5.2% vs yesterday
+                        -5.2% vs Last year
                     </div>
                 </mat-card-content>
             </mat-card>
 
             <!-- Average Risk Score Card -->
-            <mat-card
-                class="bg-blue-950! backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden">
+            <!-- <mat-card
+                class="bg-emerald-900! backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden">
                 <mat-card-content class="p-6">
-                    <div class="text-3xl font-bold text-white mb-2">7.2</div>
+                    <div class="text-2xl font-bold text-white mb-2">7.2</div>
                     <div class="text-gray-100 text-xs font-medium mb-3">Average Risk Score</div>
                     <div
                         class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-green-100 text-green-700">
                         -0.8 vs last week
                     </div>
                 </mat-card-content>
-            </mat-card>
+            </mat-card> -->
         </div>
     </div>
 </div>
