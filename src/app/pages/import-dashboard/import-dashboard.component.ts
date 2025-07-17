@@ -21,7 +21,11 @@ export class ImportDashboardComponent {
   totalLcAmount: string = '0.00';
   totalLcOsAmount: string = '0.00';
   totalLcCommAmount: string = '0.00';
+  total_ImportOsAmount: string = '0.00';
+  totalPendingLc: string = '0';
+  totalLcPayAmount: string = '0.00';
   totalLcSwftAmount: string = '0.00';
+  totalLcPayChgAmount: string = '0.00';
   selectedYear: number = new Date().getFullYear();
   http = inject(HttpClient);
    years: number[] = [];
@@ -50,19 +54,56 @@ export class ImportDashboardComponent {
     }
     this.totalLcOsAmount = value});
 
+    this.dashboardService.fetchFormattedAmount(
+    'http://localhost:9092/api/v1/importDashboard/totalImpPayAmount',
+    { year: this.selectedYear.toString() }
+  ).subscribe(value => {
+    if (value === '0') {
+      value = '0.00'; // Fallback to '0.00' if the API returns 'N/A'
+    }
+    this.totalLcPayAmount = value});
+
   this.dashboardService.fetchFormattedAmount(
     'http://localhost:9092/api/v1/importDashboard/totalImportSwftAmount',
     { year: this.selectedYear.toString() }
-  ).subscribe(value => 
-    this.totalLcSwftAmount = value 
-  );
+  ).subscribe(value => {
+    if (value === '0') {
+      value = '0.00'; // Fallback to '0.00' if the API returns 'N/A'
+    }
+    this.totalLcSwftAmount = value});
+
+    this.dashboardService.fetchFormattedAmount(
+    'http://localhost:9092/api/v1/importDashboard/totalImportPayChgAmount',
+    { year: this.selectedYear.toString() }
+  ).subscribe(value => {
+    if (value === '0') {
+      value = '0.00'; // Fallback to '0.00' if the API returns 'N/A'
+    }
+    this.totalLcPayChgAmount = value});
 
   this.dashboardService.fetchFormattedAmount(
     'http://localhost:9092/api/v1/importDashboard/totalImportCommAmount',
     { year: this.selectedYear.toString() }
-  ).subscribe(value => 
-    
-    this.totalLcCommAmount = value);
+  ).subscribe(value => {
+    if (value === '0') {
+      value = '0.00'; // Fallback to '0.00' if the API returns 'N/A'
+    }
+    this.totalLcCommAmount = value});
+
+    this.dashboardService.fetchFormattedAmount(
+    'http://localhost:9092/api/v1/importDashboard/totalImportPndLc',
+    { year: this.selectedYear.toString() }
+  ).subscribe(value => {
+    this.totalPendingLc = value});
+
+    this.dashboardService.fetchFormattedAmount(
+    'http://localhost:9092/api/v1/importDashboard/totalImportPadOs',
+    { year: this.selectedYear.toString() }
+  ).subscribe(value => {
+    if (value === '0') {
+      value = '0.00'; // Fallback to '0.00' if the API returns 'N/A'
+    }
+    this.total_ImportOsAmount = value});
 }
 onYearChange(): void {
   this.loadDashboardData(); // reload data when selectedYear changes
