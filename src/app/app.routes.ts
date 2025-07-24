@@ -5,6 +5,9 @@ import { SettingComponent } from './pages/setting/setting.component';
 import { LoginComponent } from './pages/login/login.component';
 import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
 import { BlankLayoutComponent } from './layouts/blank-layout/blank-layout.component';
+import { ImportDetailsComponent } from './pages/import-details/import-details.component';
+import { BlankComponent } from './component/blank/blank.component';
+import { TransactionTableComponent } from './component/transaction-table/transaction-table.component';
 
 export const routes: Routes = [
 
@@ -12,10 +15,12 @@ export const routes: Routes = [
     path: '',
     component: MainLayoutComponent,
     children: [
-      { path: '', redirectTo: 'import', pathMatch: 'full' },
+      { path: 'blank', component: BlankComponent },
       { path: 'import', component: ImportDashboardComponent },
       { path: 'export', component: ExportDashboardComponent },
-      { path: 'setting', component: SettingComponent }
+      { path: 'setting', component: SettingComponent },
+      {path: 'import-details', component: ImportDetailsComponent},
+      {path: 'transaction-history',component: TransactionTableComponent}
     ]
   },
   {
@@ -26,7 +31,7 @@ export const routes: Routes = [
     ]
   },
   { path: 'login', redirectTo: 'auth/login', pathMatch: 'full' },
-  { path: '**', redirectTo: 'import' }
+ // { path: '**', redirectTo: '' } 
 
 
     // {

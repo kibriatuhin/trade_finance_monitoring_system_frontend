@@ -9,11 +9,12 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
 import { TotalImportAmountComponent } from '../../dialogs/total-import-amount/total-import-amount.component';
 import { CommonModule } from '@angular/common';
+import { DashboardTranHistoryComponent } from '../../component/dashboard-tran-history/dashboard-tran-history.component';
 
 @Component({
   selector: 'app-import-dashboard',
   standalone: true,
-  imports: [MatCardModule,MatSelectModule,CommonModule],
+  imports: [MatCardModule, MatSelectModule, CommonModule,DashboardTranHistoryComponent],
   templateUrl: './import-dashboard.component.html',
   styleUrl: './import-dashboard.component.css'
 })
@@ -26,6 +27,7 @@ export class ImportDashboardComponent {
   totalLcPayAmount: string = '0.00';
   totalLcSwftAmount: string = '0.00';
   totalLcPayChgAmount: string = '0.00';
+  total_ImportAccChgAmount: string = '0.00';
   selectedYear: number = new Date().getFullYear();
   http = inject(HttpClient);
    years: number[] = [];
@@ -104,6 +106,14 @@ export class ImportDashboardComponent {
       value = '0.00'; // Fallback to '0.00' if the API returns 'N/A'
     }
     this.total_ImportOsAmount = value});
+    this.dashboardService.fetchFormattedAmount(
+    'http://localhost:9092/api/v1/importDashboard/totalImpAccChgAmount',
+    { year: this.selectedYear.toString() }
+  ).subscribe(value => {
+    if (value === '0') {
+      value = '0.00'; // Fallback to '0.00' if the API returns 'N/A'
+    }
+    this.total_ImportAccChgAmount = value});
 }
 onYearChange(): void {
   this.loadDashboardData(); // reload data when selectedYear changes

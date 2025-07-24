@@ -1,0 +1,78 @@
+<div class="p-6  ml-7 mb-20! bg-white border border-gray-200 rounded-lg shadow-sm w-280">
+    <div class="example-header">
+        <mat-form-field>
+            <input matInput (keyup)="onFilterKeyup($event)" placeholder="Filter">
+
+        </mat-form-field>
+    </div>
+
+    <div class="example-container mat-elevation-z8">
+
+<mat-table [dataSource]="dataSource" matSort>
+
+  <ng-container matColumnDef="rn">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>Row</mat-header-cell>
+    <mat-cell *matCellDef="let row"> {{ row.rn }} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="brnCode">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>Branch</mat-header-cell>
+    <mat-cell *matCellDef="let row"> {{ row.brnCode }} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="postTranBatchNum">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>Batch No</mat-header-cell>
+    <mat-cell *matCellDef="let row"> {{ row.postTranBatchNum }} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="custNum">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>Customer</mat-header-cell>
+    <mat-cell *matCellDef="let row"> {{ row.custNum }} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="importType">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>Type</mat-header-cell>
+    <mat-cell *matCellDef="let row"> {{ row.importType }} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="lcCurrCode">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>Currency</mat-header-cell>
+    <mat-cell *matCellDef="let row"> {{ row.lcCurrCode }} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="lcAmount">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>Amount</mat-header-cell>
+    <mat-cell *matCellDef="let row"> {{ row.lcAmount }} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="authBy">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>Auth By</mat-header-cell>
+    <mat-cell *matCellDef="let row"> {{ row.authBy }} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="authOn">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>Auth On</mat-header-cell>
+    <mat-cell *matCellDef="let row"> {{ row.authOn | date: 'short' }} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="entdOn">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>Entry On</mat-header-cell>
+    <mat-cell *matCellDef="let row"> {{ row.entdOn | date: 'short' }} </mat-cell>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+</mat-table>
+
+<mat-paginator [pageSizeOptions]="[5, 10, 25]"></mat-paginator>
+
+    </div>
+</div>
+
+
+
+
+<!-- Copyright 2018 Google Inc. All Rights Reserved.
+    Use of this source code is governed by an MIT-style license that
+    can be found in the LICENSE file at http://angular.io/license -->

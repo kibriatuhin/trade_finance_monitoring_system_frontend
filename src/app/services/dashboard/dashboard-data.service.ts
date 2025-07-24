@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, catchError, map, of } from 'rxjs';
+import { TranHistory } from '../../shared/model/TranHistory';
 
 @Injectable({
   providedIn: 'root'
@@ -21,6 +22,20 @@ export class DashboardDataService {
     })
   );
 }
+
+fetchTranHistory(year: number): Observable<TranHistory[]> {
+  const url = 'http://localhost:9092/api/v1/importDashboard/impTranHistory';
+  const params = { year: year.toString() };
+
+  return this.http.get<any>(url, { params }).pipe(
+    map(response => response.data),  // API response থেকে শুধু data array রিটার্ন করবে
+    catchError(err => {
+      console.error('API error:', err);
+      return of([]); // error হলে empty array রিটার্ন করবে
+    })
+  );
+}
+
 
 
   private formatAmountShort(amount: number): string {

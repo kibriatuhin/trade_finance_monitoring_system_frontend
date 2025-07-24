@@ -1,9 +1,9 @@
 
 <app-header (sideBarToggle)="drawer.toggle()"></app-header>
-<mat-drawer-container autosize >
+<mat-drawer-container autosize>
     
-    <mat-drawer #drawer mode="side" [opened]="isSidebarOpen" class="w-70!  ">
-        <div class="bg-white h-screen!  border-r-1! border-gray-300 text-xs!">
+    <mat-drawer #drawer mode="side" [opened]="isSidebarOpen" class="w-70!">
+        <div class="bg-white h-full overflow-y-auto border-r border-gray-300 text-xs!">
             <mat-list class="">
 
                 <!-- Main Menu Item with Submenu -->
@@ -28,7 +28,7 @@
                     <mat-list-item class="relative pl-1 flex items-center">
                         <!-- Horizontal Line -->
                         <div class="absolute -left-6 h-px w-6 bg-gray-500 top-1/2 transform -translate-y-1/2 pl-10"></div>
-                        <a routerLink="/import" routerLinkActive="text-emerald-900! font-bold" class="block py-1 rounded-4xl text-sm! transition-all pl-2">
+                        <a (click)="openTab('Import', '/import')" routerLink="/import" routerLinkActive="text-emerald-900! font-bold" class="block py-1 rounded-4xl text-sm! transition-all pl-2">
                             <span>import</span>
                         </a>
                     </mat-list-item>
@@ -37,7 +37,7 @@
                     <mat-list-item class="relative pl-0 flex items-center">
                         <!-- Horizontal Line -->
                         <div class="absolute -left-6 h-px w-6 bg-gray-500 top-1/2 transform -translate-y-1/2 pl-10"></div>
-                        <a routerLink="/import/history" routerLinkActive="bg-blue-400 text-white"
+                        <a (click)="openTab('History', '/transaction-history')" routerLink="/transaction-history" routerLinkActive="text-emerald-900! font-bold"
                             class="block py-1  transition-all pl-2 text-sm!">
                             Export
                         </a>
@@ -69,7 +69,7 @@
                     <mat-list-item class="relative pl-1 flex items-center">
                         <!-- Horizontal Line -->
                         <div class="absolute -left-6 h-px w-6 bg-gray-500 top-1/2 transform -translate-y-1/2 pl-10"></div>
-                        <a routerLink="#" routerLinkActive="text-blue-950 font-bold" class="block py-1 rounded-4xl text-sm!  transition-all pl-2">
+                        <a (click)="openTab('Details', '/import-details')" routerLink="/import-details" routerLinkActive="text-blue-950 font-bold" class="block py-1 rounded-4xl text-sm!  transition-all pl-2">
                             Import Details
                         </a>
                     </mat-list-item>
@@ -103,8 +103,9 @@
         </div>
     </mat-drawer>
 
-    <mat-drawer-content>
-        <div class="h-screen!  " style="background-color: rgb(255, 255, 255);">
+    <mat-drawer-content >
+        <app-tab-bar ></app-tab-bar>
+        <div class="flex-1 overflow-y-auto bg-white h-[calc(100vh-64px)]" style="background-color: rgb(255, 255, 255);">
             <router-outlet></router-outlet>
         </div>
 
