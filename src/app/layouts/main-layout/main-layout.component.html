@@ -22,14 +22,14 @@
                 <!-- Submenu Items -->
                 <div *ngIf="isSubmenuOpen" class="relative ml-12   space-y-2">
                     <!-- Vertical Line -->
-                    <div class="absolute left-0 top-0 h-22 w-px bg-gray-500"></div>
+                    <div class="absolute left-0 top-0 h-34 w-px bg-gray-500"></div>
                 
                     <!-- Import Item -->
                     <mat-list-item class="relative pl-1 flex items-center">
                         <!-- Horizontal Line -->
                         <div class="absolute -left-6 h-px w-6 bg-gray-500 top-1/2 transform -translate-y-1/2 pl-10"></div>
                         <a (click)="openTab('Import', '/import')" routerLink="/import" routerLinkActive="text-emerald-900! font-bold" class="block py-1 rounded-4xl text-sm! transition-all pl-2">
-                            <span>import</span>
+                            <span>Import Monitoring</span>
                         </a>
                     </mat-list-item>
                 
@@ -39,7 +39,16 @@
                         <div class="absolute -left-6 h-px w-6 bg-gray-500 top-1/2 transform -translate-y-1/2 pl-10"></div>
                         <a (click)="openTab('History', '/transaction-history')" routerLink="/transaction-history" routerLinkActive="text-emerald-900! font-bold"
                             class="block py-1  transition-all pl-2 text-sm!">
-                            Export
+                            Export Monitoring
+                        </a>
+                    </mat-list-item>
+                    <!-- Export Item -->
+                    <mat-list-item class="relative pl-0 flex items-center">
+                        <!-- Horizontal Line -->
+                        <div class="absolute -left-6 h-px w-6 bg-gray-500 top-1/2 transform -translate-y-1/2 pl-10"></div>
+                        <a (click)="openTab('Branch', '/branches')" routerLink="/branches" routerLinkActive="text-emerald-900! font-bold"
+                            class="block py-1  transition-all pl-2 text-sm!">
+                            Branch Monitoring
                         </a>
                     </mat-list-item>
                 </div>

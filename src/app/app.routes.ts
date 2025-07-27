@@ -8,6 +8,7 @@ import { BlankLayoutComponent } from './layouts/blank-layout/blank-layout.compon
 import { ImportDetailsComponent } from './pages/import-details/import-details.component';
 import { BlankComponent } from './component/blank/blank.component';
 import { TransactionTableComponent } from './component/transaction-table/transaction-table.component';
+import { BranchDashboardComponent } from './pages/branch-dashboard/branch-dashboard.component';
 
 export const routes: Routes = [
 
@@ -20,7 +21,8 @@ export const routes: Routes = [
       { path: 'export', component: ExportDashboardComponent },
       { path: 'setting', component: SettingComponent },
       {path: 'import-details', component: ImportDetailsComponent},
-      {path: 'transaction-history',component: TransactionTableComponent}
+      {path: 'transaction-history',component: TransactionTableComponent},
+      {path : 'branches',component: BranchDashboardComponent}
     ]
   },
   {

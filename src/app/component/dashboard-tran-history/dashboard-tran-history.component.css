@@ -1,0 +1,80 @@
+ /* .example-container {
+  display: flex;
+  flex-direction: column;
+  min-width: 300px;
+}
+
+.example-header {
+  min-height: 64px;
+  padding: 8px 24px 0;
+}
+
+.mat-form-field {
+  font-size: 14px;
+  width: 100%;
+}
+
+.mat-table {
+  overflow: auto;
+  max-height: 500px;
+}  */
+
+mat-header-row {
+  background-color:  #064e3b !important ; /* Tailwind's blue-600 */
+  color: white;
+}
+
+mat-header-cell {
+  font-size: 14px;
+  text-align: center;
+}
+mat-cell {
+  font-size: 13px;
+  text-align: center;
+}
+::ng-deep mat-header-cell,
+::ng-deep mat-cell {
+  text-align: center;
+}
+.mat-mdc-row .mat-mdc-cell {
+  border-bottom: 1px solid transparent;
+  border-top: 1px solid transparent;
+  cursor: pointer;
+}
+
+.mat-mdc-row:hover .mat-mdc-cell {
+  border-color: currentColor;
+}
+
+ .filter-bar {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filter-input {
+            padding: 10px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 25px;
+            outline: none;
+            transition: all 0.3s ease;
+            flex: 1;
+            min-width: 426px;
+        }
+
+        .filter-input:focus {
+            border-color: #064e3b;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .filter-select {
+            padding: 10px 15px; 
+            border: 2px solid #e0e0e0;
+            border-radius: 25px;
+            outline: none;
+            background: white;
+            cursor: pointer;
+        }
+
+
