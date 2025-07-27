@@ -10,7 +10,7 @@ export class DashboardDataService {
 
   constructor(private http: HttpClient) {}
 
-  fetchFormattedAmount(url: string, params?: any): Observable<string> {
+fetchFormattedAmount(url: string, params?: any): Observable<string> {
   return this.http.get<any>(url, { params }).pipe(
     map(result => {
       const raw = Number(result.message);
@@ -23,9 +23,9 @@ export class DashboardDataService {
   );
 }
 
-fetchTranHistory(year: number): Observable<TranHistory[]> {
-  const url = 'http://localhost:9092/api/v1/importDashboard/impTranHistory';
-  const params = { year: year.toString() };
+fetchTranHistory(url: string,year: number,pageSize:any): Observable<TranHistory[]> {
+  //const url = 'http://localhost:9092/api/v1/importDashboard/impTranHistory';
+  const params = { year: year.toString(),size: pageSize.toString() };
 
   return this.http.get<any>(url, { params }).pipe(
     map(response => response.data),  // API response থেকে শুধু data array রিটার্ন করবে
@@ -34,6 +34,7 @@ fetchTranHistory(year: number): Observable<TranHistory[]> {
       return of([]); // error হলে empty array রিটার্ন করবে
     })
   );
+
 }
 
 

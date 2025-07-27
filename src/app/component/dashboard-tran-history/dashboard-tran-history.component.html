@@ -1,78 +1,120 @@
-<div class="p-6  ml-7 mb-20! bg-white border border-gray-200 rounded-lg shadow-sm w-280">
-    <div class="example-header">
-        <mat-form-field>
-            <input matInput (keyup)="onFilterKeyup($event)" placeholder="Filter">
-
-        </mat-form-field>
-    </div>
-
-    <div class="example-container mat-elevation-z8">
-
-<mat-table [dataSource]="dataSource" matSort>
-
-  <ng-container matColumnDef="rn">
-    <mat-header-cell *matHeaderCellDef mat-sort-header>Row</mat-header-cell>
-    <mat-cell *matCellDef="let row"> {{ row.rn }} </mat-cell>
-  </ng-container>
-
-  <ng-container matColumnDef="brnCode">
-    <mat-header-cell *matHeaderCellDef mat-sort-header>Branch</mat-header-cell>
-    <mat-cell *matCellDef="let row"> {{ row.brnCode }} </mat-cell>
-  </ng-container>
-
-  <ng-container matColumnDef="postTranBatchNum">
-    <mat-header-cell *matHeaderCellDef mat-sort-header>Batch No</mat-header-cell>
-    <mat-cell *matCellDef="let row"> {{ row.postTranBatchNum }} </mat-cell>
-  </ng-container>
-
-  <ng-container matColumnDef="custNum">
-    <mat-header-cell *matHeaderCellDef mat-sort-header>Customer</mat-header-cell>
-    <mat-cell *matCellDef="let row"> {{ row.custNum }} </mat-cell>
-  </ng-container>
-
-  <ng-container matColumnDef="importType">
-    <mat-header-cell *matHeaderCellDef mat-sort-header>Type</mat-header-cell>
-    <mat-cell *matCellDef="let row"> {{ row.importType }} </mat-cell>
-  </ng-container>
-
-  <ng-container matColumnDef="lcCurrCode">
-    <mat-header-cell *matHeaderCellDef mat-sort-header>Currency</mat-header-cell>
-    <mat-cell *matCellDef="let row"> {{ row.lcCurrCode }} </mat-cell>
-  </ng-container>
-
-  <ng-container matColumnDef="lcAmount">
-    <mat-header-cell *matHeaderCellDef mat-sort-header>Amount</mat-header-cell>
-    <mat-cell *matCellDef="let row"> {{ row.lcAmount }} </mat-cell>
-  </ng-container>
-
-  <ng-container matColumnDef="authBy">
-    <mat-header-cell *matHeaderCellDef mat-sort-header>Auth By</mat-header-cell>
-    <mat-cell *matCellDef="let row"> {{ row.authBy }} </mat-cell>
-  </ng-container>
-
-  <ng-container matColumnDef="authOn">
-    <mat-header-cell *matHeaderCellDef mat-sort-header>Auth On</mat-header-cell>
-    <mat-cell *matCellDef="let row"> {{ row.authOn | date: 'short' }} </mat-cell>
-  </ng-container>
-
-  <ng-container matColumnDef="entdOn">
-    <mat-header-cell *matHeaderCellDef mat-sort-header>Entry On</mat-header-cell>
-    <mat-cell *matCellDef="let row"> {{ row.entdOn | date: 'short' }} </mat-cell>
-  </ng-container>
-
-  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-
-</mat-table>
-
-<mat-paginator [pageSizeOptions]="[5, 10, 25]"></mat-paginator>
+<div class="p-6  ml-7 mb-20! bg-white border border-gray-200 rounded-lg shadow-sm w-280 overflow-visible">
+  <div class="flex flex-wrap items-center justify-between  gap-4">
+    <!-- Left: Title -->
+    <div>
+      <h5 class="text-sm text-gray-800 font-bold!">Recent transactions</h5>
+      <p class="text-sm text-gray-600">Recent transactions for the selected year</p>
 
     </div>
+
+    <div class="filter-bar">
+      <input type="text" class="filter-input" placeholder="Search transactions..." id="searchInput">
+      <select [(ngModel)]="selectedStatus" (change)="applyStatusFilters()" class="filter-select" id="statusFilter">
+        <option value="">All Status</option>
+        <option value="approved">Approved</option>
+        <option value="pending">Pending</option>
+        <option value="rejected">Rejected</option>
+      </select>
+      <select  [(ngModel)]="selectedType" (change)="applyTypeFilters()" class="filter-select" id="typeFilter">
+        <option value="">All Types</option>
+        <option value="ld">Lc Lodgement</option>
+        <option value="am">Lc Amendment</option>
+        <option value="cn">Lc Cancellation</option>
+        <option value="bill">Usance Lc Bill</option>
+        <option value="p">Lc Payment</option>
+      </select>
+    </div>
+
+
+    
+  </div>
+
+
+  <div class="example-container mat-elevation-z0">
+
+    <mat-table [dataSource]="dataSource" matSort>
+
+      <ng-container matColumnDef="rn">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Row</mat-header-cell>
+        <mat-cell *matCellDef="let row; let i = index">
+          {{ currentPage * pageSize + i + 1 }}
+        </mat-cell>
+      </ng-container>
+
+
+
+      <ng-container matColumnDef="brnCode">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Branch</mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{ row.brnCode }} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="postTranBatchNum">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Batch No</mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{ row.postTranBatchNum }} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="custNum">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Customer</mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{ row.custNum }} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="importType">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Type</mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{ row.importType }} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="lcCurrCode">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Currency</mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{ row.lcCurrCode }} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="lcAmount">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Amount</mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{ row.lcAmount }} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="authBy">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Auth By</mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{ row.authBy }} </mat-cell>
+      </ng-container>
+      <!-- Status Column -->
+      <ng-container matColumnDef="status">
+        <mat-header-cell *matHeaderCellDef class="text-center!">Status</mat-header-cell>
+        <mat-cell *matCellDef="let row">
+          <span class="px-2 py-1 rounded-full text-xs font-semibold uppercase text-center!"
+            [ngClass]="getStatusClasses(row)">
+            {{ getStatus(row) }}
+          </span>
+        </mat-cell>
+      </ng-container>
+
+      <!-- Risk Column -->
+      <ng-container matColumnDef="risk">
+        <mat-header-cell *matHeaderCellDef>Risk</mat-header-cell>
+        <mat-cell *matCellDef="let row">
+          <span class="flex items-center gap-2 text-sm font-medium">
+            <span class="w-3 h-3 rounded-full" [ngClass]="getRiskDotClass(row)"></span>
+            {{ getRisk(row) }}
+          </span>
+        </mat-cell>
+      </ng-container>
+
+
+
+
+
+      <ng-container matColumnDef="entdOn">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Entry On</mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{ row.entdOn | date: 'short' }} </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+    </mat-table>
+
+    <mat-paginator [length]="totalItems" [pageSize]="pageSize" (page)="onPageChange($event)"
+      [pageSizeOptions]="[5, 10,15,20, 25]" class="text-gray-700 text-sm"></mat-paginator>
+
+  </div>
 </div>
-
-
-
-
-<!-- Copyright 2018 Google Inc. All Rights Reserved.
-    Use of this source code is governed by an MIT-style license that
-    can be found in the LICENSE file at http://angular.io/license -->
