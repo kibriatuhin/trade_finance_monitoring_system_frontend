@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, catchError, map, of } from 'rxjs';
 import { TranHistory } from '../../shared/model/TranHistory';
+import { BranchSummaryData } from '../../shared/interface/BranchSummaryData';
+import { BranchStatusListData } from '../../shared/interface/BranchStatusListData';
 
 @Injectable({
   providedIn: 'root'
@@ -23,6 +25,32 @@ fetchFormattedAmount(url: string, params?: any): Observable<string> {
   );
 }
 
+fetchFormattedBranch(url: string): Observable<BranchSummaryData> {
+  return this.http.get<any>(url).pipe(
+    map(response => response.data as BranchSummaryData),
+    catchError(err => {
+      console.error('API error:', err);
+      return of({
+        totalSnOutBrn: 0,
+        totalSnInBrn: 0,
+        totalBrn: 0
+      } as BranchSummaryData);
+    })
+  );
+}
+fetchBranchStatusHistory(url: string): Observable<BranchStatusListData[]> {
+  return this.http.get<{ data: BranchStatusListData[] }>(url).pipe(
+    map(response => response.data),
+    catchError(err => {
+      console.error('API error:', err);
+      return of([]); // return empty array on error
+    })
+  );
+}
+
+
+
+
 fetchTranHistory(url: string,year: number,pageSize:any): Observable<TranHistory[]> {
   //const url = 'http://localhost:9092/api/v1/importDashboard/impTranHistory';
   const params = { year: year.toString(),size: pageSize.toString() };
@@ -35,6 +63,12 @@ fetchTranHistory(url: string,year: number,pageSize:any): Observable<TranHistory[
     })
   );
 
+}
+private formateNumber(value: number): string {
+  if(value <10){
+    return '0' + value.toString();
+  }
+  return value.toString();
 }
 
 
