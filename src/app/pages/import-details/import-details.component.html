@@ -1,80 +1,72 @@
-
 <div class="min-h-screen! max-h-screen! overflow-auto! bg-gray-50 p-4">
-  
-<div class="flex flex-col items-center justify-center p-4">
-  <h5 class=" font-bold mb-1!">Import Lodgement Details</h5>
-</div>
-<div class=" bg-gray-600! h-px! mb-1"></div>
 
-<form [formGroup]="form" class="grid grid-cols-4 gap-4 p-4">
-
-  <div class="flex flex-col w-full">
-    <label for="brnCode" class="mb-1 font-medium text-sm text-gray-700">
-      Branch Code <span class="text-red-600">*</span>
-    </label>
-    <mat-form-field appearance="outline" class="w-full custom-compact-field" [color]="isInvalid('fundServiceType') ? 'warn' : 'primary'" >
-       <div class="flex flex-row items-center">
-          <input
-        matInput
-        id="brnCode"
-        formControlName="brnCode"
-        placeholder="Enter value"
-        class="text-sm h-8 leading-none px-2"
-      />
-      <button mat-icon-button matSuffix tabindex="-1">
-        <mat-icon  >content_copy</mat-icon>
-      </button>
-       </div>
-      <mat-error *ngIf="isInvalid('brnCode')">
-        <span class="text-red-600 text-xs">⚠️ Should not be blank</span>
-      </mat-error>
-    </mat-form-field>
+  <div class="flex flex-col items-center justify-center p-4">
+    <h5 class=" font-bold mb-1!">Import Lodgement Details</h5>
   </div>
+  <div class=" bg-gray-600! h-px! mb-1"></div>
 
-  <!-- Currency Code -->
-   <div class="flex flex-col w-full">
-    <label for="currencyCode" class="mb-1 font-medium text-sm text-gray-700">
-      Currency Code <span class="text-red-600">*</span>
-    </label>
-    <mat-form-field appearance="outline" class="w-full custom-compact-field">
-      <input matInput id="currencyCode" formControlName="currencyCode" placeholder="Enter currency" class="text-sm h-8 leading-none px-2" />
-      <button mat-icon-button matSuffix tabindex="-1">
-        <mat-icon >content_copy</mat-icon>
-      </button>
-    </mat-form-field>
-  </div> 
+  <form [formGroup]="form" class="grid grid-cols-4 gap-4 p-4">
 
-  <!-- Transaction Max Limit -->
-   <div class="flex flex-col w-full">
-    <label for="transactionMaxLimit" class="mb-1 font-medium text-sm text-gray-700">
-      Transaction Max Limit <span class="text-red-600">*</span>
-    </label>
-    <mat-form-field appearance="outline" class="w-full custom-compact-field">
-      <input matInput id="transactionMaxLimit" formControlName="transactionMaxLimit" placeholder="Enter amount" class="text-sm h-8 leading-none px-2" />
-    </mat-form-field>
-  </div>
+    <div class="flex flex-col w-full">
+      <label for="brnCode" class="mb-1 font-medium text-sm text-gray-700">
+        Branch Code <span class="text-red-600">*</span>
+      </label>
+      <mat-form-field appearance="outline" class="w-full custom-compact-field"
+        [color]="isInvalid('fundServiceType') ? 'warn' : 'primary'">
+        <div class="flex flex-row items-center">
+          <input matInput id="brnCode" formControlName="brnCode" placeholder="Enter value"
+            class="text-sm h-8 leading-none px-2" />
+          <button mat-icon-button matSuffix tabindex="-1">
+            <mat-icon>content_copy</mat-icon>
+          </button>
+        </div>
+        <mat-error *ngIf="isInvalid('brnCode')">
+          <span class="text-red-600 text-xs">⚠️ Should not be blank</span>
+        </mat-error>
+      </mat-form-field>
+    </div>
 
-  <!-- Alternate Fund Service Type -->
-   <div class="flex flex-col w-full ">
-    <label for="alternateFundServiceType" class="mb-1 font-medium text-sm text-gray-700">
-      Alternate Fund Service Type
-    </label>
-    <mat-form-field appearance="outline" class="w-full custom-compact-field">
-      <input
-        matInput
-        id="alternateFundServiceType"
-        formControlName="alternateFundServiceType"
-        placeholder="Optional"
-        class="text-sm h-8 leading-none px-2"
-      />
-      <button mat-icon-button matSuffix tabindex="-1">
-        <mat-icon>content_copy</mat-icon>
-      </button>
-    </mat-form-field>
-  </div> 
+    <!-- Currency Code -->
+    <div class="flex flex-col w-full">
+      <label for="currencyCode" class="mb-1 font-medium text-sm text-gray-700">
+        Currency Code <span class="text-red-600">*</span>
+      </label>
+      <mat-form-field appearance="outline" class="w-full custom-compact-field">
+        <input matInput id="currencyCode" formControlName="currencyCode" placeholder="Enter currency"
+          class="text-sm h-8 leading-none px-2" />
+        <button mat-icon-button matSuffix tabindex="-1">
+          <mat-icon>content_copy</mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
+
+    <!-- Transaction Max Limit -->
+    <div class="flex flex-col w-full">
+      <label for="transactionMaxLimit" class="mb-1 font-medium text-sm text-gray-700">
+        Transaction Max Limit <span class="text-red-600">*</span>
+      </label>
+      <mat-form-field appearance="outline" class="w-full custom-compact-field">
+        <input matInput id="transactionMaxLimit" formControlName="transactionMaxLimit" placeholder="Enter amount"
+          class="text-sm h-8 leading-none px-2" />
+      </mat-form-field>
+    </div>
+
+    <!-- Alternate Fund Service Type -->
+    <div class="flex flex-col w-full ">
+      <label for="alternateFundServiceType" class="mb-1 font-medium text-sm text-gray-700">
+        Alternate Fund Service Type
+      </label>
+      <mat-form-field appearance="outline" class="w-full custom-compact-field">
+        <input matInput id="alternateFundServiceType" formControlName="alternateFundServiceType" placeholder="Optional"
+          class="text-sm h-8 leading-none px-2" />
+        <button mat-icon-button matSuffix tabindex="-1">
+          <mat-icon>content_copy</mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
 
 
- </form> 
+  </form>
 
-<app-transaction-table class="mt-4"></app-transaction-table>
+  <app-transaction-table class="mt-4"></app-transaction-table>
 </div>

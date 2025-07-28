@@ -34,6 +34,16 @@ export class ImportDashboardComponent {
 
  constructor(private dashboardService: DashboardDataService,private dialog: MatDialog) {}
 
+ ngOnInit(): void {
+  const startYear = 2015;
+  const currentYear = new Date().getFullYear();
+  for (let year = startYear; year <= currentYear; year++) {
+    this.years.push(year);
+  }
+
+  this.loadDashboardData(); // initial load
+}
+
  loadDashboardData(): void {
   this.dashboardService.fetchFormattedAmount(
     'http://localhost:9092/api/v1/importDashboard/totalImportAmount',
@@ -118,18 +128,6 @@ export class ImportDashboardComponent {
 onYearChange(): void {
   this.loadDashboardData(); // reload data when selectedYear changes
 }
-
-
-ngOnInit(): void {
-  const startYear = 2015;
-  const currentYear = new Date().getFullYear();
-  for (let year = startYear; year <= currentYear; year++) {
-    this.years.push(year);
-  }
-
-  this.loadDashboardData(); // initial load
-}
-
 
  openDialog() {
     const dialogRef = this.dialog.open(TotalImportAmountComponent, {

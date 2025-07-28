@@ -1,1 +1,84 @@
-<p>branch-dashboard works!</p>
+<div class="flex flex-col items-center justify-center  bg-gray-50! pb-5! pt-3!">
+        <h5 class=" font-bold mb-1!">AD Branch Monitoring</h5>
+    </div>
+<div class=" bg-gray-600! h-px! mb-1"></div>
+
+<div class="p-6">
+    
+    
+    <div class="max-w-6xl mx-auto mt-5! ">
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3"> 
+            <!-- Total AD Branch List -->
+            <mat-card
+                class="bg-emerald-900! backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden h-50!  ">
+                <mat-card-content class="p-6">
+                    <div class="text-gray-100 text-lg font-medium mb-3 text-center">Total AD Branch</div>
+                    <div class="text-6xl font-bold text-white mb-2 text-center"> {{branchSummaryData.totalBrn}}</div>
+                    <div class="w-73! bg-amber-50! h-px! mt-5 mx-7 "></div>
+                    <div class="flex flex-row  justify-center">
+                        
+                        <div
+                            class="inline-flex items-center px-3 py-2 text-1xl  font-medium  text-white">
+                            <button mat-button  class="cursor-pointer"></button>
+                        </div>
+                    </div>
+
+                </mat-card-content>
+            </mat-card>
+
+             <!-- Total Sign In Branch List -->
+             <mat-card
+                class="bg-emerald-900! backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden h-50!  ">
+                <mat-card-content class="p-6">
+                    <div class="text-gray-100 text-lg font-medium mb-3 text-center">Total SignIn Branch</div>
+                    <div class="text-6xl font-bold text-white mb-2 text-center"> {{branchSummaryData.totalSnInBrn}}</div>
+                    <div class="w-73! bg-amber-50! h-px! mt-5 mx-7 "></div>
+                    <div class="flex flex-row  justify-center">
+                        
+                        <div
+                            class="inline-flex items-center px-3 py-2 text-1xl  font-medium  text-white">
+                            <button mat-button  class="cursor-pointer"></button>
+                        </div>
+                    </div>
+
+                </mat-card-content>
+            </mat-card>
+
+             <!-- Total Sign out Branch List -->
+            <mat-card
+                class="bg-emerald-900! backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden h-50!  ">
+                <mat-card-content class="p-6">
+                    <div class="text-gray-100 text-lg font-medium mb-3 text-center">Total SignOut Branch</div>
+                    <div class="text-6xl font-bold text-white mb-2 text-center"> {{branchSummaryData.totalSnOutBrn}}</div>
+                    <div class="w-73! bg-amber-50! h-px! mt-5 mx-7 "></div>
+                    <div class="flex flex-row  justify-center">
+                        
+                        <div
+                            class="inline-flex items-center px-3 py-2 text-1xl  font-medium  text-white">
+                            <button mat-button  class="cursor-pointer"></button>
+                        </div>
+                    </div>
+
+                </mat-card-content>
+            </mat-card>
+
+        </div>
+     </div>
+</div>
+
+<div class="w-297! ml-3! bg-gray-400! h-px! mt-5! mb-5!"></div>
+
+<div class="p-6  ml-7 mb-20! bg-white border border-gray-200 rounded-lg shadow-sm w-280 overflow-visible">
+    <app-dynamic-material-table [columns]="[
+    { key: 'rn', label: 'RN' },
+    { key: 'brnCode', label: 'Branch Code' },
+    { key: 'brnName', label: 'Branch Name' },
+    { key: 'currentDate', label: 'Business Date' },
+    { key: 'brnSignIn', label: 'Sign In' },
+    { key: 'brnSignOut', label: 'Sign Out' },
+    
+  ]" [data]="branchSummary" (onPage)="onPageChangeHandler($event)" [totalItems]="totalItems" [pageSize]="pageSize"  [currentPage]="currentPage"
+  />
+</div>
+

@@ -1,0 +1,29 @@
+mat-header-row {
+  background-color: #064e3b !important;
+  color: white;
+}
+
+mat-header-cell {
+  font-size: 14px;
+  text-align: center;
+}
+
+mat-cell {
+  font-size: 13px;
+  text-align: left;
+}
+
+::ng-deep mat-header-cell,
+::ng-deep mat-cell {
+  text-align: center;
+}
+
+.mat-mdc-row .mat-mdc-cell {
+  border-bottom: 1px solid transparent;
+  border-top: 1px solid transparent;
+  cursor: pointer;
+}
+
+.mat-mdc-row:hover .mat-mdc-cell {
+  border-color: currentColor;
+}

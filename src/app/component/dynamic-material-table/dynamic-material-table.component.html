@@ -1,0 +1,39 @@
+<div class="example-container mat-elevation-z0">
+    <mat-table [dataSource]="dataSource" matSort>
+
+        <ng-container *ngFor="let col of columns" [matColumnDef]="col.key">
+            <mat-header-cell *matHeaderCellDef>
+                <span *ngIf="col.sortable !== false" [mat-sort-header]="col.key">{{ col.label }}</span>
+                <span *ngIf="col.sortable === false">{{ col.label }}</span>
+            </mat-header-cell>
+
+
+            <mat-cell *matCellDef="let row; let i = index">
+                <ng-container [ngSwitch]="col.key">
+                    <ng-container *ngSwitchCase="'rn'">
+                        {{ currentPage * pageSize + i + 1 }}
+                    </ng-container>
+                    <!-- For formatted date -->
+                    <ng-container *ngSwitchCase="'brnSignIn'">
+                        {{ row[col.key] | date:'short' }}
+                    </ng-container>
+                    <!-- For formatted date -->
+                    <ng-container *ngSwitchCase="'brnSignOut'">
+                        {{ row[col.key] | date:'short' }}
+                    </ng-container>
+                    
+                    <ng-container *ngSwitchDefault>
+                        {{ row[col.key] }}
+                    </ng-container>
+                </ng-container>
+            </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+    </mat-table>
+
+    <mat-paginator [length]="totalItems" [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 15, 20, 25]"
+        (page)="onPageChange($event)" class="text-gray-700 text-sm">
+    </mat-paginator>
+</div>
