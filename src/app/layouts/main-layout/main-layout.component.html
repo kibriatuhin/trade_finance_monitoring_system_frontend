@@ -1,10 +1,10 @@
 
 <app-header (sideBarToggle)="drawer.toggle()"></app-header>
-<mat-drawer-container autosize>
+<mat-drawer-container autosize class="!border-t-0 !shadow-none">
     
     <mat-drawer #drawer mode="side" [opened]="isSidebarOpen" class="w-70!">
         <div class="bg-white h-full overflow-y-auto border-r border-gray-300 text-xs!">
-            <mat-list class="">
+            <mat-list>
 
                 <!-- Main Menu Item with Submenu -->
                 <mat-list-item >
@@ -12,7 +12,7 @@
                         class="flex items-center justify-between w-full px-4 py-2 rounded-lg hover:bg-blue-100 transition-all"
                         (click)="toggleSubmenu()">
                         <div class="flex items-center gap-3 text-sm!">
-                            <mat-icon class="bg-emerald-900! rounded-xl text-white! text-sm! w-6! h-6! flex! items-center! justify-center! leading-none!">dashboard</mat-icon>
+                            <mat-icon class="bg-emerald-800! rounded-xl text-white! text-sm! w-6! h-6! flex! items-center! justify-center! leading-none!">dashboard</mat-icon>
                             <span >DashBoard</span>
                         </div>
                         <mat-icon>{{ isSubmenuOpen ? 'expand_less' : 'expand_more' }}</mat-icon>
@@ -28,7 +28,7 @@
                     <mat-list-item class="relative pl-1 flex items-center">
                         <!-- Horizontal Line -->
                         <div class="absolute -left-6 h-px w-6 bg-gray-500 top-1/2 transform -translate-y-1/2 pl-10"></div>
-                        <a (click)="openTab('Import', '/import')" routerLink="/import" routerLinkActive="text-emerald-900! font-bold" class="block py-1 rounded-4xl text-sm! transition-all pl-2">
+                        <a (click)="openTab('IMPMNTG', '/import')" routerLink="/import" routerLinkActive="text-emerald-900! font-bold" class="block py-1 rounded-4xl text-sm! transition-all pl-2">
                             <span>Import Monitoring</span>
                         </a>
                     </mat-list-item>
@@ -37,7 +37,7 @@
                     <mat-list-item class="relative pl-0 flex items-center">
                         <!-- Horizontal Line -->
                         <div class="absolute -left-6 h-px w-6 bg-gray-500 top-1/2 transform -translate-y-1/2 pl-10"></div>
-                        <a (click)="openTab('History', '/transaction-history')" routerLink="/transaction-history" routerLinkActive="text-emerald-900! font-bold"
+                        <a (click)="openTab('EXPMNTG', '/export')" routerLink="/export" routerLinkActive="text-emerald-900! font-bold"
                             class="block py-1  transition-all pl-2 text-sm!">
                             Export Monitoring
                         </a>
@@ -46,7 +46,7 @@
                     <mat-list-item class="relative pl-0 flex items-center">
                         <!-- Horizontal Line -->
                         <div class="absolute -left-6 h-px w-6 bg-gray-500 top-1/2 transform -translate-y-1/2 pl-10"></div>
-                        <a (click)="openTab('Branch', '/branches')" routerLink="/branches" routerLinkActive="text-emerald-900! font-bold"
+                        <a (click)="openTab('BRMNTG', '/branches')" routerLink="/branches" routerLinkActive="text-emerald-900! font-bold"
                             class="block py-1  transition-all pl-2 text-sm!">
                             Branch Monitoring
                         </a>
@@ -62,7 +62,7 @@
                         class="flex items-center justify-between w-full px-4 py-2 rounded-lg hover:bg-blue-100 transition-all"
                         (click)="toggleSubmenu2()">
                         <div class="flex items-center gap-3 text-sm!">
-                            <mat-icon class="bg-emerald-900! rounded-xl text-white! text-sm! w-6! h-6! flex! items-center! justify-center! leading-none!">flight_land</mat-icon>
+                            <mat-icon class="bg-emerald-800! rounded-xl text-white! text-sm! w-6! h-6! flex! items-center! justify-center! leading-none!">flight_land</mat-icon>
                             <span>Import Report</span>
                         </div>
                         <mat-icon>{{ isSubmenuOpen2 ? 'expand_less' : 'expand_more' }}</mat-icon>
@@ -103,7 +103,7 @@
                     <a routerLink="/setting" routerLinkActive="bg-blue-600 text-white rounded-full"
                         [routerLinkActiveOptions]="{ exact: true }"
                         class="flex items-center gap-3 px-4 py-2 w-full rounded-lg transition-all duration-200 hover:bg-blue-100 text-sm!">
-                        <mat-icon class="bg-emerald-900! rounded-xl text-white! text-sm! w-6! h-6! flex! items-center! justify-center! leading-none!">flight_takeoff</mat-icon>
+                        <mat-icon class="bg-emerald-800! rounded-xl text-white! text-sm! w-6! h-6! flex! items-center! justify-center! leading-none!">flight_takeoff</mat-icon>
                         <span>Export Report</span>
                     </a>
                 </mat-list-item>
@@ -114,7 +114,7 @@
 
     <mat-drawer-content >
         <app-tab-bar ></app-tab-bar>
-        <div class="flex-1 overflow-y-auto bg-white h-[calc(100vh-64px)]" style="background-color: rgb(255, 255, 255);">
+        <div class="flex-1 overflow-y-auto h-[calc(100vh)] bg-indigo-50">
             <router-outlet></router-outlet>
         </div>
 

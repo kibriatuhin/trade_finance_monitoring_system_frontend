@@ -30,105 +30,54 @@ openTab(title: string, route: string) {
 }
 
 
- /* openTab(title: string, route: string) {
-    const exists = this.tabs.find(t => t.route === route);
-    if (!exists) {
-      this.tabs.forEach(t => t.isActive = false);
-      this.tabs.push({ title, route, isActive: true });
-    } else {
-      this.tabs.forEach(t => t.isActive = (t.route === route));
-    }
-    this.tabsSubject.next(this.tabs);
-  }*/
 
-closeTab(route: string) {
-    const index = this.tabs.findIndex(t => t.route === route);
-    if (index !== -1) {
-      const wasActive = this.tabs[index].isActive;
-      this.tabs.splice(index, 1);
+ closeTab(route: string) {
+  const index = this.tabs.findIndex(t => t.route === route);
+  if (index !== -1) {
+    const wasActive = this.tabs[index].isActive;
+    this.tabs.splice(index, 1);
 
-      if (wasActive && this.tabs.length > 0) {
-        this.tabs[this.tabs.length - 1].isActive = true;
+    if (wasActive && this.tabs.length > 0) {
+      // Prefer previous tab, otherwise take the first available tab
+      let nextActiveIndex = index - 1;
+
+      if (nextActiveIndex < 0) {
+        nextActiveIndex = 0;
       }
 
-      this.tabsSubject.next(this.tabs);
+      this.tabs[nextActiveIndex].isActive = true;
+      this.router.navigateByUrl(this.tabs[nextActiveIndex].route);
+    } else if (wasActive && this.tabs.length === 0) {
+      this.router.navigateByUrl('/blank');
     }
+
+    // Important: Send new array reference to trigger change detection
+    this.tabsSubject.next([...this.tabs]);
   }
-
-/*closeTab(route: string): void {
-  const index = this.tabs.findIndex(t => t.route === route);
-  if (index === -1) return;
-
-  const wasActive = this.tabs[index].isActive;
-
-  // Determine next tab BEFORE removal
-  let nextTab: Tab | undefined;
-  if (wasActive) {
-    // Prefer right tab, then left
-    nextTab = this.tabs[index + 1] || this.tabs[index - 1];
-  }
-
-  // Remove the tab
-  this.tabs.splice(index, 1);
-
-  // Clear active flags
-  this.tabs.forEach(t => t.isActive = false);
-
-  // Activate next tab if exists
-  if (nextTab) {
-    nextTab.isActive = true;
-  }
-
-  // Emit updated tab list
-  this.tabsSubject.next([...this.tabs]);
-
-  // ✅ If all tabs are closed and the closed one was active, navigate to /blank
-  if (wasActive && this.tabs.length === 0) {
-    this.router.navigate(['/blank']);
-  }
-}*/
+}
 
 
-/*
-
-closeTab(route: string): void {
-  const index = this.tabs.findIndex(t => t.route === route);
-  if (index === -1) return;
-
-  const wasActive = this.tabs[index].isActive;
-
-  // Determine next tab BEFORE removal
-  let nextTab: Tab | undefined;
-  if (wasActive) {
-    // Prefer right tab, then left
-    nextTab = this.tabs[index + 1] || this.tabs[index - 1];
-  }
-
-  // Remove the tab
-  this.tabs.splice(index, 1);
-
-  // Clear current active flags
-  this.tabs.forEach(t => t.isActive = false);
-
-  // Activate next tab if exists
-  if (nextTab) {
-    nextTab.isActive = true;
-  }
-
-  // Emit updated tab list
-  this.tabsSubject.next([...this.tabs]);
-} */
 
 
 
 
 activateTab(route: string) {
-  this.tabs.forEach(t => t.isActive = (t.route === route));
-  this.tabsSubject.next([...this.tabs]); // new reference here too
+  let activatedTab: Tab | undefined;
+  
+  this.tabs.forEach(t => {
+    t.isActive = (t.route === route);
+    if (t.isActive) {
+      activatedTab = t;
+    }
+  });
+  
+  this.tabsSubject.next([...this.tabs]);
+  
+  // Navigate to the activated tab
+  if (activatedTab) {
+    this.router.navigateByUrl(activatedTab.route);
+  }
 }
 
- /* activateTab(route: string) {
-    this.tabs.forEach(t => t.isActive = (t.route === route));
-    this.tabsSubject.next(this.tabs);
-  }*/
+
 }
