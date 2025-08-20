@@ -1,0 +1,41 @@
+<div *ngIf="show"
+     #dialogContainer 
+     class="absolute left-0 mt-1 w-80 bg-white border border-gray-300 rounded-lg shadow-md z-10"
+     role="dialog" aria-modal="false">
+  
+  <!-- header -->
+  <div class="p-2 border-b border-gray-200 flex justify-between items-center">
+    <div class="text-sm font-semibold">Select Currency</div>
+    <button aria-label="Close" (click)="onCancel()" class="text-gray-500 hover:text-gray-700">
+      &times;
+    </button>
+  </div>
+
+
+
+  <!-- table -->
+  <div #scrollContainer class="max-h-40 overflow-y-auto">
+    <table class="w-full text-xs border-collapse">
+      <thead class="sticky top-0 bg-emerald-800 text-white z-10">
+      <tr>
+        <th class="px-2 py-1 text-left w-32">Currency Code</th>
+        <th class="px-2 py-1 text-left">Name</th>
+      </tr>
+    </thead>
+      <tbody>
+        <tr *ngFor="let c of currencies ; let i = index" class="cursor-pointer hover:bg-gray-100" [class.bg-gray-200]="i === hoveredIndex"
+          #currencyRow
+            (click)="onSelect(c)" >
+          <td class="px-2 py-1 border-t border-gray-200 font-medium">{{ c.currCode }}</td>
+          <td class="px-2 py-1 border-t border-gray-200">{{ c.currName }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- footer -->
+  <div class="text-[10px] text-gray-600 px-2 py-1 border-t border-gray-200 flex justify-between">
+    <div>Currency Code Help - Name Search Type</div>
+    <div>Page 1</div>
+  </div>
+</div>

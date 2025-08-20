@@ -16,6 +16,7 @@ export const routes: Routes = [
     path: '',
     component: MainLayoutComponent,
     children: [
+      { path: '', component: BlankComponent }, // Default route
       { path: 'blank', component: BlankComponent },
       { path: 'import', component: ImportDashboardComponent },
       { path: 'export', component: ExportDashboardComponent },

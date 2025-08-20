@@ -3,6 +3,8 @@ import { Tab } from '../../shared/model/tab.model';
 import { TabService } from '../../services/tabServices/tab.service';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { ChangeDetectorRef } from '@angular/core';
+
 import { NgZone } from '@angular/core';
 
 @Component({
@@ -14,26 +16,40 @@ import { NgZone } from '@angular/core';
 })
 export class TabBarComponent {
   tabs: Tab[] = [];
-  activeTab: Tab | null = null;
 
-  constructor(private tabService: TabService, private router: Router) {
+  // ✅ Use ChangeDetectorRef to trigger change detection manually
+
+
+
+  constructor(
+    private tabService: TabService, 
+    private router: Router,
+    private cdr: ChangeDetectorRef
+  ) {
     this.tabService.tabs$.subscribe((tabs) => {
       this.tabs = tabs;
-
-      const active = tabs.find((t) => t.isActive);
-      if (active) {
-        this.router.navigateByUrl(active.route);
-      } else {
-        this.router.navigateByUrl('/blank'); // fallback to blank
+      
+      // Handle navigation when active tab changes
+      const activeTab = tabs.find(t => t.isActive);
+      if (activeTab) {
+        this.router.navigateByUrl(activeTab.route);
+      } else if (tabs.length === 0) {
+        this.router.navigateByUrl('/blank');
       }
+      
+      this.cdr.detectChanges();
     });
-  }
+  } 
 
   activate(tab: Tab) {
     this.tabService.activateTab(tab.route);
   }
 
-  close(tab: Tab) {
+  close(tab: Tab, event?: MouseEvent) {
+    // Prevent click event from bubbling to parent (activate)
+    if (event) {
+      event.stopPropagation();
+    }
     this.tabService.closeTab(tab.route);
   }
 }

@@ -79,7 +79,7 @@ export class DashboardTranHistoryComponent {
   fetchData(): void {
     this.dashboardService
       .fetchTranHistory(
-        'http://localhost:9092/api/v1/importDashboard/impTranHistory',
+        '/importDashboard/impTranHistory',
         this.selectedYear,
         this.pageSize
       )

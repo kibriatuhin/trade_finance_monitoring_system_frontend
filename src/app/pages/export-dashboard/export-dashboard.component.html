@@ -1,1 +1,380 @@
-<p>export-dashboard works!</p>
+<div class="flex flex-col items-center justify-center  pb-5! pt-3!">
+    <h5 class=" font-bold mb-1!">Export/Order LC Monitoring</h5>
+</div>
+<div class=" bg-gray-600! h-px! mb-1"></div>
+<div class="  p-6">
+
+
+    <form [formGroup]="exportForm" (ngSubmit)="onSubmit()" class="flex flex-col md:flex-row items-center mb-1 gap-3">
+
+        <div class="">
+            <label for="countries" class="block  text-sm font-medium text-gray-900 ">Financial
+                Year</label>
+            <select id="countries" name="year" #yearSelect (ngModel)="selectedYear" formControlName="year" (keydown)="onYearKeyDown($event)"
+                class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
+              px-3 py-2.5 pr-15! focus:outline-none focus:border-blue-500 block w-full p-2.5">
+
+                <option *ngFor="let year of years" [value]="year">{{ year }}</option>
+
+            </select>
+            <div class="text-red-800 text-xs min-h-[20px]">
+                @if ((exportForm.get('year')?.dirty || exportForm.get('year')?.touched) &&
+                exportForm.get('year')?.errors?.['required']) {
+                <span class="text-red-500">Year is required.</span>
+                }
+            </div>
+        </div>
+        <div class="max-w-md relative" #wrapper>
+            <label for="currency" class="block text-sm font-medium text-gray-900ss mb-1">
+                Currency Code
+            </label>
+
+            <div class="relative" #wrapper>
+                <input id="currency" type="text" name="currency" formControlName="currency" autocomplete="off"
+                    placeholder="Choose Currency" (keydown)="onCurrencyKeyDown($event)" (input)="toUppercase($event)"
+                     class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block 
+                             px-3 py-2.5 pr-20 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+                    aria-label="Currency Code" />
+                <div class="text-red-800 text-xs min-h-[20px]">
+
+                    @if (currencyErrorMessage) {
+                    <span class="text-red-500">{{ currencyErrorMessage }}</span>
+
+                    }
+                    
+
+                </div>
+                <!-- <button mat-icon-button type="button"
+                    class="absolute inset-y-0 right-0 flex items-center pr-2 cursor-pointer">
+                     <mat-icon class="material-symbols-outlined text-gray-500">
+                        content_copy
+                    </mat-icon> s
+                </button> -->
+
+
+                <!-- popover dialog, positioned relative to input -->
+                <app-show-dialog [show]="showPopover" [currencies]="currencies" (select)="selectCurrency($event)"
+                    (close)="cancel()"></app-show-dialog>
+
+
+
+            </div>
+
+
+        </div>
+
+    </form>
+    <div class="max-w-6xl mx-auto mb-20">
+
+
+
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
+            
+            <!-- Total Export Lc open Volume Card -->
+
+            <mat-card
+                class="bg-emerald-800! backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden ">
+                <mat-card-content class="p-6">
+                    <div class="text-2xl font-bold text-white mb-2 ">{{ totalExportSummary.totalExportOpen}}</div>
+                    <div class="text-gray-100 text-xs font-medium mb-3">Total Export Open</div>
+                    <div class="w-53! bg-amber-50! h-px! mb-1"></div>
+                    <div class="flex flex-row  justify-center">
+
+                        <div class="inline-flex items-center px-3 py-2 text-1xl  font-medium  text-white">
+                            <button mat-button class="cursor-pointer">View Details</button>
+                        </div>
+                    </div>
+
+                </mat-card-content>
+            </mat-card>
+
+            <!-- Total Order Lc open  Volume Card -->
+
+            <mat-card
+                class="bg-emerald-800! backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden ">
+                <mat-card-content class="p-6">
+                    <div class="text-2xl font-bold text-white mb-2 ">{{ totalExportSummary.totalOrderOpen}}</div>
+                    <div class="text-gray-100 text-xs font-medium mb-3">Total Order/Contact Open</div>
+                    <div class="w-53! bg-amber-50! h-px! mb-1"></div>
+                    <div class="flex flex-row  justify-center">
+
+                        <div class="inline-flex items-center px-3 py-2 text-1xl  font-medium  text-white">
+                            <button mat-button class="cursor-pointer">View Details</button>
+                        </div>
+                    </div>
+
+                </mat-card-content>
+            </mat-card>
+
+            <!--Total BTB Open Card -->
+            <mat-card
+                class="bg-emerald-800! backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden ">
+                <mat-card-content class="p-6">
+                    <div class="text-2xl font-bold text-white mb-2 ">{{ totalExportSummary.totalBtbOpen}}</div>
+                    <div class="text-gray-100 text-xs font-medium mb-3">Total BTB Open</div>
+                    <div class="w-53! bg-amber-50! h-px! mb-1"></div>
+                    <div class="flex flex-row  justify-center">
+
+                        <div class="inline-flex items-center px-3 py-2 text-1xl  font-medium  text-white">
+                            <button mat-button class="cursor-pointer">View Details</button>
+                        </div>
+                    </div>
+
+                </mat-card-content>
+            </mat-card>
+
+            <!--Total BTB Bill Open Card -->
+            <mat-card
+                class="bg-emerald-800! backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden ">
+                <mat-card-content class="p-6">
+                    <div class="text-2xl font-bold text-white mb-2 ">{{ totalExportSummary.totalExpBtbBillOpen}}</div>
+                    <div class="text-gray-100 text-xs font-medium mb-3">Total BTB Bill Open</div>
+                    <div class="w-53! bg-amber-50! h-px! mb-1"></div>
+                    <div class="flex flex-row  justify-center">
+
+                        <div class="inline-flex items-center px-3 py-2 text-1xl  font-medium  text-white">
+                            <button mat-button class="cursor-pointer">View Details</button>
+                        </div>
+                    </div>
+
+                </mat-card-content>
+            </mat-card>
+
+             <!-- Total Export PC Open card -->
+             <mat-card
+                class="bg-emerald-800! backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden ">
+                <mat-card-content class="p-6">
+                    <div class="text-2xl font-bold text-white mb-2 ">{{ totalExportSummary.totalExpPcOpen}}</div>
+                    <div class="text-gray-100 text-xs font-medium mb-3">Total Packing Credit Open</div>
+                    <div class="w-53! bg-amber-50! h-px! mb-1"></div>
+                    <div class="flex flex-row  justify-center">
+
+                        <div class="inline-flex items-center px-3 py-2 text-1xl  font-medium  text-white">
+                            <button mat-button class="cursor-pointer">View Details</button>
+                        </div>
+                    </div>
+
+                </mat-card-content>
+            </mat-card>
+
+            <!-- Total Export Bill Open Card -->
+             <mat-card
+                class="bg-emerald-800! backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden ">
+                <mat-card-content class="p-6">
+                    <div class="text-2xl font-bold text-white mb-2 ">{{ totalExportSummary.totalExpBillOpen}}</div>
+                    <div class="text-gray-100 text-xs font-medium mb-3">Total Export Bill Open</div>
+                    <div class="w-53! bg-amber-50! h-px! mb-1"></div>
+                    <div class="flex flex-row  justify-center">
+
+                        <div class="inline-flex items-center px-3 py-2 text-1xl  font-medium  text-white">
+                            <button mat-button class="cursor-pointer">View Details</button>
+                        </div>
+                    </div>
+
+                </mat-card-content>
+            </mat-card>
+
+            <!-- Total Export PL Open Card -->
+             <mat-card
+                class="bg-emerald-800! backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden ">
+                <mat-card-content class="p-6">
+                    <div class="text-2xl font-bold text-white mb-2 ">{{ totalExportSummary.totalExpPlOpen}}</div>
+                    <div class="text-gray-100 text-xs font-medium mb-3">Total Purchase Loan Open</div>
+                    <div class="w-53! bg-amber-50! h-px! mb-1"></div>
+                    <div class="flex flex-row  justify-center">
+
+                        <div class="inline-flex items-center px-3 py-2 text-1xl  font-medium  text-white">
+                            <button mat-button class="cursor-pointer">View Details</button>
+                        </div>
+                    </div>
+
+                </mat-card-content>
+            </mat-card>
+
+
+            <!-- Total Export Lc  Volume Card -->
+            <mat-card
+                class="bg-emerald-800! backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden ">
+                <mat-card-content class="p-6">
+                    <div class="text-2xl font-bold text-white mb-2 ">&#x09F3; {{ totalExportSummary.totalExportAmount}}</div>
+                    <div class="text-gray-100 text-xs font-medium mb-3">Total Export Volume</div>
+                    <div class="w-53! bg-amber-50! h-px! mb-1"></div>
+                    <div class="flex flex-row  justify-center">
+
+                        <div class="inline-flex items-center px-3 py-2 text-1xl  font-medium  text-white">
+                            <button mat-button class="cursor-pointer">View Details</button>
+                        </div>
+                    </div>
+
+                </mat-card-content>
+            </mat-card>
+
+            <!-- Total Order/Contact amount Card -->
+
+             <mat-card
+                class="bg-emerald-800! backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden ">
+                <mat-card-content class="p-6">
+                    <div class="text-2xl font-bold text-white mb-2 ">&#x09F3; {{ totalExportSummary.totalOrderAmount}}</div>
+                    <div class="text-gray-100 text-xs font-medium mb-3">Total Order/Contact Volume</div>
+                    <div class="w-53! bg-amber-50! h-px! mb-1"></div>
+                    <div class="flex flex-row  justify-center">
+
+                        <div class="inline-flex items-center px-3 py-2 text-1xl  font-medium  text-white">
+                            <button mat-button class="cursor-pointer">View Details</button>
+                        </div>
+                    </div>
+
+                </mat-card-content>
+            </mat-card>
+            
+
+            <!-- Total Export BTB amount Card -->
+            <mat-card
+                class="bg-emerald-800! backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden">
+                <mat-card-content class="p-6">
+                    <div class="text-2xl font-bold text-white mb-2">&#x09F3;{{ totalExportSummary.totalBtbAmount}}</div>
+                    <div class="text-gray-100 text-xs font-medium mb-3">Total BTB Amount</div>
+                    <div class="w-53! bg-amber-50! h-px! mb-1"></div>
+                    <div class="flex flex-row  justify-center">
+
+                        <div class="inline-flex items-center px-3 py-2 text-1xl  font-medium  text-white">
+                            <button mat-button class="cursor-pointer">View Details</button>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+            <!-- Total Export BTB Bill amount Card -->
+            <mat-card
+                class="bg-emerald-800! backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden">
+                <mat-card-content class="p-6">
+                    <div class="text-2xl font-bold text-white mb-2">&#x09F3;{{ totalExportSummary.totalExpBtbBillAmount}}</div>
+                    <div class="text-gray-100 text-xs font-medium mb-3">Total BTB Bill Amount</div>
+                    <div class="w-53! bg-amber-50! h-px! mb-1"></div>
+                    <div class="flex flex-row  justify-center">
+
+                        <div class="inline-flex items-center px-3 py-2 text-1xl  font-medium  text-white">
+                            <button mat-button class="cursor-pointer">View Details</button>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+
+            <!-- Total Export BTB payment amount Card -->
+            <mat-card
+                class="bg-emerald-800! backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden">
+                <mat-card-content class="p-6">
+                    <div class="text-2xl font-bold text-white mb-2">&#x09F3;{{ totalExportSummary.totalExpBtbPayAmount}}</div>
+                    <div class="text-gray-100 text-xs font-medium mb-3">Total BTB Payment Amount</div>
+                    <div class="w-53! bg-amber-50! h-px! mb-1"></div>
+                    <div class="flex flex-row  justify-center">
+
+                        <div class="inline-flex items-center px-3 py-2 text-1xl  font-medium  text-white">
+                            <button mat-button class="cursor-pointer">View Details</button>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+
+            
+
+            
+
+            <!-- Total Export Pc Amount Card -->
+            <mat-card
+                class="bg-emerald-800! backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden">
+                <mat-card-content class="p-6">
+                    <div class="text-2xl font-bold text-white mb-2">&#x09F3;{{ totalExportSummary.totalExpPcAmount}}</div>
+                    <div class="text-gray-100 text-xs font-medium mb-3">Total Packing Credit Amount</div>
+                    <div class="w-53! bg-amber-50! h-px! mb-1"></div>
+                    <div class="flex flex-row  justify-center">
+
+                        <div class="inline-flex items-center px-3 py-2 text-1xl  font-medium  text-white">
+                            <button mat-button class="cursor-pointer">View Details</button>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+
+             <!-- Total Export Bill Amount Card -->
+            <mat-card
+                class="bg-emerald-800! backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden">
+                <mat-card-content class="p-6">
+                    <div class="text-2xl font-bold text-white mb-2">&#x09F3;{{ totalExportSummary.totalExpBillAmount}}</div>
+                    <div class="text-gray-100 text-xs font-medium mb-3">Total Export Bill Amount</div>
+                    <div class="w-53! bg-amber-50! h-px! mb-1"></div>
+                    <div class="flex flex-row  justify-center">
+
+                        <div class="inline-flex items-center px-3 py-2 text-1xl  font-medium  text-white">
+                            <button mat-button class="cursor-pointer">View Details</button>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+
+             <!-- Total Export Pl Amount Card -->
+            <mat-card
+                class="bg-emerald-800! backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden">
+                <mat-card-content class="p-6">
+                    <div class="text-2xl font-bold text-white mb-2">&#x09F3;{{ totalExportSummary.totalExpPlAmount}}</div>
+                    <div class="text-gray-100 text-xs font-medium mb-3">Total Purchase Loan Amount</div>
+                    <div class="w-53! bg-amber-50! h-px! mb-1"></div>
+                    <div class="flex flex-row  justify-center">
+
+                        <div class="inline-flex items-center px-3 py-2 text-1xl  font-medium  text-white">
+                            <button mat-button class="cursor-pointer">View Details</button>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+             <!-- Total Payment Disbursement Amount Card -->
+            <mat-card
+                class="bg-emerald-800! backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden">
+                <mat-card-content class="p-6">
+                    <div class="text-2xl font-bold text-white mb-2">&#x09F3;{{ totalExportSummary.totalExpDispAmount}}</div>
+                    <div class="text-gray-100 text-xs font-medium mb-3">Total Payment Disbursement Amount</div>
+                    <div class="w-53! bg-amber-50! h-px! mb-1"></div>
+                    <div class="flex flex-row  justify-center">
+
+                        <div class="inline-flex items-center px-3 py-2 text-1xl  font-medium  text-white">
+                            <button mat-button class="cursor-pointer">View Details</button>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+
+             <!-- Total Export EDF Received Amount Card -->
+            <mat-card
+                class="bg-emerald-800! backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden">
+                <mat-card-content class="p-6">
+                    <div class="text-2xl font-bold text-white mb-2">&#x09F3;{{ totalExportSummary.totalExpEdfRecvdAmount}}</div>
+                    <div class="text-gray-100 text-xs font-medium mb-3">Total EDF Received Amount</div>
+                    <div class="w-53! bg-amber-50! h-px! mb-1"></div>
+                    <div class="flex flex-row  justify-center">
+
+                        <div class="inline-flex items-center px-3 py-2 text-1xl  font-medium  text-white">
+                            <button mat-button class="cursor-pointer">View Details</button>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+             <!-- Total EDF Refund Amount Card -->
+            <mat-card
+                class="bg-emerald-800! backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden">
+                <mat-card-content class="p-6">
+                    <div class="text-2xl font-bold text-white mb-2">&#x09F3;{{ totalExportSummary.totalExpEdfRefundAmount}}</div>
+                    <div class="text-gray-100 text-xs font-medium mb-3">Total EDF Refund Amount</div>
+                    <div class="w-53! bg-amber-50! h-px! mb-1"></div>
+                    <div class="flex flex-row  justify-center">
+
+                        <div class="inline-flex items-center px-3 py-2 text-1xl  font-medium  text-white">
+                            <button mat-button class="cursor-pointer">View Details</button>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+
+
+        </div>
+    </div>
+
+</div>

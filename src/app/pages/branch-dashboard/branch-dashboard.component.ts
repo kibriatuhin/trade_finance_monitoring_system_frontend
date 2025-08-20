@@ -6,11 +6,15 @@ import { DynamicMaterialTableComponent } from '../../component/dynamic-material-
 import { BranchStatusListData } from '../../shared/interface/BranchStatusListData';
 import { Output, EventEmitter } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { MatFormFieldModule } from '@angular/material/form-field'; // ✅ এইটা import করো
+
 
 @Component({
   selector: 'app-branch-dashboard',
   standalone: true,
-  imports: [MatCardModule, MatCard, DynamicMaterialTableComponent],
+  imports: [MatCardModule, MatCard, DynamicMaterialTableComponent,FormsModule,CommonModule,ReactiveFormsModule,MatFormFieldModule],
   templateUrl: './branch-dashboard.component.html',
   styleUrl: './branch-dashboard.component.css',
 })
@@ -34,7 +38,7 @@ export class BranchDashboardComponent {
 
   loadDashboardData(): void {
     this.dashboardService
-      .fetchFormattedBranch('http://localhost:9092/api/v1/branch/adBrnSummary')
+      .fetchFormattedBranch('/branch/adBrnSummary')
       .subscribe((data) => {
         console.log('Branch Summary Data:', data);
         this.branchSummaryData = data;
@@ -42,7 +46,7 @@ export class BranchDashboardComponent {
 
     this.dashboardService
       .fetchBranchStatusHistory(
-        'http://localhost:9092/api/v1/branch/brnHistory'
+        '/branch/brnHistory'
       )
       .subscribe((data: BranchStatusListData[]) => {
         console.log('Branch table status Data:', data);
