@@ -6,7 +6,7 @@
 
 <div class="  p-6">
     <div class="max-w-6xl mx-auto ">
-        <div class="flex flex-row ">
+        <!-- <div class="flex flex-row ">
             <mat-form-field  appearance="fill">
                 <mat-label >Financial Year</mat-label>
                 <mat-select [(value)]="selectedYear" (selectionChange)="onYearChange()">
@@ -15,7 +15,87 @@
                     </mat-option>
                 </mat-select>
             </mat-form-field>
-        </div>
+        </div> -->
+
+        <form [formGroup]="importForm" (ngSubmit)="onSubmit()" class="flex flex-col md:flex-row items-center mb-1 gap-3">
+           <!--  
+                 Input Field : Financial  Year
+                 Author : Golam Kibria Tuhin
+                 Date : 21-08-2025
+           -->
+            <div class="">
+                <label for="fYear"  class="block  text-sm font-medium text-gray-900 ">Financial Year</label>
+                <select id="fYear" name="year" (ngModel)="selectedYear" formControlName="year"  #yearSelect
+                        (keydown)="onKeyDownPress($event,'branchCode',false)"
+                        (change)="onYearChange()"
+                        aria-label="Financial Year" 
+                    class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
+                          px-3 py-2.5 pr-15! focus:outline-none focus:border-blue-500 block w-full p-2.5">
+            
+                    <option *ngFor="let year of years" [value]="year">{{ year }}</option>
+            
+                </select>
+                <div class="text-red-800 text-xs min-h-[20px]">
+                    @if ((importForm.get('year')?.dirty || importForm.get('year')?.touched) &&
+                    importForm.get('year')?.errors?.['required']) {
+                    <span class="text-red-500">Year is required.</span>
+                    }
+                </div>
+            </div>
+
+            <!--  
+                 Input Field : Branch Code
+                 Author : Golam Kibria Tuhin
+                 Date : 21-08-2025
+           -->
+            <div class="max-w-md relative" #wrapper>
+                <label for="branchCode" class="block text-sm font-medium text-gray-900ss mb-1">
+                    Branch Code
+                </label>
+                <div class="relative" #wrapper>
+                    <input id="branchCode" type="text" name="branchCode" formControlName="branchCode" autocomplete="off"
+                        (keydown)="onKeyDownPress($event,'currencyCode',false)"
+                        (blur)="onBranchCodeBlur()"
+                        placeholder="Enter Branch"  class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block 
+                                         px-3 py-2.5 pr-20 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+                        aria-label="Branch Code" />
+                    <div class="text-xs min-h-[20px]"
+         [ngClass]="{
+           'text-green-600': branchCodeErrorMessage === 'For All Branch',
+           'text-red-500': branchCodeErrorMessage && branchCodeErrorMessage !== 'For All Branch'
+         }">
+         
+      {{ branchCodeErrorMessage }}
+    </div>
+            
+                </div>
+            </div>
+
+            <!--  
+                 Input Field : Currency Code
+                 Author : Golam Kibria Tuhin
+                 Date : 21-08-2025
+           -->
+            <div class="max-w-md relative" #wrapper>
+                <label for="currency" class="block text-sm font-medium text-gray-900ss mb-1">
+                    Currency Code
+                </label>
+                <div class="relative" #wrapper>
+                    <input id="currency" type="text" name="currencyCode" formControlName="currencyCode" autocomplete="off"
+                        (keydown)="onKeyDownPress($event, undefined, true)" (input)="toUppercase($event)"
+                        placeholder="Enter Currency Code"  class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block 
+                                         px-3 py-2.5 pr-20 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+                        aria-label="Currency Code" />
+                    <div class="text-red-800 text-xs min-h-[20px]">
+                         @if (currencyErrorMessage) {
+                    <span class="text-red-500">{{ currencyErrorMessage }}</span>
+
+                    }
+                    </div>
+            
+                </div>
+            </div>
+        </form>
 
         <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
 
@@ -36,12 +116,29 @@
                 </mat-card-content>
             </mat-card>
 
+            <!-- Pending L/Cs Card -->
+            <mat-card
+                class="bg-emerald-800! backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden">
+                <mat-card-content class="p-6">
+                    <div class="text-2xl font-bold text-white mb-2">{{totalImportLcSummary.impPendingLc}}</div>
+                    <div class="text-gray-100 text-xs font-medium mb-3">Pending L/Cs</div>
+                    <div class="w-53! bg-amber-50! h-px! mb-1"></div>
+                    <div class="flex flex-row  justify-center">
+                        
+                        <div
+                            class="inline-flex items-center px-3 py-2 text-1xl  font-medium  text-white">
+                            <button mat-button  class="cursor-pointer">View Details</button>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+
 
             <!-- Total import Lc  Volume Card -->
             <mat-card
                 class="bg-emerald-800! backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden ">
                 <mat-card-content class="p-6">
-                    <div class="text-2xl font-bold text-white mb-2 ">&#x09F3; {{ totalImportLcSummary.importAmount}}</div>
+                    <div class="text-2xl font-bold text-white mb-2 ">{{ getCurrencySymbol() }} {{ totalImportLcSummary.importAmount}}</div>
                     <div class="text-gray-100 text-xs font-medium mb-3">Total Trade Volume</div>
                     <div class="w-53! bg-amber-50! h-px! mb-1"></div>
                     <div class="flex flex-row  justify-center">
@@ -54,11 +151,27 @@
 
                 </mat-card-content>
             </mat-card>
+             <!--total bill amount Card -->
+            <mat-card
+                class="bg-emerald-800! backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden">
+                <mat-card-content class="p-6">
+                    <div class="text-2xl font-bold text-white mb-2">{{ getCurrencySymbol() }} {{totalImportLcSummary.importBillAmt}}</div>
+                    <div class="text-gray-100 text-xs font-medium mb-3">Total Bill Amount on Import Lc</div>
+                    <div class="w-53! bg-amber-50! h-px! mb-1"></div>
+                    <div class="flex flex-row  justify-center">
+                        
+                        <div
+                            class="inline-flex items-center px-3 py-2 text-1xl  font-medium  text-white">
+                            <button mat-button  class="cursor-pointer">View Details</button>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
             <!--total Os Liability Card -->
             <mat-card
                 class="bg-emerald-800! backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden">
                 <mat-card-content class="p-6">
-                    <div class="text-2xl font-bold text-white mb-2">&#x09F3; {{totalImportLcSummary.ImportOsLiab}}</div>
+                    <div class="text-2xl font-bold text-white mb-2">{{ getCurrencySymbol() }} {{totalImportLcSummary.ImportOsLiab}}</div>
                     <div class="text-gray-100 text-xs font-medium mb-3">Total O/S Liability on Import Lc</div>
                     <div class="w-53! bg-amber-50! h-px! mb-1"></div>
                     <div class="flex flex-row  justify-center">
@@ -75,7 +188,7 @@
             <mat-card
                 class="bg-emerald-800! backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden">
                 <mat-card-content class="p-6">
-                    <div class="text-2xl font-bold text-white mb-2">&#x09F3; {{totalImportLcSummary.importPayment }}</div>
+                    <div class="text-2xl font-bold text-white mb-2">{{ getCurrencySymbol() }} {{totalImportLcSummary.importPayment }}</div>
                     <div class="text-gray-100 text-xs font-medium mb-3">Total Payment Amount</div>
                     <div class="w-53! bg-amber-50! h-px! mb-1"></div>
                     <div class="flex flex-row  justify-center">
@@ -87,8 +200,24 @@
                     </div>
                 </mat-card-content>
             </mat-card>
+        <!-- PAD on Import payment -->
+            <mat-card
+                class="bg-emerald-800! backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden">
+                <mat-card-content class="p-6">
+                    <div class="text-2xl font-bold text-white mb-2">&#x09F3; {{totalImportLcSummary.importPadAmt}}</div>
+                    <div class="text-gray-100 text-xs font-medium mb-3">Total Pad Amount on Import Payment</div>
+                   <div class="w-53! bg-amber-50! h-px! mb-1"></div>
+                    <div class="flex flex-row  justify-center">
+                        
+                        <div
+                            class="inline-flex items-center px-3 py-2 text-1xl  font-medium  text-white">
+                            <button mat-button  class="cursor-pointer">View Details</button>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>    
 
-                   <!-- Active Transactions Card -->
+         <!-- PAD OS on Import payment -->
             <mat-card
                 class="bg-emerald-800! backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden">
                 <mat-card-content class="p-6">
@@ -128,9 +257,13 @@
                 <mat-card-content class="p-6">
                     <div class="text-2xl font-bold text-white mb-2">&#x09F3; {{totalImportLcSummary.impCommAmount }}</div>
                     <div class="text-gray-100 text-xs font-medium mb-3">Total Trade Commission</div>
-                    <div
-                        class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-green-100 text-green-700">
-                        +8.3% vs Last year
+                   <div class="w-53! bg-amber-50! h-px! mb-1"></div>
+                    <div class="flex flex-row  justify-center">
+                        
+                        <div
+                            class="inline-flex items-center px-3 py-2 text-1xl  font-medium  text-white">
+                            <button mat-button  class="cursor-pointer">View Details</button>
+                        </div>
                     </div>
                 </mat-card-content>
             </mat-card>
@@ -141,9 +274,13 @@
                 <mat-card-content class="p-6">
                     <div class="text-2xl font-bold text-white mb-2">&#x09F3; {{totalImportLcSummary.impSwftChgAmount}}</div>
                     <div class="text-gray-100 text-xs font-medium mb-3">Total Swift Charge</div>
-                    <div
-                        class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-green-100 text-green-700">
-                        +8.3% vs Last year
+                    <div class="w-53! bg-amber-50! h-px! mb-1"></div>
+                    <div class="flex flex-row  justify-center">
+                        
+                        <div
+                            class="inline-flex items-center px-3 py-2 text-1xl  font-medium  text-white">
+                            <button mat-button  class="cursor-pointer">View Details</button>
+                        </div>
                     </div>
                 </mat-card-content>
             </mat-card>
@@ -154,27 +291,53 @@
                 <mat-card-content class="p-6">
                     <div class="text-2xl font-bold text-white mb-2">&#x09F3; {{totalImportLcSummary.impPayChgAmount}}</div>
                     <div class="text-gray-100 text-xs font-medium mb-3">Total Charges on Import Payment</div>
-                    <div
-                        class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-green-100 text-green-700">
-                        +8.3% vs Last year
+                    <div class="w-53! bg-amber-50! h-px! mb-1"></div>
+                    <div class="flex flex-row  justify-center">
+                        
+                        <div
+                            class="inline-flex items-center px-3 py-2 text-1xl  font-medium  text-white">
+                            <button mat-button  class="cursor-pointer">View Details</button>
+                        </div>
                     </div>
                 </mat-card-content>
             </mat-card>
 
-             
-
-            <!-- Pending L/Cs Card -->
+         <!-- Foreign Lc open Vat Card -->
             <mat-card
                 class="bg-emerald-800! backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden">
                 <mat-card-content class="p-6">
-                    <div class="text-2xl font-bold text-white mb-2">{{totalImportLcSummary.impPendingLc}}</div>
-                    <div class="text-gray-100 text-xs font-medium mb-3">Pending L/Cs</div>
-                    <div
-                        class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-red-100 text-red-700">
-                        -5.2% vs Last year
+                    <div class="text-2xl font-bold text-white mb-2">&#x09F3; {{totalImportLcSummary.importVatAmount}}</div>
+                    <div class="text-gray-100 text-xs font-medium mb-3">Total Foreign LC Open Vat</div>
+                   <div class="w-53! bg-amber-50! h-px! mb-1"></div>
+                    <div class="flex flex-row  justify-center">
+                        
+                        <div
+                            class="inline-flex items-center px-3 py-2 text-1xl  font-medium  text-white">
+                            <button mat-button  class="cursor-pointer">View Details</button>
+                        </div>
                     </div>
                 </mat-card-content>
             </mat-card>
+
+            <!-- Foreign Lc open Tax Card -->
+            <mat-card
+                class="bg-emerald-800! backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden">
+                <mat-card-content class="p-6">
+                    <div class="text-2xl font-bold text-white mb-2">&#x09F3; {{totalImportLcSummary.importTaxAmount}}</div>
+                    <div class="text-gray-100 text-xs font-medium mb-3">Total Import LC Open Tax</div>
+                   <div class="w-53! bg-amber-50! h-px! mb-1"></div>
+                    <div class="flex flex-row  justify-center">
+                        
+                        <div
+                            class="inline-flex items-center px-3 py-2 text-1xl  font-medium  text-white">
+                            <button mat-button  class="cursor-pointer">View Details</button>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+             
+
+            
 
             <!-- Average Risk Score Card -->
             <!-- <mat-card
@@ -193,5 +356,5 @@
     
 </div>
 <div class="w-197! ml-3! bg-gray-400! h-px! mb-1"></div>
-<app-dashboard-tran-history [selectedYear]="selectedYear"></app-dashboard-tran-history>
+<app-dashboard-tran-history [selectedYear]="tempSelectedYear"></app-dashboard-tran-history>
 

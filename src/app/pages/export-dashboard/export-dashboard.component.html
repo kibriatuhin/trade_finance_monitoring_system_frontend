@@ -8,9 +8,8 @@
     <form [formGroup]="exportForm" (ngSubmit)="onSubmit()" class="flex flex-col md:flex-row items-center mb-1 gap-3">
 
         <div class="">
-            <label for="countries" class="block  text-sm font-medium text-gray-900 ">Financial
-                Year</label>
-            <select id="countries" name="year" #yearSelect (ngModel)="selectedYear" formControlName="year" (keydown)="onYearKeyDown($event)"
+            <label for="fYear" class="block  text-sm font-medium text-gray-900 ">Financial Year</label>
+            <select id="fYear" name="year" #yearSelect (ngModel)="selectedYear" formControlName="year" (keydown)="onYearKeyDown($event)"
                 class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
               px-3 py-2.5 pr-15! focus:outline-none focus:border-blue-500 block w-full p-2.5">
 

@@ -9,4 +9,8 @@ export interface ImportSummaryData {
   impSwftChgAmount: string;
   importAmount: string;
   importLcOpen: string;
+  importVatAmount: string;
+  importTaxAmount: string;
+  importPadAmt:string;
+  importBillAmt:string;
 }
