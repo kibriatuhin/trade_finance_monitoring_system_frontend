@@ -63,7 +63,11 @@ fetchTotalImportSummary(apiUrl: string, queryParams: any): Observable<ImportSumm
         importPayment: this.formatAmountShort(data.importPayment),
         impSwftChgAmount: this.formatAmountShort(data.impSwftChgAmount),
         importAmount: this.formatAmountShort(data.importAmount),
-        importLcOpen: this.formatAmountShort(data.importLcOpen)
+        importLcOpen: this.formatAmountShort(data.importLcOpen),
+        importVatAmount: this.formatAmountShort(data.importVatAmount),
+        importTaxAmount: this.formatAmountShort(data.importTaxAmount),
+        importPadAmt: this.formatAmountShort(data.importPadAmt),
+        importBillAmt: this.formatAmountShort(data.importBillAmt)
       } as ImportSummaryData;
     }),
     catchError(err => {
@@ -78,7 +82,11 @@ fetchTotalImportSummary(apiUrl: string, queryParams: any): Observable<ImportSumm
         importPayment: '0.0',
         impSwftChgAmount: '0.0',
         importAmount: '0.0',
-        importLcOpen: '0'
+        importLcOpen: '0',
+        importVatAmount: '0.0',
+        importTaxAmount: '0.0',
+        importPadAmt:'0.0',
+        importBillAmt:'0.0'
       } as ImportSummaryData);
     })
   );
