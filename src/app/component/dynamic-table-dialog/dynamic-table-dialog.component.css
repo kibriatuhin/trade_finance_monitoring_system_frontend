@@ -1,0 +1,48 @@
+/* Make the main container take full width */
+.w-280 {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+/* Make the table container take full width */
+.bg-white.border.border-gray-200.rounded-lg {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+/* Target the example-container (your dynamic table wrapper) */
+.example-container {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+/* Make the actual table take full width */
+.mat-mdc-table {
+  width: 100% !important;
+  table-layout: fixed !important; /* This helps with column widths */
+}
+
+/* Force specific column widths - use the column key */
+.mat-column-authOn {
+  min-width: 150px !important;
+  width: 150px !important;
+  flex: 0 0 150px !important; /* Flexbox approach */
+}
+
+/* Prevent text wrapping in the AuthOn column */
+.mat-column-authOn .mat-mdc-cell {
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+/* Make all cells respect the column widths */
+.mat-mdc-cell, .mat-mdc-header-cell {
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+/* Optional: Add some padding for better spacing */
+.mat-mdc-cell, .mat-mdc-header-cell {
+  padding: 8px 12px !important;
+}

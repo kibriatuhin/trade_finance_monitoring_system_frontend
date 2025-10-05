@@ -1,0 +1,39 @@
+<div class="w-full max-w-none bg-white rounded-xl flex flex-col h-full">
+  <!-- Header -->
+  <div class="sticky top-0 z-10 bg-white rounded-t-xl border-b border-gray-200">
+    <div class="flex flex-col items-center justify-center py-5">
+      <h5 class="font-bold text-lg">{{ data?.title }}</h5>
+    </div>
+    <div class="bg-gray-600 h-px mb-4"></div>
+  </div>
+
+  <!-- Content -->
+  <div class="flex-grow overflow-y-auto p-6">
+    <div class="ml-7 mb-20 bg-white border border-gray-200 rounded-lg shadow-sm w-full max-w-full">
+      <!-- Show table if data exists -->
+      <div *ngIf="data?.tableData && data?.tableData.length > 0">
+        <app-dynamic-material-table 
+          [columns]="data?.columns" 
+          [data]="data?.tableData" 
+          (onPage)="onPageChangeHandler($event)"
+          [totalItems]="data?.totalItems" 
+          [pageSize]="data?.pageSize" 
+          [currentPage]="data?.currentPage" />
+      </div>
+      
+      <!-- Show message if no data -->
+      <div *ngIf="!(data?.tableData && data?.tableData.length > 0)" class="text-center py-8 text-gray-500">
+        No data available
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer (only show in dialog mode) -->
+  <div *ngIf="dialogData" class="sticky bottom-0 bg-white rounded-b-xl border-t border-gray-200">
+    <mat-dialog-actions align="end" class="mt-6 pb-6">
+      <button mat-raised-button color="primary" [mat-dialog-close]="true" cdkFocusInitial>
+        Cancel
+      </button>
+    </mat-dialog-actions>
+  </div>
+</div>

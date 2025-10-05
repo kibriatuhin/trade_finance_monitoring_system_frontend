@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Output, SimpleChanges } from '@angular/core';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
 import { Input, OnChanges, ViewChild, AfterViewInit } from '@angular/core';
@@ -15,40 +15,40 @@ import { CommonModule } from '@angular/common';
   templateUrl: './dynamic-material-table.component.html',
   styleUrl: './dynamic-material-table.component.css'
 })
-export class DynamicMaterialTableComponent  implements OnChanges, AfterViewInit {
-  @Input() columns: { key: string; label: string; sortable?: boolean }[] = [];
+export class DynamicMaterialTableComponent  implements OnChanges {
+  @Input() columns: { key: string; label: string; sortable?: boolean; cssClass?: string; width?: string; minWidth?: string; }[] = [];
   @Input() data: any[] = [];
 
    @Input() totalItems = 0;
-  @Input() pageSize = 5;
+  @Input() pageSize = 10;
   @Input() currentPage = 0;
   @Output() onPage = new EventEmitter<any>();
 
   displayedColumns: string[] = [];
-  dataSource = new MatTableDataSource<any>();
+ // dataSource = new MatTableDataSource<any>();
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  ngOnChanges(): void {
+  ngOnChanges(changes: SimpleChanges): void {
     this.displayedColumns = this.columns.map(c => c.key);
-    this.dataSource.data = this.data;
+
+    // 🔥 Critical: Manually update paginator's length & index
+     if (changes['currentPage'] || changes['pageSize'] || changes['totalItems']) {
+    // Re-initialize paginator or update its state
+    this.paginator.pageIndex = this.currentPage;
+    this.paginator.pageSize = this.pageSize;
+    this.paginator.length = this.totalItems;
+  }
   }
 
-  ngAfterViewInit(): void {
-    //this.dataSource.paginator = this.paginator;
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-  }
+  
 
   onPageChange(event: PageEvent) {
     console.log(this.currentPage);
-    console.log(this.pageSize)
+    console.log(this.pageSize);
     this.onPage.emit(event);
     // Emit to parent if needed
   }
-  isDateColumn(key: string): boolean {
-  return ['brnSignIn', 'brnSignOut'].includes(key);
-}
 
 }

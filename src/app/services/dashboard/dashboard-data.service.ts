@@ -6,6 +6,8 @@ import { BranchSummaryData } from '../../shared/interface/BranchSummaryData';
 import { BranchStatusListData } from '../../shared/interface/BranchStatusListData';
 import { ImportSummaryData } from '../../shared/interface/ImportSummaryData';
 import { environment } from '../../../environment/environment';
+import { ImportLcOpenDetailsData } from '../../shared/interface/ImportLcOpenDetailsData';
+import { ApiResponse, ImportPndingLcDetailsData, PendingLcPageResponse } from '../../shared/interface/ImportPndingLcDetailsData';
 
 @Injectable({
   providedIn: 'root'
@@ -132,6 +134,19 @@ private formateNumber(value: number): string {
 }
 
 
+//for import Lc open details
+fetchImportLcOpenDetails(url: string, queryParams: any): Observable<ImportLcOpenDetailsData[]> {
+  const fullUrl = `${this.baseUrl}${url}`;
+  return this.http.get<{ data: ImportLcOpenDetailsData[] }>(fullUrl,{ params: queryParams }).pipe(
+    map(response => response.data),
+    catchError(err => {
+      console.error('API error:', err);
+      return of([]); // return empty array on error
+    })
+  );
+}
+
+
 
 
 
@@ -151,4 +166,39 @@ private formateNumber(value: number): string {
     return value.toString();
   }
 }
+
+//for import pending Lc details
+fetchPendingLcDetails(url: string,queryParams: any): Observable<PendingLcPageResponse> {
+    const fullUrl = `${this.baseUrl}${url}`;
+
+    return this.http.get<ApiResponse<PendingLcPageResponse>>(fullUrl, { params: queryParams }).pipe(
+      map(response => {
+        if (response.status === 'success' && response.data) {
+          return response.data;
+        } else {
+          console.warn('Unexpected API response:', response);
+          return this.getEmptyPageResponse();
+        }
+      }),
+      catchError(err => {
+        console.error('Failed to fetch pending LC details:', err);
+        return of(this.getEmptyPageResponse());
+      })
+    );
+  }
+
+  private getEmptyPageResponse(): PendingLcPageResponse {
+    return {
+      lcList: [],
+      pageNo: 0,
+      pageSize: 0,
+      totalElements: 0,
+      totalPages: 0,
+      isFirst: true,
+      isLast: true
+    };
+  }
 }
+
+
+

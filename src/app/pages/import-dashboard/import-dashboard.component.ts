@@ -5,12 +5,14 @@ import { DashboardDataService } from '../../services/dashboard/dashboard-data.se
 
 import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { PageEvent } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
 import { TotalImportAmountComponent } from '../../dialogs/total-import-amount/total-import-amount.component';
 import { CommonModule } from '@angular/common';
 import { DashboardTranHistoryComponent } from '../../component/dashboard-tran-history/dashboard-tran-history.component';
 import { ImportSummaryData } from '../../shared/interface/ImportSummaryData';
+import { trigger, state, style, transition, animate } from '@angular/animations';
 import {
   FormControl,
   FormGroup,
@@ -19,6 +21,10 @@ import {
   Validators,
 } from '@angular/forms';
 import { Route, Router } from '@angular/router';
+import { ImportLcOpenDetailsData } from '../../shared/interface/ImportLcOpenDetailsData';
+import { DynamicTableDialogComponent } from '../../component/dynamic-table-dialog/dynamic-table-dialog.component';
+import { MatIcon } from "@angular/material/icon";
+import { ImportPndingLcDetailsData, PendingLcPageResponse } from '../../shared/interface/ImportPndingLcDetailsData';
 
 @Component({
   selector: 'app-import-dashboard',
@@ -30,11 +36,29 @@ import { Route, Router } from '@angular/router';
     ReactiveFormsModule,
     CommonModule,
     DashboardTranHistoryComponent,
-  ],
+    MatIcon,
+    DynamicTableDialogComponent
+],
   templateUrl: './import-dashboard.component.html',
   styleUrl: './import-dashboard.component.css',
+ animations: [
+  trigger('slideIn', [
+    transition(':enter', [
+      style({ transform: 'translateX(100%)', opacity: 0 }),
+      animate('400ms cubic-bezier(0.25)', 
+        style({ transform: 'translateX(0)', opacity: 1 }))
+    ]),
+    transition(':leave', [
+      style({ transform: 'translateX(0)', opacity: 1 }),
+      animate('400ms cubic-bezier(0.25, 0.8, 0.25, 1)', 
+        style({ transform: 'translateX(-100%)', opacity: 0 }))
+    ])
+  ])
+]
 })
 export class ImportDashboardComponent {
+   viewMode: 'cards' | 'details' = 'cards';
+  currentDetailData: any = null;
   totalPendingLc: string = '0';
   selectedYear: number = new Date().getFullYear();
   tempSelectedYear: number = 2024;
@@ -88,6 +112,13 @@ export class ImportDashboardComponent {
     importBillAmt:'0.0'
   };
 
+  lcOpenDetails: ImportLcOpenDetailsData[] = [];
+  pendingLcDetails: ImportPndingLcDetailsData[] = [];
+   totalItems = 0;
+  pageSize =10;
+  currentPage = 0;
+  currentDetailView: 'pendingLc' | 'lcOpen' | null = null;
+
   constructor(
     private dashboardService: DashboardDataService,
     private dialog: MatDialog,
@@ -95,6 +126,16 @@ export class ImportDashboardComponent {
     private el: ElementRef,
     private router : Router
   ) { }
+  ngOnInit(): void {
+    const startYear = 2015;
+    const currentYear = new Date().getFullYear();
+    for (let year = startYear; year <= currentYear; year++) {
+      this.years.push(year);
+    }
+     
+
+    //this.loadDashboardData(); // initial load
+  }
 
   @HostListener('document:keydown', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
@@ -234,15 +275,7 @@ export class ImportDashboardComponent {
     }
   }
 
-  ngOnInit(): void {
-    const startYear = 2015;
-    const currentYear = new Date().getFullYear();
-    for (let year = startYear; year <= currentYear; year++) {
-      this.years.push(year);
-    }
-
-    //this.loadDashboardData(); // initial load
-  }
+  
 
   onSubmit() {
     console.log('Form submitted press done ');
@@ -279,19 +312,194 @@ export class ImportDashboardComponent {
     this.cdr.detectChanges(); // Ensure the view updates with the new value
   }
 
-  openDialog() {
-    const dialogRef = this.dialog.open(TotalImportAmountComponent, {
-      width: '95vw', // viewport width 
-      maxWidth: '1200px', // maximum width
-      height: 'auto', // auto height
-      maxHeight: '90vh', // maximum height
-      //panelClass: 'custom-dialog-container', // custom styling 
-    });
+  lcOpenDialog() {
+    this.currentDetailView = 'lcOpen';
+  const columns = [
+    { key: 'rn', label: 'RN' },
+    { key: 'brnCode', label: 'Branch Code' },
+    { key: 'lcType', label: 'Lc Type' },
+    { key: 'lcYear', label: 'Year' },
+    { key: 'lcSl', label: 'Lc Serial' },
+    { key: 'custNum', label: 'Cust. Number' },
+    { key: 'lcCurr', label: 'Currency' },
+    { key: 'lcAmt', label: 'Lc Amount' },
+    { key: 'lcConvRate', label: 'Conv. Rate' },
+    { key: 'lcBaseAmt', label: 'Base Amount' },
+    { key: 'authBy', label: 'Auth. By' },
+    { key: 'authOn', label: 'Auth. On' , cssClass: 'min-w-[150px] w-[150px]'  },
+  ];
 
-    dialogRef.afterClosed().subscribe((result) => {
-      console.log(`Dialog result: ${result}`);
-    });
+  // Load data first (wait for async operation)
+  this.loadImportLcOpenDetails().then(() => {
+    console.log('Data loaded:', this.lcOpenDetails);
+    
+    if (this.lcOpenDetails && this.lcOpenDetails.length > 0) {
+      this.currentDetailData = {
+        title: 'View Total LC Open Details',
+        columns: columns,
+        tableData: this.lcOpenDetails,
+        totalItems: this.totalItems || 0,
+        pageSize: this.pageSize || 5,
+        currentPage: this.currentPage || 0
+      };
+      
+      this.viewMode = 'details';
+    } else {
+      console.warn('No data available for display');
+      this.currentDetailData = {
+        title: 'Total LC Open Details',
+        columns: columns,
+        tableData: [],
+        totalItems: 0,
+        pageSize: 5,
+        currentPage: 0
+      };
+      this.viewMode = 'details';
+    }
+  }).catch(error => {
+    console.error('Error loading data:', error);
+    this.currentDetailData = {
+      title: 'Total LC Open Details',
+      columns: columns,
+      tableData: [],
+      totalItems: 0,
+      pageSize: 5,
+      currentPage: 0
+    };
+    this.viewMode = 'details';
+  });
+}
+
+  goBackToCards() {
+    this.viewMode = 'cards';
+    this.currentDetailView = null; 
+    this.currentDetailData = null;
   }
+loadImportLcOpenDetails(): Promise<void> {
+  return new Promise((resolve, reject) => {
+    this.dashboardService.fetchImportLcOpenDetails('/importDashboard/impOpenDtls', {
+      year: this.importForm.get('year')?.value || '',
+      branchCode: this.importForm.get('branchCode')?.value || '',
+      currency: this.importForm.get('currencyCode')?.value || '',
+    }).subscribe({
+      next: (data) => {
+        console.log('Total Import LC Summary:', data);
+        this.lcOpenDetails = data;
+        resolve();
+      },
+      error: (err) => {
+        console.error('Failed to fetch import summary:', err);
+        reject(err);
+      },
+    });
+  });
+}
+//pending Lc Dialog
+pendingLcDialog(){
+
+
+  this.currentDetailView = 'pendingLc';
+
+  const columns = [
+    { key: 'rn', label: 'RN' },
+    { key: 'lcBrnCode', label: 'Branch Code' },
+    { key: 'lcRefNo', label: 'LC Ref. NO' ,cssClass: 'min-w-[150px] w-[150px]'},
+    { key: 'lcCustNum', label: 'Cust. Number' },
+    { key: 'lcCurr', label: 'Currency' },
+    { key: 'lcAmount', label: 'Lc Amount' },
+    { key: 'lcTotalAmount', label: 'Total Lc Amt.' },
+    { key: 'lcTotalOsAmount', label: 'Total OS Amount' },
+    { key: 'lcEntdBy', label: 'Entd. By' },
+    { key: 'lcEntdOn', label: 'Entd. On' , cssClass: 'min-w-[150px] w-[150px]'  },
+  ];
+
+  // Load data first (wait for async operation)
+  this.loadImportPendingLcDetails().then(() => {
+    console.log('Data loaded:', this.pendingLcDetails);
+    
+    if (this.pendingLcDetails && this.pendingLcDetails.length > 0) {
+      this.currentDetailData = {
+        title: 'View Pending Lc Details',
+        columns: columns,
+        tableData: this.pendingLcDetails,
+        totalItems: this.totalItems ,
+        pageSize: this.pageSize ,
+        currentPage: this.currentPage 
+      };
+      
+      this.viewMode = 'details';
+    } else {
+      console.warn('No data available for display');
+      this.currentDetailData = {
+        title: 'View Pending Lc Details',
+        columns: columns,
+        tableData: [],
+        totalItems: 0,
+        pageSize: 5,
+        currentPage: 1
+      };
+      this.viewMode = 'details';
+    }
+  }).catch(error => {
+    console.error('Error loading data:', error);
+    this.currentDetailData = {
+      title: 'View Pending Lc Details',
+      columns: columns,
+      tableData: [],
+      totalItems: 0,
+      pageSize: 5,
+      currentPage: 1
+    };
+    this.viewMode = 'details';
+  });
+}
+// Pending Lc Api Call 
+loadImportPendingLcDetails(): Promise<void> {
+  return new Promise((resolve, reject) => {
+    this.dashboardService.fetchPendingLcDetails('/importDashboard/impPenDtls', {
+      year: this.importForm.get('year')?.value || '',
+      branchCode: this.importForm.get('branchCode')?.value || '',
+      currency: this.importForm.get('currencyCode')?.value || '',
+      pageNo: this.currentPage,
+      pageSize: this.pageSize
+    }).subscribe({
+      next: (pageResponse: PendingLcPageResponse) => {
+        console.log('Pending LC Page Response:', pageResponse);
+
+        // Update table data
+        this.pendingLcDetails = pageResponse.lcList;
+
+        // Update pagination metadata
+        this.totalItems = pageResponse.totalElements;
+        this.pageSize = pageResponse.pageSize;
+        this.currentPage = pageResponse.pageNo; // optional: sync if needed
+        this.updatePendingLcDialogData();
+        resolve();
+      },
+      error: (err) => {
+        console.error('Failed to fetch pending LC details:', err);
+        this.pendingLcDetails = [];
+        this.totalItems = 0;
+        reject(err);
+      }
+    });
+  });
+}
+
+private updatePendingLcDialogData() {
+  if (this.currentDetailView === 'pendingLc' && this.viewMode === 'details') {
+    // Rebuild the data object to trigger change detection
+    this.currentDetailData = {
+      ...this.currentDetailData,
+      tableData: this.pendingLcDetails,
+      totalItems: this.totalItems,
+      pageSize: this.pageSize,
+      currentPage: this.currentPage
+    };
+  }
+}
+
+
   private markBranchCodeAsInvalid(errorType: string) {
     const currencyControl = this.importForm.get('branchCode');
     if (currencyControl) {
@@ -391,4 +599,24 @@ export class ImportDashboardComponent {
     const currencyCode = this.importForm.get('currencyCode')?.value || this.selectCurrencyCode;
     return this.currencyMap.get(currencyCode?.toUpperCase()) || '$';
   }
+
+  onPageChangeHandler(event:PageEvent){
+    this.currentPage = event.pageIndex;
+    this.pageSize = event.pageSize;
+
+  // Only refetch if we're viewing Pending LC (which supports pagination)
+  if (this.currentDetailView === 'pendingLc') {
+    this.loadImportPendingLcDetails();
+  }
+    /*
+       if (event.pageSize !== this.pageSize) {
+        this.pageSize = event.pageSize;
+        this.currentPage = 0; // Reset to first page if needed
+        //this.fetchData(); // Call API only on page size change
+      } else {
+        // Just update current page, don't call API
+        this.currentPage = event.pageIndex;
+      }
+    }*/
+}
 }
