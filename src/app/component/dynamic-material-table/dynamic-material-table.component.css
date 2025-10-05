@@ -1,3 +1,4 @@
+/*
 mat-header-row {
   background-color: #064e3b !important;
   color: white;
@@ -26,4 +27,62 @@ mat-cell {
 
 .mat-mdc-row:hover .mat-mdc-cell {
   border-color: currentColor;
+}*/
+
+
+/* Professional table styling */
+.mat-mdc-table {
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.mat-mdc-row .mat-mdc-cell {
+  border-bottom: 1px solid transparent;
+  border-top: 1px solid transparent;
+  cursor: pointer;
+}
+
+mat-header-cell {
+  font-size: 14px;
+  text-align: center;
+}
+
+/* Header with gradient */
+.mat-mdc-header-row {
+  background:  rgb(15,76,92);
+  color: white;
+  font-weight: 600;
+}
+
+/* Alternating rows with subtle colors */
+.mat-mdc-row:nth-child(even) {
+  background-color: #fafafa;
+}
+
+.mat-mdc-row:nth-child(odd) {
+  background-color: #ffffff;
+}
+
+/* Border between rows */
+.mat-mdc-row {
+  border-bottom: 1px solid #e0e0e0;
+}
+
+/* Remove border from last row */
+.mat-mdc-row:last-child {
+  border-bottom: none;
+}
+
+/* Hover effect */
+.mat-mdc-row:hover {
+  background-color: #e3f2fd !important;
+  transition: background-color 0.2s ease;
+}
+
+
+/* Remove right border from last cell */
+.mat-mdc-cell:last-child, .mat-mdc-header-cell:last-child {
+  border-right: none;
 }

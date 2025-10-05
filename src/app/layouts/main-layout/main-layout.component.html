@@ -12,7 +12,7 @@
                         class="flex items-center justify-between w-full px-4 py-2 rounded-lg hover:bg-blue-100 transition-all"
                         (click)="toggleSubmenu()">
                         <div class="flex items-center gap-3 text-sm!">
-                            <mat-icon class="bg-emerald-800! rounded-xl text-white! text-sm! w-6! h-6! flex! items-center! justify-center! leading-none!">dashboard</mat-icon>
+                            <mat-icon style="background-color: rgb(15,76,92);" class=" rounded-xl text-white! text-sm! w-6! h-6! flex! items-center! justify-center! leading-none!">dashboard</mat-icon>
                             <span >DashBoard</span>
                         </div>
                         <mat-icon>{{ isSubmenuOpen ? 'expand_less' : 'expand_more' }}</mat-icon>
@@ -62,7 +62,7 @@
                         class="flex items-center justify-between w-full px-4 py-2 rounded-lg hover:bg-blue-100 transition-all"
                         (click)="toggleSubmenu2()">
                         <div class="flex items-center gap-3 text-sm!">
-                            <mat-icon class="bg-emerald-800! rounded-xl text-white! text-sm! w-6! h-6! flex! items-center! justify-center! leading-none!">flight_land</mat-icon>
+                            <mat-icon style="background-color: rgb(15,76,92);"  class=" rounded-xl text-white! text-sm! w-6! h-6! flex! items-center! justify-center! leading-none!">flight_land</mat-icon>
                             <span>Import Report</span>
                         </div>
                         <mat-icon>{{ isSubmenuOpen2 ? 'expand_less' : 'expand_more' }}</mat-icon>
@@ -103,7 +103,7 @@
                     <a routerLink="/setting" routerLinkActive="bg-blue-600 text-white rounded-full"
                         [routerLinkActiveOptions]="{ exact: true }"
                         class="flex items-center gap-3 px-4 py-2 w-full rounded-lg transition-all duration-200 hover:bg-blue-100 text-sm!">
-                        <mat-icon class="bg-emerald-800! rounded-xl text-white! text-sm! w-6! h-6! flex! items-center! justify-center! leading-none!">flight_takeoff</mat-icon>
+                        <mat-icon style="background-color: rgb(15,76,92);"  class=" rounded-xl text-white! text-sm! w-6! h-6! flex! items-center! justify-center! leading-none!">flight_takeoff</mat-icon>
                         <span>Export Report</span>
                     </a>
                 </mat-list-item>
@@ -113,11 +113,13 @@
     </mat-drawer>
 
     <mat-drawer-content >
-        <app-tab-bar ></app-tab-bar>
-        <div class="flex-1 overflow-y-auto h-[calc(100vh)] bg-indigo-50">
+        <app-tab-bar ></app-tab-bar> 
+        <div class="flex-1 overflow-y-auto h-[calc(100vh)] bg-gray-100">
             <router-outlet></router-outlet>
         </div>
 
     </mat-drawer-content>
 
 </mat-drawer-container>
+
+<!-- bg-indigo-50 -->
