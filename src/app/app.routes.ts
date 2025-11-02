@@ -9,6 +9,8 @@ import { ImportDetailsComponent } from './pages/import-details/import-details.co
 import { BlankComponent } from './component/blank/blank.component';
 import { TransactionTableComponent } from './component/transaction-table/transaction-table.component';
 import { BranchDashboardComponent } from './pages/branch-dashboard/branch-dashboard.component';
+import { ImportTransactionDashboardComponent } from './pages/import-transaction-dashboard/import-transaction-dashboard.component';
+import { ExportTransactionDashboardComponent } from './pages/export-transaction-dashboard/export-transaction-dashboard.component';
 
 export const routes: Routes = [
 
@@ -23,7 +25,9 @@ export const routes: Routes = [
       { path: 'setting', component: SettingComponent },
       {path: 'import-details', component: ImportDetailsComponent},
       {path: 'transaction-history',component: TransactionTableComponent},
-      {path : 'branches',component: BranchDashboardComponent}
+      {path : 'branches',component: BranchDashboardComponent},
+      {path:'import-transactions', component: ImportTransactionDashboardComponent},
+      {path: 'export-transactions', component: ExportTransactionDashboardComponent}
     ]
   },
   {

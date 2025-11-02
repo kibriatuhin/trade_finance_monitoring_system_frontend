@@ -1,0 +1,37 @@
+.example-spacer {
+  flex: 1 1 auto;
+}
+
+.filter-input {
+  height: 43px;
+  padding: 10px 20px;
+  border: 2px solid #e0e0e0;
+  border-radius: 25px;
+  outline: none;
+  transition: all 0.3s ease;
+  width: 100%;
+  max-width: 326px;
+  font-size: 0.875rem; /* Optional: also reduce input text size */
+}
+
+.filter-input:focus {
+  border-color: #064e3b;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* Optional: Hover effect */
+.group:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+  padding: 2px 8px;
+}
+/* In your component CSS */
+::ng-deep .mat-mdc-button {
+  background: none;
+  box-shadow: none;
+  border: none;
+}
+.filter-input::placeholder {
+  font-size: 1.05rem; /* 12px — adjust as needed */
+  color: #9ca3af;     /* optional: slightly muted gray */
+}

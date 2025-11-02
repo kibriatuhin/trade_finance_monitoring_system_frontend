@@ -7,7 +7,10 @@ import { BranchStatusListData } from '../../shared/interface/BranchStatusListDat
 import { ImportSummaryData } from '../../shared/interface/ImportSummaryData';
 import { environment } from '../../../environment/environment';
 import { ImportLcOpenDetailsData } from '../../shared/interface/ImportLcOpenDetailsData';
-import { ApiResponse, ImportPndingLcDetailsData, PendingLcPageResponse } from '../../shared/interface/ImportPndingLcDetailsData';
+import { ApiResponseN, ImportPndingLcDetailsData, PendingLcPageResponse } from '../../shared/interface/ImportPndingLcDetailsData';
+import { ImportLcTotalAmountData } from '../../shared/interface/ImportLcTotalAmountData';
+import { PageResponse } from '../../shared/interface/PageResponse';
+import { ApiResponse } from '../../shared/interface/ApiResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -69,7 +72,8 @@ fetchTotalImportSummary(apiUrl: string, queryParams: any): Observable<ImportSumm
         importVatAmount: this.formatAmountShort(data.importVatAmount),
         importTaxAmount: this.formatAmountShort(data.importTaxAmount),
         importPadAmt: this.formatAmountShort(data.importPadAmt),
-        importBillAmt: this.formatAmountShort(data.importBillAmt)
+        importBillAmt: this.formatAmountShort(data.importBillAmt),
+        importOpChg: this.formatAmountShort(data.importOpChg)
       } as ImportSummaryData;
     }),
     catchError(err => {
@@ -88,7 +92,8 @@ fetchTotalImportSummary(apiUrl: string, queryParams: any): Observable<ImportSumm
         importVatAmount: '0.0',
         importTaxAmount: '0.0',
         importPadAmt:'0.0',
-        importBillAmt:'0.0'
+        importBillAmt:'0.0',
+        importOpChg:'0.0'
       } as ImportSummaryData);
     })
   );
@@ -167,37 +172,45 @@ fetchImportLcOpenDetails(url: string, queryParams: any): Observable<ImportLcOpen
   }
 }
 
-//for import pending Lc details
-fetchPendingLcDetails(url: string,queryParams: any): Observable<PendingLcPageResponse> {
-    const fullUrl = `${this.baseUrl}${url}`;
 
-    return this.http.get<ApiResponse<PendingLcPageResponse>>(fullUrl, { params: queryParams }).pipe(
-      map(response => {
-        if (response.status === 'success' && response.data) {
-          return response.data;
-        } else {
-          console.warn('Unexpected API response:', response);
-          return this.getEmptyPageResponse();
-        }
-      }),
-      catchError(err => {
-        console.error('Failed to fetch pending LC details:', err);
-        return of(this.getEmptyPageResponse());
-      })
-    );
-  }
 
-  private getEmptyPageResponse(): PendingLcPageResponse {
-    return {
-      lcList: [],
-      pageNo: 0,
-      pageSize: 0,
-      totalElements: 0,
-      totalPages: 0,
-      isFirst: true,
-      isLast: true
-    };
-  }
+
+
+
+
+// Generic API fetcher with pagination
+getPagedData<T>(url: string, queryParams: any): Observable<PageResponse<T>> {
+  const fullUrl = `${this.baseUrl}${url}`;
+
+  return this.http.get<ApiResponse<PageResponse<T>>>(fullUrl, { params: queryParams }).pipe(
+    map(response => {
+      if (response.status === 'success' && response.data) {
+        return response.data;
+      } else {
+        console.warn('Unexpected API response:', response);
+        return this.getEmptyResponse<T>();
+      }
+    }),
+    catchError(err => {
+      console.error('Failed to fetch data:', err);
+      return of(this.getEmptyResponse<T>());
+    })
+  );
+}
+
+
+private getEmptyResponse<T>(): PageResponse<T> {
+  return {
+    lcList: [],       
+    pageNo: 0,
+    pageSize: 0,
+    totalElements: 0,
+    totalPages: 0,
+    isFirst: true,
+    isLast: true
+  };
+}
+
 }
 
 

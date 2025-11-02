@@ -1,0 +1,18 @@
+/* Override Angular Material's default truncation */
+.mat-list-item {
+  overflow: visible !important;
+}
+
+.mat-list-item-content {
+  overflow: visible !important;
+  white-space: nowrap !important;
+  flex-wrap: nowrap !important;
+}
+
+.mat-list-item-content a,
+.mat-list-item-content span {
+  overflow: visible !important;
+  white-space: nowrap !important;
+  text-overflow: clip !important;
+  min-width: max-content !important;
+}

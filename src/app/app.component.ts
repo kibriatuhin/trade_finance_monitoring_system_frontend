@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterModule, RouterOutlet } from '@angular/router';
 import {MatButtonModule} from '@angular/material/button';
-import { HeaderComponent } from "./component/header/header.component";
+import { HeaderComponent } from "./layouts/header/header.component";
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatListModule} from '@angular/material/list';
 import {MatIconModule} from '@angular/material/icon';
@@ -10,15 +10,15 @@ import { inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MainLayoutComponent } from "./layouts/main-layout/main-layout.component";
 import { BlankLayoutComponent } from './layouts/blank-layout/blank-layout.component';
-
+import { NgxSpinnerModule } from "ngx-spinner";
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, RouterModule,MatSidenavModule, CommonModule],
+  imports: [RouterOutlet, RouterModule,MatSidenavModule, CommonModule,NgxSpinnerModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
 export class AppComponent {
- 
+  title = 'TF_Monitoring_System';
 }
