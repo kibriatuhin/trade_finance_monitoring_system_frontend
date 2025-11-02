@@ -1,0 +1,99 @@
+<div class="flex flex-col items-center justify-center   pb-5! pt-3!">
+  <h5 class=" font-bold mb-1! text-emerald-800!">Import Transactions Monitoring</h5>
+</div>
+<div class=" bg-gray-600! h-px! mb-1"></div>
+
+<div class="  p-6">
+  <div class="max-w-6xl mx-auto ">
+    <!---Input Field -->
+    <form [formGroup]="tranForm" (ngSubmit)="onSubmit()" class="flex flex-col md:flex-row items-center mb-1 gap-3">
+      <!-- Branch Code Input -->
+
+      <!--  
+                 Input Field : Branch Code
+                 Author : Golam Kibria Tuhin
+                 Date : 21-08-2025
+           -->
+      <div class="max-w-md relative" #wrapper>
+        <label for="branchCode" class="block text-sm font-medium text-gray-900ss mb-1">
+          Branch Code
+        </label>
+        <div class="relative" #wrapper>
+          <input id="branchCode" type="text" name="branchCode" formControlName="branchCode" #branchCode autocomplete="off"
+            (keydown)="onKeyDownPress($event,'search',false)" (blur)="onBranchCodeBlur()"
+            placeholder="Enter Branch"
+            class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block 
+                                         px-3 py-2.5 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+            aria-label="Branch Code" />
+          <div class="text-xs min-h-[20px]" [ngClass]="{
+                               'text-green-600': branchCodeErrorMessage === 'For All Branch',
+                                 'text-red-500': branchCodeErrorMessage && branchCodeErrorMessage !== 'For All Branch'
+                                  }">
+
+            {{ branchCodeErrorMessage }}
+          </div>
+
+        </div>
+      </div>
+
+      <div class="max-w-md relative" #wrapper>
+        <div class="relative" #wrapper>
+           <button id="search" mat-raised-button class=" px-10! py-5.5! focus:bg-emerald-800! focus:text-white! text-emerald-800!  hover:bg-emerald-800! hover:text-white!"
+            (keydown)="onKeyDownPress($event,'search',true)"  >Search</button>
+        </div>
+      </div>
+
+
+
+
+
+    </form>
+
+
+
+
+    <!-- Transaction Table -->
+    <div class="p-6 mb-20! bg-white border border-gray-200 rounded-lg shadow-sm w-280 overflow-visible">
+      <div class="flex flex-wrap items-center justify-between  gap-4">
+        <!-- Left: Title -->
+        <div>
+          <h5 class="text-sm text-gray-800 font-bold!">Recent transactions</h5>
+          <p class="text-sm text-gray-600">Recent transactions for the selected year</p>
+
+        </div>
+
+        <div class="filter-bar">
+
+          <select class="filter-select" id="statusFilter">
+            <option value="">All Status</option>
+            <option value="approved">Approved</option>
+            <option value="pending">Pending</option>
+            <option value="rejected">Rejected</option>
+          </select>
+          <select class="filter-select" id="typeFilter">
+            <option value="">All Types</option>
+            <option value="ld">Lc Lodgement</option>
+            <option value="am">Lc Amendment</option>
+            <option value="cn">Lc Cancellation</option>
+            <option value="bill">Usance Lc Bill</option>
+            <option value="p">Lc Payment</option>
+          </select>
+        </div>
+
+
+
+      </div>
+
+
+      <div class="example-container mat-elevation-z0">
+
+
+
+      </div>
+    </div>
+
+    <div class="w-197! ml-3! bg-gray-400! h-px! mb-1"></div>
+        <app-dashboard-tran-history [selectedYear]="tempSelectedYear"></app-dashboard-tran-history>
+
+  </div>
+</div>

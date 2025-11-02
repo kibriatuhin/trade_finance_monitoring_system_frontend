@@ -6,9 +6,9 @@ export interface ImportPndingLcDetailsData {
     lcRefNo: string;
     lcCustNum: string;
     lcCurr: string;
-    lcAmount: number;
-    lcTotalAmount: number;
-    lcTotalOsAmount: number;
+    lcAmount: string;
+    lcTotalAmount: string;
+    lcTotalOsAmount: string;
     lcEntdBy: string;
     lcEntdOn: string | null;
 
@@ -24,7 +24,7 @@ export interface PendingLcPageResponse {
 }
 
 // Generic API response wrapper
-export interface ApiResponse<T> {
+export interface ApiResponseN<T> {
   data: T;
   message: string;
   status: string;

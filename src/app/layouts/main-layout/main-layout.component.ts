@@ -7,14 +7,15 @@ import {MatIconModule} from '@angular/material/icon';
 import {BreakpointObserver, Breakpoints, LayoutModule} from '@angular/cdk/layout';
 import { inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HeaderComponent } from '../../component/header/header.component';
+import { HeaderComponent } from '../header/header.component';
 import { TabBarComponent } from "../../component/tab-bar/tab-bar.component";
 import { TabService } from '../../services/tabServices/tab.service';
+import { SidebarNavComponent } from "../sidebar-nav/sidebar-nav.component";
 
 @Component({
   selector: 'app-main-layout',
   standalone: true,
-  imports: [RouterOutlet, MatButtonModule, RouterModule, MatSidenavModule, MatListModule, MatIconModule, CommonModule, HeaderComponent, TabBarComponent],
+  imports: [RouterOutlet, MatButtonModule, RouterModule, MatSidenavModule, MatListModule, MatIconModule, CommonModule, HeaderComponent, TabBarComponent, SidebarNavComponent],
   templateUrl: './main-layout.component.html',
   styleUrl: './main-layout.component.css'
 })
@@ -26,18 +27,7 @@ export class MainLayoutComponent {
 
   constructor(private tabService: TabService) {}
 
-openTab(title: string, route: string) {
-  this.tabService.openTab(title, route);
-}
-
-  toggleSubmenu() {
-    this.isSubmenuOpen = !this.isSubmenuOpen;
-  }
-  toggleSubmenu2() {
-    this.isSubmenuOpen2 = !this.isSubmenuOpen2;
-  }
-
-  private breakpointObserver = inject(BreakpointObserver); // ✅ Correct way to use inject()
+private breakpointObserver = inject(BreakpointObserver);
 
   ngOnInit() {
     this.breakpointObserver
@@ -45,5 +35,9 @@ openTab(title: string, route: string) {
       .subscribe(result => {
         this.isSidebarOpen = !result.matches;
       });
+  }
+
+  toggleSidebar() {
+    this.isSidebarOpen = !this.isSidebarOpen;
   }
 }

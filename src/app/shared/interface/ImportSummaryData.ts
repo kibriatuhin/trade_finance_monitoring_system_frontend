@@ -13,4 +13,5 @@ export interface ImportSummaryData {
   importTaxAmount: string;
   importPadAmt:string;
   importBillAmt:string;
+  importOpChg:string;
 }

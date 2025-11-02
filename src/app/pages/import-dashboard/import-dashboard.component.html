@@ -1,378 +1,305 @@
 <div class="p-0 relative overflow-hidden">
-    <div  [@slideIn] *ngIf="viewMode === 'cards'" class="transition-all duration-300 ease-in-out" >
-
-        <div class="flex flex-col items-center justify-center  pb-5! pt-3!">
-            <h5 class=" font-bold mb-1!">Import LC Monitoring</h5>
+    <div [@slideIn] *ngIf="viewMode === 'cards'" class="transition-all duration-300 ease-in-out">
+        <div class="flex flex-col items-center justify-center pb-5! pt-3!">
+            <h5 class="font-bold mb-1! text-blue-700!">Import LC Monitoring</h5>
         </div>
-        <div class=" bg-gray-600! h-px! mb-1"></div>
+        <div class="bg-gray-600! h-px! mb-1"></div>
 
-        <div class="  p-6">
-            <div class="max-w-6xl mx-auto ">
-                <!-- <div class="flex flex-row ">
-            <mat-form-field  appearance="fill">
-                <mat-label >Financial Year</mat-label>
-                <mat-select [(value)]="selectedYear" (selectionChange)="onYearChange()">
-                    <mat-option *ngFor="let year of years" [value]="year">
-                        {{ year }}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
-        </div> -->
+        <div class="p-6">
+            <div class="max-w-6xl mx-auto">
 
-                <form [formGroup]="importForm" (ngSubmit)="onSubmit()"
-                    class="flex flex-col md:flex-row items-center mb-1 gap-3">
+                <form [formGroup]="importForm" (ngSubmit)="onSubmit()" class="flex flex-col md:flex-row items-center pt-5! gap-3 border-1! border-gray-200! rounded-sm! pl-5!  bg-blue-50! mb-10!">
                     <!--  
-                 Input Field : Financial  Year
-                 Author : Golam Kibria Tuhin
-                 Date : 21-08-2025
-           -->
-                    <div class="">
-                        <label for="fYear" class="block  text-sm font-medium text-gray-900 ">Financial Year</label>
-                        <select id="fYear" name="year" (ngModel)="selectedYear" formControlName="year" #yearSelect
-                            (keydown)="onKeyDownPress($event,'branchCode',false)" (change)="onYearChange()"
-                            aria-label="Financial Year" class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
-                          px-3 py-2.5 pr-15! focus:outline-none focus:border-blue-500 block w-full p-2.5">
-
+                   Input Field : Financial  Year
+                   Author : Golam Kibria Tuhin
+                   Date : 21-08-2025
+                     -->
+                    <div class>
+                        <label for="fYear" class="block text-sm font-medium text-gray-900">Financial Year</label>
+                        <select
+                            id="fYear"
+                            name="year"
+                            (ngModel)="(selectedYear)"
+                            formControlName="year"
+                            #yearSelect
+                            (keydown)="onKeyDownPress($event, 'branchCode', false)"
+                            (change)="onYearChange()"
+                            aria-label="Financial Year"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg px-3 py-2.5 pr-15! focus:outline-none! focus:ring-2! focus:ring-blue-500!  block w-full p-2.5"
+                        >
                             <option *ngFor="let year of years" [value]="year">{{ year }}</option>
-
                         </select>
                         <div class="text-red-800 text-xs min-h-[20px]">
-                            @if ((importForm.get('year')?.dirty || importForm.get('year')?.touched) &&
-                            importForm.get('year')?.errors?.['required']) {
+                            @if ((importForm.get('year')?.dirty || importForm.get('year')?.touched) && importForm.get('year')?.errors?.['required']) {
                             <span class="text-red-500">Year is required.</span>
                             }
                         </div>
                     </div>
 
                     <!--  
-                 Input Field : Branch Code
-                 Author : Golam Kibria Tuhin
-                 Date : 21-08-2025
-           -->
+                     Input Field : Branch Code
+                     Author : Golam Kibria Tuhin
+                     Date : 21-08-2025
+                  -->
                     <div class="max-w-md relative" #wrapper>
-                        <label for="branchCode" class="block text-sm font-medium text-gray-900ss mb-1">
-                            Branch Code
-                        </label>
+                        <label for="branchCode" class="block text-sm font-medium text-gray-900ss mb-1"> Branch Code </label>
                         <div class="relative" #wrapper>
-                            <input id="branchCode" type="text" name="branchCode" formControlName="branchCode"
-                                autocomplete="off" (keydown)="onKeyDownPress($event,'currencyCode',false)"
-                                (blur)="onBranchCodeBlur()" placeholder="Enter Branch"
-                                class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block 
-                                         px-3 py-2.5 pr-20 focus:outline-none focus:ring-2 focus:ring-blue-500 transition" aria-label="Branch Code" />
-                            <div class="text-xs min-h-[20px]" [ngClass]="{
-           'text-green-600': branchCodeErrorMessage === 'For All Branch',
-           'text-red-500': branchCodeErrorMessage && branchCodeErrorMessage !== 'For All Branch'
-         }">
-
+                            <input
+                                id="branchCode"
+                                type="text"
+                                name="branchCode"
+                                formControlName="branchCode"
+                                autocomplete="off"
+                                (keydown)="onKeyDownPress($event, 'currencyCode', false)"
+                                (blur)="onBranchCodeBlur()"
+                                placeholder="Enter Branch"
+                                class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block px-3 py-2.5 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+                                aria-label="Branch Code"
+                            />
+                            <div
+                                class="text-xs min-h-[20px]"
+                                [ngClass]="{
+                                    'text-green-600': branchCodeErrorMessage === 'For All Branch',
+                                    'text-red-500': branchCodeErrorMessage && branchCodeErrorMessage !== 'For All Branch'
+                                }"
+                            >
                                 {{ branchCodeErrorMessage }}
                             </div>
-
                         </div>
                     </div>
 
+                   
+
                     <!--  
-                 Input Field : Currency Code
-                 Author : Golam Kibria Tuhin
-                 Date : 21-08-2025
-           -->
+                      Input Field : Currency Code
+                      Author : Golam Kibria Tuhin
+                      Date : 21-08-2025
+                    -->
                     <div class="max-w-md relative" #wrapper>
-                        <label for="currency" class="block text-sm font-medium text-gray-900ss mb-1">
-                            Currency Code
-                        </label>
+                        <label for="currency" class="block text-sm font-medium text-gray-900ss mb-1"> Currency Code </label>
                         <div class="relative" #wrapper>
-                            <input id="currency" type="text" name="currencyCode" formControlName="currencyCode"
-                                autocomplete="off" (keydown)="onKeyDownPress($event, undefined, true)"
-                                (input)="toUppercase($event)" placeholder="Enter Currency Code"
-                                class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block 
-                                         px-3 py-2.5 pr-20 focus:outline-none focus:ring-2 focus:ring-blue-500 transition" aria-label="Currency Code" />
+                            <input
+                                id="currency"
+                                type="text"
+                                name="currencyCode"
+                                formControlName="currencyCode"
+                                autocomplete="off"
+                                (keydown)="onKeyDownPress($event, 'search', false)"
+                                (input)="toUppercase($event)"
+                                placeholder="Enter Currency Code"
+                                class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block px-3 py-2.5 pr-5 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+                                aria-label="Currency Code"
+                            />
                             <div class="text-red-800 text-xs min-h-[20px]">
                                 @if (currencyErrorMessage) {
                                 <span class="text-red-500">{{ currencyErrorMessage }}</span>
 
                                 }
                             </div>
+                        </div>
+                    </div>
 
+                    <div class="max-w-md relative" #wrapper>
+                        <div class="relative" #wrapper>
+                            <button
+                                id="search"
+                                mat-raised-button
+                                class="px-10! py-5.0! mt-1! rounded-[8px]!  focus:outline-none! focus:ring-2! focus:ring-blue-800! focus:text-white! text-white! bg-linear-to-r! from-cyan-700! via-blue-500! to-indigo-600! hover:text-white!"
+                                (keydown)="onKeyDownPress($event, undefined, true)"
+                            >
+                                Search
+                            </button>
                         </div>
                     </div>
                 </form>
+                <div class="max-w-6xl mx-auto mb-20">
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
+                        <!-- Total Import  L/Cs open-->
 
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
-
-                    <mat-card
-                        class=" backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden "
-                         style="background-color: rgb(15,76,92);"
+                        <app-dashboard-card
+                            [value]="totalImportLcSummary.importLcOpen"
+                            label="Total LC Open"
+                            [currencySymbol]="null"
+                            [cardFixedColor]="true"
+                            [cardWhiteColor]="false"
+                            cardBackgroundColor="bg-blue-100!"
+                            valueColor="text-blue-800"
+                            (buttonClick)="importLcOpenDialog()"
                         >
-                        <mat-card-content class="p-6">
-                            <div class="text-2xl font-bold text-white mb-2 ">{{totalImportLcSummary.importLcOpen}}</div>
-                            <div class="text-gray-100 text-xs font-medium mb-3">Total LC Open</div>
-                            <div class="w-53! bg-amber-50! h-px! mb-1"></div>
-                            <div class="flex flex-row  justify-center">
+                        </app-dashboard-card>
 
-                                <div class="inline-flex items-center px-3 py-2 text-1xl  font-medium  text-white">
-                                    <button mat-button (click)="lcOpenDialog()" class="cursor-pointer">View
-                                        Details</button>
-                                </div>
-                            </div>
+                        <!-- Pending L/Cs Card -->
 
-                        </mat-card-content>
-                    </mat-card>
-
-                    <!-- Pending L/Cs Card -->
-                    <mat-card
-                        class=" backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden"
-                        style="background-color: rgb(15,76,92);"
+                        <app-dashboard-card
+                            [value]="totalImportLcSummary.impPendingLc"
+                            label="Pending L/Cs"
+                            [currencySymbol]="null"
+                            [cardFixedColor]="true"
+                            [cardWhiteColor]="false"
+                            cardBackgroundColor="bg-red-100!"
+                            valueColor="text-red-800"
+                            (buttonClick)="pendingLcDialog()"
                         >
-                        <mat-card-content class="p-6">
-                            <div class="text-2xl font-bold text-white mb-2">{{totalImportLcSummary.impPendingLc}}</div>
-                            <div class="text-gray-100 text-xs font-medium mb-3">Pending L/Cs</div>
-                            <div class="w-53! bg-amber-50! h-px! mb-1"></div>
-                            <div class="flex flex-row  justify-center">
+                        </app-dashboard-card>
 
-                                <div class="inline-flex items-center px-3 py-2 text-1xl  font-medium  text-white">
-                                    <button mat-button (click)="pendingLcDialog()" class="cursor-pointer">View Details</button>
-                                </div>
-                            </div>
-                        </mat-card-content>
-                    </mat-card>
+                        <!-- Total import Lc  Volume Card -->
 
-
-                    <!-- Total import Lc  Volume Card -->
-                    <mat-card
-                        class=" backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden "
-                        style="background-color: rgb(15,76,92);"
+                        <app-dashboard-card
+                            [value]="totalImportLcSummary.importAmount"
+                            label="Total Trade Volume"
+                            [currencySymbol]="getCurrencySymbol()"
+                            valueColor="text-sky-800!"
+                            [cardFixedColor]="true"
+                            [cardWhiteColor]="false"
+                            cardBackgroundColor="bg-sky-100!"
+                            (buttonClick)="importLcAmountDialog()"
                         >
-                        <mat-card-content class="p-6">
-                            <div class="text-2xl font-bold text-white mb-2 ">{{ getCurrencySymbol() }} {{
-                                totalImportLcSummary.importAmount}}</div>
-                            <div class="text-gray-100 text-xs font-medium mb-3">Total Trade Volume</div>
-                            <div class="w-53! bg-amber-50! h-px! mb-1"></div>
-                            <div class="flex flex-row  justify-center">
+                        </app-dashboard-card>
 
-                                <div class="inline-flex items-center px-3 py-2 text-1xl  font-medium  text-white">
-                                    <button mat-button class="cursor-pointer">View Details</button>
-                                </div>
-                            </div>
+                        <!--total bill amount Card -->
+                        <app-dashboard-card
+                            [value]="totalImportLcSummary.importBillAmt"
+                            label="Total Bill Amount"
+                            [currencySymbol]="getCurrencySymbol()"
+                            [cardFixedColor]="true"
+                            [cardWhiteColor]="false"
+                            cardBackgroundColor="bg-orange-100!"
+                            valueColor="text-orange-800!"
+                            
+                            (buttonClick)="importBillAmtDialog()"
+                        >
+                        </app-dashboard-card>
 
-                        </mat-card-content>
-                    </mat-card>
-                    <!--total bill amount Card -->
-                    <mat-card
-                        class=" backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden"
-                        style="background-color: rgb(15,76,92);">
-                        <mat-card-content class="p-6">
-                            <div class="text-2xl font-bold text-white mb-2">{{ getCurrencySymbol() }}
-                                {{totalImportLcSummary.importBillAmt}}</div>
-                            <div class="text-gray-100 text-xs font-medium mb-3">Total Bill Amount on Import Lc</div>
-                            <div class="w-53! bg-amber-50! h-px! mb-1"></div>
-                            <div class="flex flex-row  justify-center">
+                        <!--total Os Liability Card -->
+                        <app-dashboard-card
+                            [value]="totalImportLcSummary.ImportOsLiab"
+                            label="Total O/S Liability"
+                            [currencySymbol]="getCurrencySymbol()"
+                            [cardFixedColor]="true"
+                            [cardWhiteColor]="false"
+                            cardBackgroundColor="bg-red-100!"
+                            valueColor="text-red-800!"
+                            
+                            (buttonClick)="importLcOsAmtDialog()"
+                        >
+                        </app-dashboard-card>
 
-                                <div class="inline-flex items-center px-3 py-2 text-1xl  font-medium  text-white">
-                                    <button mat-button class="cursor-pointer">View Details</button>
-                                </div>
-                            </div>
-                        </mat-card-content>
-                    </mat-card>
-                    <!--total Os Liability Card -->
-                    <mat-card
-                        class="backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden"
-                        style="background-color: rgb(15,76,92);">
-                        <mat-card-content class="p-6">
-                            <div class="text-2xl font-bold text-white mb-2">{{ getCurrencySymbol() }}
-                                {{totalImportLcSummary.ImportOsLiab}}</div>
-                            <div class="text-gray-100 text-xs font-medium mb-3">Total O/S Liability on Import Lc</div>
-                            <div class="w-53! bg-amber-50! h-px! mb-1"></div>
-                            <div class="flex flex-row  justify-center">
+                        <!-- Active Transactions Card -->
+                        <app-dashboard-card
+                            [value]="totalImportLcSummary.importPayment"
+                            label="Total Payment Amount"
+                            [currencySymbol]="getCurrencySymbol()"
+                            [cardFixedColor]="true"
+                            [cardWhiteColor]="false"
+                            cardBackgroundColor="bg-emerald-100!"
+                            valueColor="text-emerald-800!"
+                            
+                            (buttonClick)="importPayAmtDialog()"
+                        >
+                        </app-dashboard-card>
 
-                                <div class="inline-flex items-center px-3 py-2 text-1xl  font-medium  text-white">
-                                    <button mat-button class="cursor-pointer">View Details</button>
-                                </div>
-                            </div>
-                        </mat-card-content>
-                    </mat-card>
+                        <!-- PAD on Import payment -->
+                        <app-dashboard-card
+                            [value]="totalImportLcSummary.importPadAmt"
+                            label="Total PAD Amount on Payment"
+                            [cardFixedColor]="true"
+                            [cardWhiteColor]="false"
+                            cardBackgroundColor="bg-teal-100!"
+                            valueColor="text-teal-800!"
+                            
+                            (buttonClick)="importPayPadAmtDialog()"
+                        >
+                        </app-dashboard-card>
 
-                    <!-- Active Transactions Card -->
-                    <mat-card
-                        class=" backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden"
-                        style="background-color: rgb(15,76,92);">
-                        <mat-card-content class="p-6">
-                            <div class="text-2xl font-bold text-white mb-2">{{ getCurrencySymbol() }}
-                                {{totalImportLcSummary.importPayment }}</div>
-                            <div class="text-gray-100 text-xs font-medium mb-3">Total Payment Amount</div>
-                            <div class="w-53! bg-amber-50! h-px! mb-1"></div>
-                            <div class="flex flex-row  justify-center">
+                        <!-- PAD OS on Import payment -->
+                        <app-dashboard-card
+                            [value]="totalImportLcSummary.importPadOs"
+                            label="Total PAD O/S on Payment"
+                            [cardFixedColor]="true"
+                            [cardWhiteColor]="false"
+                            cardBackgroundColor="bg-red-100!"
+                            valueColor="text-red-800!"
+                            
+                            (buttonClick)="importPayPadOsDialog()"
+                        >
+                        </app-dashboard-card>
 
-                                <div class="inline-flex items-center px-3 py-2 text-1xl  font-medium  text-white">
-                                    <button mat-button class="cursor-pointer">View Details</button>
-                                </div>
-                            </div>
-                        </mat-card-content>
-                    </mat-card>
-                    <!-- PAD on Import payment -->
-                    <mat-card
-                        class=" backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden"
-                        style="background-color: rgb(15,76,92);">
-                        <mat-card-content class="p-6">
-                            <div class="text-2xl font-bold text-white mb-2">&#x09F3;
-                                {{totalImportLcSummary.importPadAmt}}</div>
-                            <div class="text-gray-100 text-xs font-medium mb-3">Total Pad Amount on Import Payment</div>
-                            <div class="w-53! bg-amber-50! h-px! mb-1"></div>
-                            <div class="flex flex-row  justify-center">
+                        <!-- total  Import Acc Charge Amount -->
+                        <app-dashboard-card
+                            [value]="totalImportLcSummary.impAccChgAmount"
+                            label="Total Acceptance Charge Amount"
+                            [cardFixedColor]="true"
+                            [cardWhiteColor]="false"
+                            cardBackgroundColor="bg-slate-100!"
+                            valueColor="text-slate-800!"
+                            
+                            (buttonClick)="importBillAccAmtDialog()"
+                        >
+                        </app-dashboard-card>
 
-                                <div class="inline-flex items-center px-3 py-2 text-1xl  font-medium  text-white">
-                                    <button mat-button class="cursor-pointer">View Details</button>
-                                </div>
-                            </div>
-                        </mat-card-content>
-                    </mat-card>
+                        
 
-                    <!-- PAD OS on Import payment -->
-                    <mat-card
-                        class=" backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden"
-                        style="background-color: rgb(15,76,92);">
-                        <mat-card-content class="p-6">
-                            <div class="text-2xl font-bold text-white mb-2">&#x09F3;
-                                {{totalImportLcSummary.importPadOs}}</div>
-                            <div class="text-gray-100 text-xs font-medium mb-3">Total Pad O/S on Import Payment</div>
-                            <div class="w-53! bg-amber-50! h-px! mb-1"></div>
-                            <div class="flex flex-row  justify-center">
+                        <!-- total LC open Charge  -->
+                        <app-dashboard-card
+                            [value]="totalImportLcSummary.importOpChg"
+                            label="Total LC Open Charge"
+                            [cardFixedColor]="true"
+                            [cardWhiteColor]="false"
+                            cardBackgroundColor="bg-violet-100!"
+                            valueColor="text-violet-800!"
+                            
+                            (buttonClick)="importOpenChgAmtDialog()"
+                        >
+                        </app-dashboard-card>
 
-                                <div class="inline-flex items-center px-3 py-2 text-1xl  font-medium  text-white">
-                                    <button mat-button class="cursor-pointer">View Details</button>
-                                </div>
-                            </div>
-                        </mat-card-content>
-                    </mat-card>
+                       
 
-                    <!-- Active Transactions Card -->
-                    <mat-card
-                        class=" backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden"
-                        style="background-color: rgb(15,76,92);">
-                        <mat-card-content class="p-6">
-                            <div class="text-2xl font-bold text-white mb-2">&#x09F3;
-                                {{totalImportLcSummary.impAccChgAmount}}</div>
-                            <div class="text-gray-100 text-xs font-medium mb-3">Total Acceptence Charge Amount</div>
-                            <div class="w-53! bg-amber-50! h-px! mb-1"></div>
-                            <div class="flex flex-row  justify-center">
+                        <!-- Import Payment Charge -->
 
-                                <div class="inline-flex items-center px-3 py-2 text-1xl  font-medium  text-white">
-                                    <button mat-button class="cursor-pointer">View Details</button>
-                                </div>
-                            </div>
-                        </mat-card-content>
-                    </mat-card>
+                        <app-dashboard-card
+                            [value]="totalImportLcSummary.impPayChgAmount"
+                            label="Total Charges on Payment"
+                            [cardFixedColor]="true"
+                            [cardWhiteColor]="false"
+                            cardBackgroundColor="bg-lime-100!"
+                            valueColor="text-lime-800!"
+                            
+                            (buttonClick)="importPayChgAmtDialog()"
+                        >
+                        </app-dashboard-card>
 
-                    <!-- Active Transactions Card -->
-                    <mat-card
-                        class=" backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden"
-                        style="background-color: rgb(15,76,92);">
-                        <mat-card-content class="p-6">
-                            <div class="text-2xl font-bold text-white mb-2">&#x09F3;
-                                {{totalImportLcSummary.impCommAmount }}</div>
-                            <div class="text-gray-100 text-xs font-medium mb-3">Total Trade Commission</div>
-                            <div class="w-53! bg-amber-50! h-px! mb-1"></div>
-                            <div class="flex flex-row  justify-center">
+                        <!-- Foreign Lc open Vat Card -->
+                        <app-dashboard-card
+                            [value]="totalImportLcSummary.importVatAmount"
+                            label="Total Vat"
+                            [cardFixedColor]="true"
+                            [cardWhiteColor]="false"
+                            cardBackgroundColor="bg-rose-100!"
+                            valueColor="text-rose-800!"
+                            
+                            (buttonClick)="importPayChgAmtDialog()"
+                        >
+                        </app-dashboard-card>
+                        
 
-                                <div class="inline-flex items-center px-3 py-2 text-1xl  font-medium  text-white">
-                                    <button mat-button class="cursor-pointer">View Details</button>
-                                </div>
-                            </div>
-                        </mat-card-content>
-                    </mat-card>
-
-                    <!-- Active Transactions Card -->
-                    <mat-card
-                        class=" backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden"
-                        style="background-color: rgb(15,76,92);">
-                        <mat-card-content class="p-6">
-                            <div class="text-2xl font-bold text-white mb-2">&#x09F3;
-                                {{totalImportLcSummary.impSwftChgAmount}}</div>
-                            <div class="text-gray-100 text-xs font-medium mb-3">Total Swift Charge</div>
-                            <div class="w-53! bg-amber-50! h-px! mb-1"></div>
-                            <div class="flex flex-row  justify-center">
-
-                                <div class="inline-flex items-center px-3 py-2 text-1xl  font-medium  text-white">
-                                    <button mat-button class="cursor-pointer">View Details</button>
-                                </div>
-                            </div>
-                        </mat-card-content>
-                    </mat-card>
-
-                    <!-- Active Transactions Card -->
-                    <mat-card
-                        class=" backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden"
-                        style="background-color: rgb(15,76,92);">
-                        <mat-card-content class="p-6">
-                            <div class="text-2xl font-bold text-white mb-2">&#x09F3;
-                                {{totalImportLcSummary.impPayChgAmount}}</div>
-                            <div class="text-gray-100 text-xs font-medium mb-3">Total Charges on Import Payment</div>
-                            <div class="w-53! bg-amber-50! h-px! mb-1"></div>
-                            <div class="flex flex-row  justify-center">
-
-                                <div class="inline-flex items-center px-3 py-2 text-1xl  font-medium  text-white">
-                                    <button mat-button class="cursor-pointer">View Details</button>
-                                </div>
-                            </div>
-                        </mat-card-content>
-                    </mat-card>
-
-                    <!-- Foreign Lc open Vat Card -->
-                    <mat-card
-                        class=" backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden"
-                        style="background-color: rgb(15,76,92);">
-                        <mat-card-content class="p-6">
-                            <div class="text-2xl font-bold text-white mb-2">&#x09F3;
-                                {{totalImportLcSummary.importVatAmount}}</div>
-                            <div class="text-gray-100 text-xs font-medium mb-3">Total Foreign LC Open Vat</div>
-                            <div class="w-53! bg-amber-50! h-px! mb-1"></div>
-                            <div class="flex flex-row  justify-center">
-
-                                <div class="inline-flex items-center px-3 py-2 text-1xl  font-medium  text-white">
-                                    <button mat-button class="cursor-pointer">View Details</button>
-                                </div>
-                            </div>
-                        </mat-card-content>
-                    </mat-card>
-
-                    <!-- Foreign Lc open Tax Card -->
-                    <mat-card
-                        class=" backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden"
-                        style="background-color: rgb(15,76,92);">
-                        <mat-card-content class="p-6">
-                            <div class="text-2xl font-bold text-white mb-2">&#x09F3;
-                                {{totalImportLcSummary.importTaxAmount}}</div>
-                            <div class="text-gray-100 text-xs font-medium mb-3">Total Import LC Open Tax</div>
-                            <div class="w-53! bg-amber-50! h-px! mb-1"></div>
-                            <div class="flex flex-row  justify-center">
-
-                                <div class="inline-flex items-center px-3 py-2 text-1xl  font-medium  text-white">
-                                    <button mat-button class="cursor-pointer">View Details</button>
-                                </div>
-                            </div>
-                        </mat-card-content>
-                    </mat-card>
-
-
-
-
-                    <!-- Average Risk Score Card -->
-                    <!-- <mat-card
-                class="bg-emerald-900! backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden">
-                <mat-card-content class="p-6">
-                    <div class="text-2xl font-bold text-white mb-2">7.2</div>
-                    <div class="text-gray-100 text-xs font-medium mb-3">Average Risk Score</div>
-                    <div
-                        class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-green-100 text-green-700">
-                        -0.8 vs last week
+                        <!-- Foreign Lc open Tax Card -->
+                        <app-dashboard-card
+                            [value]="totalImportLcSummary.importTaxAmount"
+                            label="Total Tax"
+                            [cardFixedColor]="true"
+                            [cardWhiteColor]="false"
+                            cardBackgroundColor="bg-rose-100!"
+                            valueColor="text-rose-800!"
+                            
+                            (buttonClick)="importPayChgAmtDialog()"
+                        >
+                        </app-dashboard-card>
+                        
                     </div>
-                </mat-card-content>
-            </mat-card> -->
                 </div>
             </div>
-
         </div>
-        <div class="w-197! ml-3! bg-gray-400! h-px! mb-1"></div>
-        <app-dashboard-tran-history [selectedYear]="tempSelectedYear"></app-dashboard-tran-history>
-
+        
     </div>
 
     <!-- Details View -->
@@ -380,27 +307,19 @@
         <!-- Back Button -->
         <div class="sticky top-0 z-10 mb-4 flex items-center">
             <button mat-icon-button (click)="goBackToCards()" class="cursor-pointer">
-                <mat-icon ><span class="font-extrabold">arrow_back</span></mat-icon>
+                <mat-icon><span class="font-extrabold">arrow_back</span></mat-icon>
             </button>
-            <span class="ml-2 text-gray-700">{{currentDetailData?.title}}</span>
+            <span class="ml-2 text-gray-700">{{ currentDetailData?.title }}</span>
         </div>
 
         <!-- Debug info -->
-        <div *ngIf="!currentDetailData" class="text-red-500 p-4">
-            Error: currentDetailData is null
-        </div>
+        <div *ngIf="!currentDetailData" class="text-red-500 p-4">Error: currentDetailData is null</div>
 
         <div *ngIf="currentDetailData" class="bg-white rounded-xl shadow-lg p-6">
-
             <!-- Debug data -->
-            <div *ngIf="currentDetailData.tableData && currentDetailData.tableData.length === 0"
-                class="text-yellow-600 p-4">
-                No data available
-            </div>
+            <div *ngIf="currentDetailData.tableData && currentDetailData.tableData.length === 0" class="text-yellow-600 p-4">No data available</div>
 
-            <app-dynamic-table-dialog [data]="currentDetailData" (onPage)="onPageChangeHandler($event)">
-            </app-dynamic-table-dialog>
+            <app-dynamic-table-dialog [data]="currentDetailData" (onPage)="onPageChangeHandler($event)"> </app-dynamic-table-dialog>
         </div>
     </div>
-
 </div>

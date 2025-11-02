@@ -1,0 +1,72 @@
+<!--For White Color Card-->
+<mat-card
+    class="group  backdrop-blur-sm border-gray-200! border-2! shadow-sm! hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden"
+    [ngClass]="hoverBgColor"
+    *ngIf="cardWhiteColor"
+    style="background-color: rgba(255, 255, 255, 0.966)">
+    <mat-card-content class="p-6">
+         <!-- Label -->
+        <div
+            class="text-gray-600! text-xs font-medium mb-1 transition-colors duration-300 ">
+            {{ label }}
+        </div>
+        <!-- Value with optional currency -->
+        <div
+            class="text-3xl tracking-tight! font-stretch-200%! font-medium!  mb-5! transition-colors duration-300 "
+            [ngClass]="valueColor">
+            {{ displayValue }}
+        </div>
+
+       
+        
+
+        <!-- Divider -->
+          <div class="  w-53 bg-gray-500 h-px"></div> 
+
+        <!-- Button (optional) -->
+        <div class="flex justify-right" *ngIf="showButton">
+            <button
+                mat-button
+                (click)="onButtonClick()"
+                class="px-1 py-1! text-xs! cursor-pointer transition-colors " [ngClass]="valueColor">
+                {{ buttonLabel }}
+            </button>
+        </div>
+    </mat-card-content>
+</mat-card>
+
+<!--For Fixed Color Card-->
+<mat-card
+    class=" group  backdrop-blur-sm border-gray-200! border-2! shadow-md! hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden"
+    [ngClass]="cardBackgroundColor"
+    *ngIf="cardFixedColor">
+    <mat-card-content class="p-6">
+         <!-- Label -->
+        <div
+            class="text-gray-600! text-xs font-medium mb-1 transition-colors duration-300 ">
+            {{ label }}
+        </div>
+        <!-- Value with optional currency -->
+        <div
+            class="text-3xl tracking-tight! font-stretch-200%! font-medium!  mb-5! transition-colors duration-300 "
+            [ngClass]="valueColor">
+            {{ displayValue }}
+        </div>
+
+       
+        
+
+        <!-- Divider -->
+          <div class="  w-53 bg-gray-500 h-px"></div> 
+
+        <!-- Button (optional) -->
+        <div class="flex justify-right" *ngIf="showButton">
+            <button
+                mat-button
+                (click)="onButtonClick()"
+                class="px-1 py-1! text-xs! cursor-pointer transition-colors " [ngClass]="valueColor">
+                {{ buttonLabel }}
+            </button>
+        </div>
+    </mat-card-content>
+</mat-card>
