@@ -10,7 +10,7 @@ import { ViewChild, AfterViewInit } from "@angular/core";
 import { ElementRef } from "@angular/core";
 import { HostListener } from "@angular/core";
 import { ShowDialogComponent } from "../../component/show-dialog/show-dialog.component";
-import { ExportSummaryData } from "../../shared/interface/ExportSummaryData";
+import { ExportSummaryData } from "../../shared/models/export/ExportSummaryData";
 import { ExportDashServiceService } from "../../services/export-dashboard/export-dash-service.service";
 import { Currency } from "../../shared/interface/Currency";
 import { DashboardCardComponent } from "../../component/dashboard-card/dashboard-card.component";

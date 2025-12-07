@@ -13,7 +13,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { DashboardDataService } from '../../services/dashboard/dashboard-data.service';
-import { TranHistory } from '../../shared/model/TranHistory';
+import { TranHistory } from '../../shared/models/TranHistory';
 import { PageEvent } from '@angular/material/paginator';
 import { Input } from '@angular/core';
 import { OnChanges, SimpleChanges } from '@angular/core';

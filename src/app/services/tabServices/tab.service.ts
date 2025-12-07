@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Tab } from '../../shared/model/tab.model';
+import { Tab } from '../../shared/models/tab.model';
 import { BehaviorSubject } from 'rxjs';
 import { Router } from '@angular/router';
 import { RouterModule } from '@angular/router';

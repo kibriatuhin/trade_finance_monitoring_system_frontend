@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, catchError, map, of } from 'rxjs';
-import { TranHistory } from '../../shared/model/TranHistory';
+import { TranHistory } from '../../shared/models/TranHistory';
 import { BranchSummaryData } from '../../shared/interface/BranchSummaryData';
 import { BranchStatusListData } from '../../shared/interface/BranchStatusListData';
-import { ImportSummaryData } from '../../shared/interface/ImportSummaryData';
+import { ImportSummaryData } from '../../shared/models/import/ImportSummaryData';
 import { environment } from '../../../environment/environment';
-import { ImportLcOpenDetailsData } from '../../shared/interface/ImportLcOpenDetailsData';
-import { ApiResponseN, ImportPndingLcDetailsData, PendingLcPageResponse } from '../../shared/interface/ImportPndingLcDetailsData';
-import { ImportLcTotalAmountData } from '../../shared/interface/ImportLcTotalAmountData';
+import { ImportLcOpenDetailsData } from '../../shared/models/import/ImportLcOpenDetailsData';
+import { ApiResponseN, ImportPndingLcDetailsData, PendingLcPageResponse } from '../../shared/models/import/ImportPndingLcDetailsData';
+import { ImportLcTotalAmountData } from '../../shared/models/import/ImportLcTotalAmountData';
 import { PageResponse } from '../../shared/interface/PageResponse';
 import { ApiResponse } from '../../shared/interface/ApiResponse';
 

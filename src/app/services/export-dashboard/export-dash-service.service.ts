@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ExportSummaryData } from '../../shared/interface/ExportSummaryData';
+import { ExportSummaryData } from '../../shared/models/export/ExportSummaryData';
 import { Observable, catchError, map, of } from 'rxjs';
 import { Currency } from '../../shared/interface/Currency';
 import { environment } from '../../../environment/environment';

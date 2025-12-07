@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Tab } from '../../shared/model/tab.model';
+import { Tab } from '../../shared/models/tab.model';
 import { TabService } from '../../services/tabServices/tab.service';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';

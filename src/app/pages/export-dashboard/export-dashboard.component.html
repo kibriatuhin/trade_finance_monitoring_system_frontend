@@ -126,7 +126,7 @@
                             [cardWhiteColor]="false"
                             cardBackgroundColor="bg-purple-100!"
                             valueColor="text-purple-800"
-                            (buttonClick)="onClickHoverTest()">
+                            (buttonClick)="ExportLcOpenDialog()">
                         </app-dashboard-card>
 
                         <!-- Total Order Lc open  Volume Card -->
@@ -139,7 +139,7 @@
                             [cardWhiteColor]="false"
                             cardBackgroundColor="bg-slate-200!"
                             valueColor="text-slate-800"
-                            (buttonClick)="onClickHoverTest()">
+                            (buttonClick)="OrderLcOpenDialog()">
                         </app-dashboard-card>
 
                         <!--Total BTB Open Card -->
@@ -152,7 +152,7 @@
                             [cardWhiteColor]="false"
                             cardBackgroundColor="bg-orange-100!"
                             valueColor="text-orange-800"
-                            (buttonClick)="onClickHoverTest()">
+                            (buttonClick)="ExpOrdBtbLcOpenDialog()">
                         </app-dashboard-card>
 
                         <!-- Total Export Lc  Volume Card -->
@@ -165,7 +165,7 @@
                             [cardWhiteColor]="false"
                             cardBackgroundColor="bg-green-100!"
                             valueColor="text-green-900"
-                            (buttonClick)="onClickHoverTest()">
+                            (buttonClick)="ExportVolumeOpenDialog()">
                         </app-dashboard-card>
 
                         <!-- Total Order/Contact amount Card -->
@@ -178,7 +178,7 @@
                             [cardWhiteColor]="false"
                             cardBackgroundColor="bg-amber-100!"
                             valueColor="text-amber-900"
-                            (buttonClick)="onClickHoverTest()">
+                            (buttonClick)="OrderVolumeOpenDialog()">
                         </app-dashboard-card>
 
                         <!-- Total Export BTB amount Card -->
@@ -191,7 +191,7 @@
                             [cardWhiteColor]="false"
                             cardBackgroundColor="bg-emerald-100!"
                             valueColor="text-emerald-900"
-                            (buttonClick)="onClickHoverTest()">
+                            (buttonClick)="ExpOrdBTBVolumeOpenDialog()">
                         </app-dashboard-card>
 
                         <!-- Total Export BTB Bill amount Card -->
@@ -204,7 +204,7 @@
                             [cardWhiteColor]="false"
                             cardBackgroundColor="bg-red-100!"
                             valueColor="text-red-900"
-                            (buttonClick)="onClickHoverTest()">
+                            (buttonClick)="ExpOrdBTBOsOpenDialog()">
                         </app-dashboard-card>
                         <!-- Total Export BTB Bill amount Card -->
 
@@ -216,7 +216,7 @@
                             [cardWhiteColor]="false"
                             cardBackgroundColor="bg-sky-100!"
                             valueColor="text-sky-900"
-                            (buttonClick)="onClickHoverTest()">
+                            (buttonClick)="ExpOrdBtbBillOpenDialog()">
                         </app-dashboard-card>
 
                         <!-- Total Export BTB payment amount Card -->
@@ -229,7 +229,7 @@
                             [cardWhiteColor]="false"
                             cardBackgroundColor="bg-blue-100!"
                             valueColor="text-blue-900"
-                            (buttonClick)="onClickHoverTest()">
+                            (buttonClick)="ExpOrdBtbBillPayOpenDialog()">
                         </app-dashboard-card>
 
                         <!-- PAD on Import payment -->
@@ -242,7 +242,7 @@
                             cardBackgroundColor="bg-teal-100!"
                             valueColor="text-teal-800!"
                             
-                            (buttonClick)="onClickHoverTest()"
+                            (buttonClick)="ExpOrdBtbPadAmtOpenDialog()"
                         >
                         </app-dashboard-card>
 
@@ -256,7 +256,7 @@
                             cardBackgroundColor="bg-red-100!"
                             valueColor="text-red-800!"
                             
-                            (buttonClick)="onClickHoverTest()"
+                            (buttonClick)="ExpOrdBtbPadOsAmtOpenDialog()"
                         >
                         </app-dashboard-card>
 
@@ -270,7 +270,7 @@
                             [cardWhiteColor]="false"
                             cardBackgroundColor="bg-indigo-100!"
                             valueColor="text-indigo-900"
-                            (buttonClick)="onClickHoverTest()">
+                            (buttonClick)="ExpOrdPcAmtOpenDialog()">
                         </app-dashboard-card>
 
                         <!-- Total Export Bill Amount Card -->
@@ -283,7 +283,7 @@
                             [cardWhiteColor]="false"
                             cardBackgroundColor="bg-violet-100!"
                             valueColor="text-violet-900"
-                            (buttonClick)="onClickHoverTest()">
+                            (buttonClick)="ExpOrdBillAmtOpenDialog()">
                         </app-dashboard-card>
 
                         <!-- Total Export Pl Amount Card -->
@@ -296,7 +296,7 @@
                             [cardWhiteColor]="false"
                             cardBackgroundColor="bg-purple-100!"
                             valueColor="text-purple-900"
-                            (buttonClick)="onClickHoverTest()">
+                            (buttonClick)="ExpOrdPlAmtOpenDialog()">
                         </app-dashboard-card>
                         <!-- Total Payment Disbursement Amount Card -->
 
@@ -308,7 +308,7 @@
                             [cardWhiteColor]="false"
                             cardBackgroundColor="bg-fuchsia-100!"
                             valueColor="text-fuchsia-900"
-                            (buttonClick)="onClickHoverTest()">
+                            (buttonClick)="ExpOrdDisbAmtOpenDialog()">
                         </app-dashboard-card>
 
                         <!-- Total Export EDF Received Amount Card -->
@@ -321,19 +321,7 @@
                             [cardWhiteColor]="false"
                             cardBackgroundColor="bg-teal-100!"
                             valueColor="text-teal-900"
-                            (buttonClick)="onClickHoverTest()">
-                        </app-dashboard-card>
-                        <!-- Total EDF Refund Amount Card -->
-
-                        <app-dashboard-card
-                            [value]="totalExportSummary.totalExEdfRecAmount"
-                            label="Total EDF Refund Amount"
-                            currencySymbol="৳"
-                            [cardFixedColor]="true"
-                            [cardWhiteColor]="false"
-                            cardBackgroundColor="bg-cyan-100!"
-                            valueColor="text-cyan-900"
-                            (buttonClick)="onClickHoverTest()">
+                            (buttonClick)="ExpOrdEdfRcAmtOpenDialog()">
                         </app-dashboard-card>
                     </div>
                 </div>
