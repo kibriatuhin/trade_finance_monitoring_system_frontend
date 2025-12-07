@@ -1,21 +1,19 @@
 export interface ExportSummaryData {
     totalExportOpen: string;
     totalOrderOpen: string;
+    totalBtbOpen: string;
     totalExportAmount: string;
     totalOrderAmount: string;
     totalBtbAmount: string;
-    totalBtbOpen: string;
-    totalExpPcAmount: string;
-    totalExpBillAmount: string;
-    totalExpPlAmount: string;
-    totalExpPcOpen: string;
-    totalExpBillOpen: string;
-    totalExpPlOpen: string;
-    totalExpBtbBillOpen: string;
-    totalExpBtbBillAmount: string;
-    totalExpBtbPayAmount: string;
-    totalExpDispAmount: string;
-    totalExpEdfRecvdAmount: string;
-    totalExpEdfRefundAmount: string;
+    totalBtbOsAmount: string;
+    totalBtbBillAmount: string;
+    totalBtbPayAmount: string;
+    totalBtbPadAmount: string;
+    totalBtbPadOsAmount: string;
+    totalExOrPCAmount: string;
+    totalExOrBillAmount: string;
+    totalExOrPLAmount: string;
+    totalExOrDisbAmount: string;
+    totalExEdfRecAmount: string;
 
 }

@@ -28,3 +28,59 @@ html {
 }
 
 
+/* ===== Modern Scrollbar — Applied ONLY to Real Scroll Containers ===== */
+
+/* Target common Angular Material scroll containers */
+.mat-tab-body-content,
+.mat-sidenav-content,
+.cdk-overlay-container,
+.app-scrollable-container {
+  scrollbar-width: thin;
+  scrollbar-color: #B0BEC5 #ECEFF1;
+}
+
+/* WebKit (Chrome, Edge, Safari) */
+.mat-tab-body-content::-webkit-scrollbar,
+.mat-sidenav-content::-webkit-scrollbar,
+.cdk-overlay-container::-webkit-scrollbar,
+.app-scrollable-container::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.mat-tab-body-content::-webkit-scrollbar-track,
+.mat-sidenav-content::-webkit-scrollbar-track,
+.cdk-overlay-container::-webkit-scrollbar-track,
+.app-scrollable-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.mat-tab-body-content::-webkit-scrollbar-thumb,
+.mat-sidenav-content::-webkit-scrollbar-thumb,
+.cdk-overlay-container::-webkit-scrollbar-thumb,
+.app-scrollable-container::-webkit-scrollbar-thumb {
+  background-color: #B0BEC5;
+  border-radius: 10px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+  opacity: 0.7;
+  transition: 
+    background-color 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.mat-tab-body-content::-webkit-scrollbar-thumb:hover,
+.mat-sidenav-content::-webkit-scrollbar-thumb:hover,
+.cdk-overlay-container::-webkit-scrollbar-thumb:hover,
+.app-scrollable-container::-webkit-scrollbar-thumb:hover {
+  background-color: #78909C;
+  opacity: 1;
+}
+
+.mat-tab-body-content::-webkit-scrollbar-thumb:active,
+.mat-sidenav-content::-webkit-scrollbar-thumb:active,
+.cdk-overlay-container::-webkit-scrollbar-thumb:active,
+.app-scrollable-container::-webkit-scrollbar-thumb:active {
+  background-color: #546E7A;
+  opacity: 1;
+}

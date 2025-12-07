@@ -15,6 +15,7 @@ export class ExportDashServiceService {
   constructor(private http: HttpClient) { }
 
   // For Export history dashboard data
+  
   fetchTotalExportSummary(apiUrl: string, queryParams: any): Observable<ExportSummaryData> {
     const fullUrl = `${this.baseUrl}${apiUrl}`;
     return this.http.get<any>(fullUrl, { params: queryParams }).pipe(
@@ -24,22 +25,21 @@ export class ExportDashServiceService {
         return {
           totalExportOpen: this.formatAmountShort(data.totalExportOpen),
           totalOrderOpen: this.formatAmountShort(data.totalOrderOpen),
+          totalBtbOpen: this.formatAmountShort(data.totalBtbOpen),
           totalExportAmount: this.formatAmountShort(data.totalExportAmount),
           totalOrderAmount: this.formatAmountShort(data.totalOrderAmount),
           totalBtbAmount: this.formatAmountShort(data.totalBtbAmount),
-          totalBtbOpen: this.formatAmountShort(data.totalBtbOpen),
-          totalExpPcAmount: this.formatAmountShort(data.totalExpPcAmount),
-          totalExpBillAmount: this.formatAmountShort(data.totalExpBillAmount),
-          totalExpPlAmount: this.formatAmountShort(data.totalExpPlAmount),
-          totalExpPcOpen: this.formatAmountShort(data.totalExpPcOpen),
-          totalExpBillOpen: this.formatAmountShort(data.totalExpBillOpen),
-          totalExpPlOpen: this.formatAmountShort(data.totalExpPlOpen),
-          totalExpBtbBillOpen: this.formatAmountShort(data.totalExpBtbBillOpen),
-          totalExpBtbBillAmount: this.formatAmountShort(data.totalExpBtbBillAmount),
-          totalExpBtbPayAmount: this.formatAmountShort(data.totalExpBtbPayAmount),
-          totalExpDispAmount: this.formatAmountShort(data.totalExpDispAmount),
-          totalExpEdfRecvdAmount: this.formatAmountShort(data.totalExpEdfRecvdAmount),
-          totalExpEdfRefundAmount: this.formatAmountShort(data.totalExpEdfRefundAmount)
+          totalBtbOsAmount: this.formatAmountShort(data.totalBtbOsAmount),
+          totalBtbBillAmount: this.formatAmountShort(data.totalBtbBillAmount),
+          totalBtbPayAmount: this.formatAmountShort(data.totalBtbPayAmount),
+          totalBtbPadAmount: this.formatAmountShort(data.totalBtbPadAmount),
+          totalBtbPadOsAmount: this.formatAmountShort(data.totalBtbPadOsAmount),
+          totalExOrPCAmount: this.formatAmountShort(data.totalExOrPCAmount),
+          totalExOrBillAmount: this.formatAmountShort(data.totalExOrBillAmount),
+          totalExOrPLAmount: this.formatAmountShort(data.totalExOrPLAmount),
+          totalExOrDisbAmount: this.formatAmountShort(data.totalExOrDisbAmount),
+          totalExEdfRecAmount: this.formatAmountShort(data.totalExEdfRecAmount),
+          
         } as ExportSummaryData;
       }),
       catchError(err => {
@@ -47,22 +47,20 @@ export class ExportDashServiceService {
         return of({
           totalExportOpen: '0',
           totalOrderOpen: '0',
+          totalBtbOpen: '0',
           totalExportAmount: '0.0',
           totalOrderAmount: '0.0',
           totalBtbAmount: '0.0',
-          totalBtbOpen: '0',
-          totalExpPcAmount: '0.0',
-          totalExpBillAmount: '0.0',
-          totalExpPlAmount: '0.0',
-          totalExpPcOpen: '0',
-          totalExpBillOpen: '0',
-          totalExpPlOpen: '0',
-          totalExpBtbBillOpen: '0',
-          totalExpBtbBillAmount: '0.0',
-          totalExpBtbPayAmount: '0.0',
-          totalExpDispAmount: '0.0',
-          totalExpEdfRecvdAmount: '0.0',
-          totalExpEdfRefundAmount: '0.0'
+          totalBtbOsAmount:'0.0',
+          totalBtbBillAmount:'0.0',
+          totalBtbPayAmount:'0.0',
+          totalBtbPadAmount:'0.0',
+          totalBtbPadOsAmount:'0.0',
+          totalExOrPCAmount:'0.0',
+          totalExOrBillAmount:'0.0',
+          totalExOrPLAmount:'0.0',
+          totalExOrDisbAmount:'0.0',
+          totalExEdfRecAmount:'0.0',
         } as ExportSummaryData);
       })
     );

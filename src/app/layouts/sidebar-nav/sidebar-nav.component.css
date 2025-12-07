@@ -1,5 +1,5 @@
 /* Override Angular Material's default truncation */
-.mat-list-item {
+/*.mat-list-item {
   overflow: visible !important;
 }
 
@@ -15,4 +15,116 @@
   white-space: nowrap !important;
   text-overflow: clip !important;
   min-width: max-content !important;
+}*/
+
+/* Remove default padding/margin of mat-tree */
+.mat-tree {
+  padding: 0;
+  margin: 0;
+}
+
+.mat-tree-node {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* Ensure vertical connector lines are visible */
+.mat-tree-node .absolute {
+  pointer-events: none;
+}
+
+/* Optional: Adjust spacing for nested items */
+.mat-tree-node[role="treeitem"] {
+  position: relative;
+}
+
+/* Fix for horizontal connector alignment */
+.mat-tree-node .absolute.left-0 {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* Style for Node menu  */
+
+
+/* ---------- Parent Node ---------- */
+.tree-parent {
+  position: relative;
+  padding-top: 10px;
+  background-color: white;
+}
+.parent-wrapping{
+   padding-top: 10px;
+}
+
+.parent-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 5px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+
+/* Icon + text */
+/* .icon-text {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  
+} */
+
+/* ---------- CHILDREN CONTAINER ---------- */
+.children-container {
+  margin-left: 22px; /* indent children */
+  position: relative;
+  padding-left: 12px;
+}
+
+/* Vertical line for children */
+.children-container::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: #b5b5b5;
+  opacity: 0.8;
+}
+
+/* ---------- LEAF NODES ---------- */
+.tree-leaf {
+  position: relative;
+  padding: 6px 0;
+  display: flex;
+  align-items: center;
+}
+
+/* Horizontal line connector */
+.leaf-connector {
+  position: absolute;
+  left: -12px;
+  width: 12px;
+  height: 1px;
+  background: #b5b5b5;
+}
+
+/* Leaf text link */
+.leaf-text {
+  padding: 4px 6px;
+  font-size: 14px;
+  text-decoration: none;
+  color: #333;
+}
+
+.leaf-text:hover {
+  color: #1976d2;
+}
+
+/* Active link */
+.active-leaf {
+  color: #1976d2 !important;
+  font-weight: 600;
 }
