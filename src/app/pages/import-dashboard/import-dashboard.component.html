@@ -173,7 +173,7 @@
                         <!--total Os Liability Card -->
                         <app-dashboard-card
                             [value]="totalImportLcSummary.ImportOsLiab"
-                            label="Total O/S Liability"
+                            label="Outstanding Liability"
                             [currencySymbol]="getCurrencySymbol()"
                             [cardFixedColor]="true"
                             [cardWhiteColor]="false"
@@ -204,6 +204,7 @@
                             label="Total PAD Amount on Payment"
                             [cardFixedColor]="true"
                             [cardWhiteColor]="false"
+                            currencySymbol="৳"
                             cardBackgroundColor="bg-teal-100!"
                             valueColor="text-teal-800!"
                             
@@ -214,9 +215,10 @@
                         <!-- PAD OS on Import payment -->
                         <app-dashboard-card
                             [value]="totalImportLcSummary.importPadOs"
-                            label="Total PAD O/S on Payment"
+                            label=" PAD O/S on Payment"
                             [cardFixedColor]="true"
                             [cardWhiteColor]="false"
+                            currencySymbol="৳"
                             cardBackgroundColor="bg-red-100!"
                             valueColor="text-red-800!"
                             
@@ -227,9 +229,10 @@
                         <!-- total  Import Acc Charge Amount -->
                         <app-dashboard-card
                             [value]="totalImportLcSummary.impAccChgAmount"
-                            label="Total Acceptance Charge Amount"
+                            label=" Acceptance Charge"
                             [cardFixedColor]="true"
                             [cardWhiteColor]="false"
+                            currencySymbol="৳"
                             cardBackgroundColor="bg-slate-100!"
                             valueColor="text-slate-800!"
                             
@@ -242,9 +245,10 @@
                         <!-- total LC open Charge  -->
                         <app-dashboard-card
                             [value]="totalImportLcSummary.importOpChg"
-                            label="Total LC Open Charge"
+                            label="LC Open Charge"
                             [cardFixedColor]="true"
                             [cardWhiteColor]="false"
+                            currencySymbol="৳"
                             cardBackgroundColor="bg-violet-100!"
                             valueColor="text-violet-800!"
                             
@@ -258,9 +262,10 @@
 
                         <app-dashboard-card
                             [value]="totalImportLcSummary.impPayChgAmount"
-                            label="Total Charges on Payment"
+                            label="Charges on Payment"
                             [cardFixedColor]="true"
                             [cardWhiteColor]="false"
+                            currencySymbol="৳"
                             cardBackgroundColor="bg-lime-100!"
                             valueColor="text-lime-800!"
                             
@@ -274,10 +279,11 @@
                             label="Total Vat"
                             [cardFixedColor]="true"
                             [cardWhiteColor]="false"
+                            currencySymbol="৳"
                             cardBackgroundColor="bg-rose-100!"
                             valueColor="text-rose-800!"
                             
-                            (buttonClick)="importPayChgAmtDialog()"
+                            (buttonClick)="importVatAmtDialog()"
                         >
                         </app-dashboard-card>
                         
@@ -288,10 +294,11 @@
                             label="Total Tax"
                             [cardFixedColor]="true"
                             [cardWhiteColor]="false"
+                            currencySymbol="৳"
                             cardBackgroundColor="bg-rose-100!"
                             valueColor="text-rose-800!"
                             
-                            (buttonClick)="importPayChgAmtDialog()"
+                            (buttonClick)="importTaxAmtDialog()"
                         >
                         </app-dashboard-card>
                         

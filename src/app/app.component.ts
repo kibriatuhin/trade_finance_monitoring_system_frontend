@@ -12,6 +12,7 @@ import { MainLayoutComponent } from "./layouts/main-layout/main-layout.component
 import { BlankLayoutComponent } from './layouts/blank-layout/blank-layout.component';
 import { NgxSpinnerModule } from "ngx-spinner";
 
+
 @Component({
   selector: 'app-root',
   standalone: true,

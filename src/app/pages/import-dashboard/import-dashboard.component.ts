@@ -31,6 +31,8 @@ import { ImportPayChgAmtDetailsData } from "../../shared/interface/ImportPayChgA
 import { MatButtonModule } from "@angular/material/button";
 import { DashboardCardComponent } from "../../component/dashboard-card/dashboard-card.component";
 import { ImportOpenCharge } from "../../shared/interface/ImportOpenCharge.model";
+import { ImportLcVatDetailsData } from "../../shared/interface/ImportLcVatDetailsData";
+import { ImportLcTaxDetailsData } from "../../shared/interface/ImportLcTaxDetailsData";
 
 @Component({
     selector: "app-import-dashboard",
@@ -41,7 +43,6 @@ import { ImportOpenCharge } from "../../shared/interface/ImportOpenCharge.model"
         FormsModule,
         ReactiveFormsModule,
         CommonModule,
-        DashboardTranHistoryComponent,
         MatIcon,
         DynamicTableDialogComponent,
         MatButtonModule,
@@ -124,6 +125,8 @@ export class ImportDashboardComponent {
     importBillAccAmtDetails: ImportBillAccAmtDetailsData[] = [];
     importPayChgAmtDetails: ImportPayChgAmtDetailsData[] = [];
     importOpenChargeDetails: ImportOpenCharge[] = [];
+    importLcVatDetails: ImportLcVatDetailsData[] = [];
+    importLcTaxDetails: ImportLcTaxDetailsData[] = [];
 
     paginationState = {
         lcOpen: { totalItems: 0, currentPage: 0, pageSize: 10 },
@@ -138,6 +141,8 @@ export class ImportDashboardComponent {
         importBillAcc: { totalItems: 0, currentPage: 0, pageSize: 10 },
         importPayChgAmt: { totalItems: 0, currentPage: 0, pageSize: 10 },
         importOpnChg: { totalItems: 0, currentPage: 0, pageSize: 10 },
+        importVatAmt: { totalItems: 0, currentPage: 0, pageSize: 10 },
+        importTaxAmt: { totalItems: 0, currentPage: 0, pageSize: 10 },
     };
 
     currentDetailView:
@@ -153,6 +158,8 @@ export class ImportDashboardComponent {
         | "importBillAcc"
         | "importPayChg"
         | "importOpnChg"
+        | "importVatAmt"
+        | "importTaxAmt"
         | null = null;
 
     constructor(private dashboardService: DashboardDataService, private dialog: MatDialog, private cdr: ChangeDetectorRef, private el: ElementRef, private router: Router) {}
@@ -2010,17 +2017,17 @@ export class ImportDashboardComponent {
             },
             {
                 key: "lcOpSl",
-                label: "Payment Sl.",
+                label: "Serial",
                 cssClass: "min-w-[100px] w-[200px]",
             },
             {
                 key: "custNum",
-                label: "Bill Currency",
+                label: "Customer No.",
                 cssClass: "min-w-[140px] w-[200px]",
             },
             {
                 key: "lcCategory",
-                label: "Customer No.",
+                label: "Category",
                 cssClass: "min-w-[80px] w-[250px]",
             },
             {
@@ -2142,6 +2149,305 @@ export class ImportDashboardComponent {
         });
     }
 
+     /**
+     * Opens the "Import Open charge amount" detail view, loads data, and configures the table.
+     */
+    importVatAmtDialog() {
+        this.currentDetailView = "importVatAmt";
+
+        const columns = [
+            { key: "rn", label: "RN" },
+            {
+                key: "brnCode",
+                label: "Branch Code",
+                cssClass: "min-w-[100px] w-[200px]",
+            },
+            {
+                key: "refNum",
+                label: "LC Ref.",
+                cssClass: "min-w-[135px] w-[200px]",
+            },
+            {
+                key: "opSl",
+                label: "Serial",
+                cssClass: "min-w-[80px] w-[200px]",
+            },
+            {
+                key: "custNum",
+                label: "Customer No.",
+                cssClass: "min-w-[140px] w-[200px]",
+            },
+            {
+                key: "lcCategory",
+                label: "Category",
+                cssClass: "min-w-[80px] w-[250px]",
+            },
+            {
+                key: "vatGl1",
+                label: "Vat GL",
+                cssClass: "min-w-[130px] w-[220px]",
+            },
+            {
+                key: "lcVatAmt1",
+                label: "Vat amt. ",
+                cssClass: "min-w-[120px] w-[220px]",
+            },
+            {
+                key: "vatGl2",
+                label: "Vat GL",
+                cssClass: "min-w-[130px] w-[240px]",
+            },
+            {
+                key: "lcVatAmt2",
+                label: "Vat amt.",
+                cssClass: "min-w-[120px] w-[240px]",
+            },
+            {
+                key: "tranBatchNo",
+                label: "Tran Batch No.",
+                cssClass: "min-w-[100px] w-[250px]",
+            },
+            {
+                key: "tranDate",
+                label: "Tran Date",
+                cssClass: "min-w-[100px] w-[200px]",
+            },
+            { key: "entdBy", label: "Entd. By", cssClass: "min-w-[80px] w-[200px]" },
+            { key: "entdOn", label: "Entd. On", cssClass: "min-w-[220px] w-[270px]" },
+        ];
+
+        this.paginationState.importVatAmt.currentPage = 0;
+
+        this.loadImportVatDetails()
+            .then(() => {
+                console.log("Data loaded:", this.importLcVatDetails);
+
+                if (this.importLcVatDetails && this.importLcVatDetails.length > 0) {
+                    this.currentDetailData = {
+                        title: "View Import Vat Details",
+                        columns: columns,
+                        tableData: this.importLcVatDetails,
+                        totalItems: this.paginationState.importVatAmt.totalItems,
+                        pageSize: this.paginationState.importVatAmt.pageSize,
+                        currentPage: this.paginationState.importVatAmt.currentPage,
+                    };
+                } else {
+                    console.warn("No data available for display");
+                    this.currentDetailData = {
+                        title: "View Import Vat Details",
+                        columns: columns,
+                        tableData: [],
+                        totalItems: 0,
+                        pageSize: this.paginationState.importVatAmt.pageSize,
+                        currentPage: this.paginationState.importVatAmt.currentPage,
+                    };
+                }
+                this.viewMode = "details";
+            })
+            .catch((error) => {
+                console.error("Error loading data:", error);
+                this.currentDetailData = {
+                    title: "View Import Vat Details",
+                    columns: columns,
+                    tableData: [],
+                    totalItems: 0,
+                    pageSize: this.paginationState.importVatAmt.pageSize,
+                    currentPage: this.paginationState.importVatAmt.currentPage,
+                };
+                this.viewMode = "details";
+            });
+    }
+
+    /**
+     * Loads paginated import commission charge amount details from the backend.
+     * @returns A promise that resolves when data is loaded or rejects on error.
+     */
+    loadImportVatDetails(): Promise<void> {
+        const { currentPage, pageSize } = this.paginationState.importVatAmt;
+
+        return new Promise((resolve, reject) => {
+            this.dashboardService
+                .getPagedData<ImportLcVatDetailsData>("/importDashboard/impLcVatDtls", {
+                    year: this.importForm.get("year")?.value || "",
+                    branchCode: this.importForm.get("branchCode")?.value || "",
+                    currency: this.importForm.get("currencyCode")?.value || "",
+                    pageNo: currentPage,
+                    pageSize: pageSize,
+                })
+                .subscribe({
+                    next: (pageResponse: PageResponse<ImportLcVatDetailsData>) => {
+                        console.log("Import vat Page Response:", pageResponse);
+                        this.importLcVatDetails = pageResponse.lcList.map((item) => ({
+                            ...item,
+                            lcVatAmt1: this.formatAmount(Number(item.lcVatAmt1)),
+                            lcVatAmt2: this.formatAmount(Number(item.lcVatAmt2))
+                        }));
+                       // this.importOpenChargeDetails = pageResponse.lcList;
+                        this.paginationState.importVatAmt.totalItems = pageResponse.totalElements;
+                        this.paginationState.importVatAmt.pageSize = pageResponse.pageSize;
+                        this.paginationState.importVatAmt.currentPage = pageResponse.pageNo;
+
+                        this.updateLcDialogData();
+                        resolve();
+                    },
+                    error: (err) => {
+                        console.error("Failed to fetch Import vat details:", err);
+                        this.importLcVatDetails = [];
+                        this.paginationState.importVatAmt.totalItems = 0;
+                        this.updateLcDialogData();
+                        reject(err);
+                    },
+                });
+        });
+    }
+
+     /**
+     * Opens the "Import Open charge amount" detail view, loads data, and configures the table.
+     */
+    importTaxAmtDialog() {
+        this.currentDetailView = "importTaxAmt";
+
+        const columns = [
+            { key: "rn", label: "RN" },
+            {
+                key: "brnCode",
+                label: "Branch Code",
+                cssClass: "min-w-[100px] w-[200px]",
+            },
+            {
+                key: "lcRefNo",
+                label: "LC Ref.",
+                cssClass: "min-w-[135px] w-[200px]",
+            },
+            {
+                key: "opSl",
+                label: "Serial",
+                cssClass: "min-w-[80px] w-[200px]",
+            },
+            {
+                key: "custNum",
+                label: "Customer No.",
+                cssClass: "min-w-[140px] w-[200px]",
+            },
+            {
+                key: "lcCategory",
+                label: "Category",
+                cssClass: "min-w-[80px] w-[250px]",
+            },
+            {
+                key: "lcTaxCurr",
+                label: "Tax Currency",
+                cssClass: "min-w-[80px] w-[220px]",
+            },
+            {
+                key: "taxGlCode",
+                label: "Tax GL",
+                cssClass: "min-w-[120px] w-[220px]",
+            },
+            {
+                key: "lcTaxAmt",
+                label: "Tax Amount",
+                cssClass: "min-w-[130px] w-[240px]",
+            },
+            {
+                key: "tranBatchNo",
+                label: "Tran Batch No.",
+                cssClass: "min-w-[100px] w-[250px]",
+            },
+            {
+                key: "tranDate",
+                label: "Tran Date",
+                cssClass: "min-w-[100px] w-[200px]",
+            },
+            { key: "entdBy", label: "Entd. By", cssClass: "min-w-[80px] w-[200px]" },
+            { key: "entdOn", label: "Entd. On", cssClass: "min-w-[220px] w-[270px]" },
+        ];
+
+        this.paginationState.importTaxAmt.currentPage = 0;
+
+        this.loadImportTaxDetails()
+            .then(() => {
+                console.log("Data loaded:", this.importLcTaxDetails);
+
+                if (this.importLcTaxDetails && this.importLcTaxDetails.length > 0) {
+                    this.currentDetailData = {
+                        title: "View Import Tax Details",
+                        columns: columns,
+                        tableData: this.importLcTaxDetails,
+                        totalItems: this.paginationState.importTaxAmt.totalItems,
+                        pageSize: this.paginationState.importTaxAmt.pageSize,
+                        currentPage: this.paginationState.importTaxAmt.currentPage,
+                    };
+                } else {
+                    console.warn("No data available for display");
+                    this.currentDetailData = {
+                        title: "View Import tax Details",
+                        columns: columns,
+                        tableData: [],
+                        totalItems: 0,
+                        pageSize: this.paginationState.importTaxAmt.pageSize,
+                        currentPage: this.paginationState.importTaxAmt.currentPage,
+                    };
+                }
+                this.viewMode = "details";
+            })
+            .catch((error) => {
+                console.error("Error loading data:", error);
+                this.currentDetailData = {
+                    title: "View Import tax Details",
+                    columns: columns,
+                    tableData: [],
+                    totalItems: 0,
+                    pageSize: this.paginationState.importTaxAmt.pageSize,
+                    currentPage: this.paginationState.importTaxAmt.currentPage,
+                };
+                this.viewMode = "details";
+            });
+    }
+
+    /**
+     * Loads paginated import commission charge amount details from the backend.
+     * @returns A promise that resolves when data is loaded or rejects on error.
+     */
+    loadImportTaxDetails(): Promise<void> {
+        const { currentPage, pageSize } = this.paginationState.importTaxAmt;
+
+        return new Promise((resolve, reject) => {
+            this.dashboardService
+                .getPagedData<ImportLcTaxDetailsData>("/importDashboard/impLcTaxDtls", {
+                    year: this.importForm.get("year")?.value || "",
+                    branchCode: this.importForm.get("branchCode")?.value || "",
+                    currency: this.importForm.get("currencyCode")?.value || "",
+                    pageNo: currentPage,
+                    pageSize: pageSize,
+                })
+                .subscribe({
+                    next: (pageResponse: PageResponse<ImportLcTaxDetailsData>) => {
+                        console.log("Import tax Page Response:", pageResponse);
+                        this.importLcTaxDetails = pageResponse.lcList.map((item) => ({
+                            ...item,
+                            lcTaxAmt: this.formatAmount(Number(item.lcTaxAmt))
+                        }));
+                       // this.importOpenChargeDetails = pageResponse.lcList;
+                        this.paginationState.importTaxAmt.totalItems = pageResponse.totalElements;
+                        this.paginationState.importTaxAmt.pageSize = pageResponse.pageSize;
+                        this.paginationState.importTaxAmt.currentPage = pageResponse.pageNo;
+
+                        this.updateLcDialogData();
+                        resolve();
+                    },
+                    error: (err) => {
+                        console.error("Failed to fetch Import tax details:", err);
+                        this.importLcTaxDetails = [];
+                        this.paginationState.importTaxAmt.totalItems = 0;
+                        this.updateLcDialogData();
+                        reject(err);
+                    },
+                });
+        });
+    }
+
+
     /**
      * Updates the current detail dialog data based on the active view type
      * to reflect the latest table data and pagination state.
@@ -2255,6 +2561,24 @@ export class ImportDashboardComponent {
                 totalItems: this.paginationState.importOpnChg.totalItems,
                 pageSize: this.paginationState.importOpnChg.pageSize,
                 currentPage: this.paginationState.importOpnChg.currentPage,
+            };
+        }
+        if (this.currentDetailView === "importVatAmt" && this.viewMode === "details") {
+            this.currentDetailData = {
+                ...this.currentDetailData,
+                tableData: this.importLcVatDetails,
+                totalItems: this.paginationState.importVatAmt.totalItems,
+                pageSize: this.paginationState.importVatAmt.pageSize,
+                currentPage: this.paginationState.importVatAmt.currentPage,
+            };
+        }
+        if (this.currentDetailView === "importTaxAmt" && this.viewMode === "details") {
+            this.currentDetailData = {
+                ...this.currentDetailData,
+                tableData: this.importLcTaxDetails,
+                totalItems: this.paginationState.importTaxAmt.totalItems,
+                pageSize: this.paginationState.importTaxAmt.pageSize,
+                currentPage: this.paginationState.importTaxAmt.currentPage,
             };
         }
     }
@@ -2432,6 +2756,16 @@ export class ImportDashboardComponent {
             this.paginationState.importOpnChg.currentPage = event.pageIndex;
             this.paginationState.importOpnChg.pageSize = event.pageSize;
             this.loadImportOpenChgDetails();
+        }
+        if (this.currentDetailView === "importVatAmt") {
+            this.paginationState.importVatAmt.currentPage = event.pageIndex;
+            this.paginationState.importVatAmt.pageSize = event.pageSize;
+            this.loadImportVatDetails();
+        }
+        if (this.currentDetailView === "importTaxAmt") {
+            this.paginationState.importTaxAmt.currentPage = event.pageIndex;
+            this.paginationState.importTaxAmt.pageSize = event.pageSize;
+            this.loadImportTaxDetails();
         }
     }
     private formatAmount(value: number | null | undefined): string {

@@ -12,7 +12,7 @@ import { MatCardModule } from "@angular/material/card";
 export class DashboardCardComponent {
     @Input() value: string | number = "";
     @Input() label: string = "Metric";
-    @Input() currencySymbol: string | null = "৳"; // e.g., '$', '৳', or null
+    @Input() currencySymbol: string | null = ""; // e.g., '$', '৳', or null
     @Input() valueColor: string = "text-emerald-800"; // Tailwind class (default)
     @Input() hoverBgColor: string = "hover:bg-emerald-800";
     @Input() buttonLabel: string = "View Details";

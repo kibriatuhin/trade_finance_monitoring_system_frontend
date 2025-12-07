@@ -1,326 +1,364 @@
-<div class="flex flex-col items-center justify-center  pb-5! pt-3!">
-    <h5 class=" font-bold mb-1! text-emerald-800!">Export/Order LC Monitoring</h5>
-</div>
-<div class=" bg-gray-600! h-px! mb-1"></div>
-<div class="  p-6">
- <div class="max-w-6xl mx-auto ">
-        <!---Input Field -->
-
-
-    <form [formGroup]="exportForm" (ngSubmit)="onSubmit()" class="flex flex-col md:flex-row items-center mb-1 gap-3">
-
-        <div class="">
-            <label for="fYear" class="block  text-sm font-medium text-gray-900 ">Financial Year</label>
-            <select id="fYear" name="year" #yearSelect (ngModel)="selectedYear" formControlName="year" (keydown)="onYearKeyDown($event)"
-                class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
-              px-3 py-2.5 pr-15! focus:outline-none focus:border-blue-500 block w-full p-2.5">
-
-                <option *ngFor="let year of years" [value]="year">{{ year }}</option>
-
-            </select>
-            <div class="text-red-800 text-xs min-h-[20px]">
-                @if ((exportForm.get('year')?.dirty || exportForm.get('year')?.touched) &&
-                exportForm.get('year')?.errors?.['required']) {
-                <span class="text-red-500">Year is required.</span>
-                }
-            </div>
+<div class="p-0 relative overflow-hidden">
+    <div [@slideIn] *ngIf="viewMode === 'cards'"
+        class="transition-all duration-300 ease-in-out">
+        <div class="flex flex-col items-center justify-center pb-5! pt-3!">
+            <h5 class="font-bold mb-1! text-blue-700!">Export LC Monitoring</h5>
         </div>
+        <div class="bg-gray-600! h-px! mb-1"></div>
 
-        
+        <div class="p-6">
+            <div class="max-w-6xl mx-auto">
+                <form [formGroup]="exportForm" (ngSubmit)="onSubmit()"
+                    class="flex flex-col md:flex-row items-center pt-5! gap-3 border-1! border-gray-200! rounded-sm! pl-5!  bg-blue-50! mb-10!">
+                    <!--  
+                   Input Field : Financial  Year
+                   Author : Golam Kibria Tuhin
+                   Date : 21-08-2025
+                     -->
+                    <div class>
+                        <label for="fYear"
+                            class="block text-sm font-medium text-gray-900">Financial
+                            Year</label>
+                        <select
+                            id="fYear"
+                            name="year"
+                            (ngModel)="(selectedYear)"
+                            formControlName="year"
+                            #yearSelect
+                            (keydown)="onKeyDownPress($event, 'branchCode', false)"
+                            (change)="onYearChange()"
+                            aria-label="Financial Year"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg px-3 py-2.5 pr-15! focus:outline-none! focus:ring-2! focus:ring-blue-500!  block w-full p-2.5">
+                            <option *ngFor="let year of years" [value]="year">{{
+                                year }}</option>
+                        </select>
+                        <div class="text-red-800 text-xs min-h-[20px]">
+                            @if ((exportForm.get('year')?.dirty ||
+                            exportForm.get('year')?.touched) &&
+                            exportForm.get('year')?.errors?.['required']) {
+                            <span class="text-red-500">Year is required.</span>
+                            }
+                        </div>
+                    </div>
 
+                    <!--  
+                     Input Field : Branch Code
+                     Author : Golam Kibria Tuhin
+                     Date : 21-08-2025
+                  -->
+                    <div class="max-w-md relative" #wrapper>
+                        <label for="branchCode"
+                            class="block text-sm font-medium text-gray-900ss mb-1">
+                            Branch Code </label>
+                        <div class="relative" #wrapper>
+                            <input
+                                id="branchCode"
+                                type="text"
+                                name="branchCode"
+                                formControlName="branchCode"
+                                autocomplete="off"
+                                (keydown)="onKeyDownPress($event, 'currencyCode', false)"
+                                (blur)="onBranchCodeBlur()"
+                                placeholder="Enter Branch"
+                                class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block px-3 py-2.5 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+                                aria-label="Branch Code" />
+                            <div
+                                class="text-xs min-h-[20px]"
+                                [ngClass]="{
+                                    'text-green-600': branchCodeErrorMessage === 'For All Branch',
+                                    'text-red-500': branchCodeErrorMessage && branchCodeErrorMessage !== 'For All Branch'
+                                }">
+                                {{ branchCodeErrorMessage }}
+                            </div>
+                        </div>
+                    </div>
 
-        <div class="max-w-md relative" #wrapper>
-            <label for="currency" class="block text-sm font-medium text-gray-900ss mb-1">
-                Currency Code
-            </label>
+                    <!--  
+                      Input Field : Currency Code
+                      Author : Golam Kibria Tuhin
+                      Date : 21-08-2025
+                    -->
+                    <div class="max-w-md relative" #wrapper>
+                        <label for="currency"
+                            class="block text-sm font-medium text-gray-900ss mb-1">
+                            Currency Code </label>
+                        <div class="relative" #wrapper>
+                            <input
+                                id="currency"
+                                type="text"
+                                name="currencyCode"
+                                formControlName="currencyCode"
+                                autocomplete="off"
+                                (keydown)="onKeyDownPress($event, 'search', false)"
+                                (input)="toUppercase($event)"
+                                placeholder="Enter Currency Code"
+                                class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block px-3 py-2.5 pr-5 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+                                aria-label="Currency Code" />
+                            <div class="text-red-800 text-xs min-h-[20px]">
+                                @if (currencyErrorMessage) {
+                                <span class="text-red-500">{{
+                                    currencyErrorMessage }}</span>
 
-            <div class="relative" #wrapper>
-                <input id="currency" type="text" name="currency" formControlName="currency" autocomplete="off"
-                    placeholder="Choose Currency" (keydown)="onCurrencyKeyDown($event)" (input)="toUppercase($event)"
-                     class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block 
-                             px-3 py-2.5 pr-20 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-                    aria-label="Currency Code" />
-                <div class="text-red-800 text-xs min-h-[20px]">
+                                }
+                            </div>
+                        </div>
+                    </div>
 
-                    @if (currencyErrorMessage) {
-                    <span class="text-red-500">{{ currencyErrorMessage }}</span>
+                    <div class="max-w-md relative" #wrapper>
+                        <div class="relative" #wrapper>
+                            <button
+                                id="search"
+                                mat-raised-button
+                                class="px-10! py-2! mt-1! rounded-[8px]!  focus:outline-none! focus:ring-2! focus:ring-blue-800! focus:text-white! text-white! bg-linear-to-r! from-cyan-700! via-blue-500! to-indigo-600! hover:text-white!"
+                                (keydown)="onKeyDownPress($event, undefined, true)">
+                                Search
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                <div class="max-w-6xl mx-auto mb-20">
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
+                        <!-- Total Export Lc open Volume Card -->
+                        <app-dashboard-card
+                            [value]="totalExportSummary.totalExportOpen"
+                            label="Total Export Open"
+                            [cardFixedColor]="true"
+                            [cardWhiteColor]="false"
+                            cardBackgroundColor="bg-purple-100!"
+                            valueColor="text-purple-800"
+                            (buttonClick)="onClickHoverTest()">
+                        </app-dashboard-card>
 
-                    }
-                    
+                        <!-- Total Order Lc open  Volume Card -->
 
+                        <app-dashboard-card
+                            [value]="totalExportSummary.totalOrderOpen"
+                            label="Total Order/Contact Open"
+                            [currencySymbol]="null"
+                            [cardFixedColor]="true"
+                            [cardWhiteColor]="false"
+                            cardBackgroundColor="bg-slate-200!"
+                            valueColor="text-slate-800"
+                            (buttonClick)="onClickHoverTest()">
+                        </app-dashboard-card>
+
+                        <!--Total BTB Open Card -->
+
+                        <app-dashboard-card
+                            [value]="totalExportSummary.totalBtbOpen"
+                            label="Total BTB Open"
+                            [currencySymbol]="null"
+                            [cardFixedColor]="true"
+                            [cardWhiteColor]="false"
+                            cardBackgroundColor="bg-orange-100!"
+                            valueColor="text-orange-800"
+                            (buttonClick)="onClickHoverTest()">
+                        </app-dashboard-card>
+
+                        <!-- Total Export Lc  Volume Card -->
+
+                        <app-dashboard-card
+                            [value]="totalExportSummary.totalExportAmount"
+                            label="Total Export Volume"
+                            [currencySymbol]="getCurrencySymbol()"
+                            [cardFixedColor]="true"
+                            [cardWhiteColor]="false"
+                            cardBackgroundColor="bg-green-100!"
+                            valueColor="text-green-900"
+                            (buttonClick)="onClickHoverTest()">
+                        </app-dashboard-card>
+
+                        <!-- Total Order/Contact amount Card -->
+
+                        <app-dashboard-card
+                            [value]="totalExportSummary.totalOrderAmount"
+                            label="Total Order/Contact Volume"
+                            [currencySymbol]="getCurrencySymbol()"
+                            [cardFixedColor]="true"
+                            [cardWhiteColor]="false"
+                            cardBackgroundColor="bg-amber-100!"
+                            valueColor="text-amber-900"
+                            (buttonClick)="onClickHoverTest()">
+                        </app-dashboard-card>
+
+                        <!-- Total Export BTB amount Card -->
+
+                        <app-dashboard-card
+                            [value]="totalExportSummary.totalBtbAmount"
+                            label="Total BTB Amount"
+                            [currencySymbol]="getCurrencySymbol()"
+                            [cardFixedColor]="true"
+                            [cardWhiteColor]="false"
+                            cardBackgroundColor="bg-emerald-100!"
+                            valueColor="text-emerald-900"
+                            (buttonClick)="onClickHoverTest()">
+                        </app-dashboard-card>
+
+                        <!-- Total Export BTB Bill amount Card -->
+
+                        <app-dashboard-card
+                            [value]="totalExportSummary.totalBtbOsAmount"
+                            label="Total BTB Outstanding Liability"
+                            [currencySymbol]="getCurrencySymbol()"
+                            [cardFixedColor]="true"
+                            [cardWhiteColor]="false"
+                            cardBackgroundColor="bg-red-100!"
+                            valueColor="text-red-900"
+                            (buttonClick)="onClickHoverTest()">
+                        </app-dashboard-card>
+                        <!-- Total Export BTB Bill amount Card -->
+
+                        <app-dashboard-card
+                            [value]="totalExportSummary.totalBtbBillAmount"
+                            label="Total BTB Bill Amount"
+                            [currencySymbol]="getCurrencySymbol()"
+                            [cardFixedColor]="true"
+                            [cardWhiteColor]="false"
+                            cardBackgroundColor="bg-sky-100!"
+                            valueColor="text-sky-900"
+                            (buttonClick)="onClickHoverTest()">
+                        </app-dashboard-card>
+
+                        <!-- Total Export BTB payment amount Card -->
+
+                        <app-dashboard-card
+                            [value]="totalExportSummary.totalBtbPayAmount"
+                            label="Total BTB Payment Amount"
+                            [currencySymbol]="getCurrencySymbol()"
+                            [cardFixedColor]="true"
+                            [cardWhiteColor]="false"
+                            cardBackgroundColor="bg-blue-100!"
+                            valueColor="text-blue-900"
+                            (buttonClick)="onClickHoverTest()">
+                        </app-dashboard-card>
+
+                        <!-- PAD on Import payment -->
+                        <app-dashboard-card
+                            [value]="totalExportSummary.totalBtbPadAmount"
+                            label="Total BTB PAD Amount on Payment"
+                            [cardFixedColor]="true"
+                            [cardWhiteColor]="false"
+                            currencySymbol="৳"
+                            cardBackgroundColor="bg-teal-100!"
+                            valueColor="text-teal-800!"
+                            
+                            (buttonClick)="onClickHoverTest()"
+                        >
+                        </app-dashboard-card>
+
+                        <!-- PAD OS on Import payment -->
+                        <app-dashboard-card
+                            [value]="totalExportSummary.totalBtbPadOsAmount"
+                            label="BTB PAD O/S on Payment"
+                            [cardFixedColor]="true"
+                            [cardWhiteColor]="false"
+                            currencySymbol="৳"
+                            cardBackgroundColor="bg-red-100!"
+                            valueColor="text-red-800!"
+                            
+                            (buttonClick)="onClickHoverTest()"
+                        >
+                        </app-dashboard-card>
+
+                        <!-- Total Export Pc Amount Card -->
+
+                        <app-dashboard-card
+                            [value]="totalExportSummary.totalExOrPCAmount"
+                            label="Total Packing Credit Amount"
+                            currencySymbol="৳"
+                            [cardFixedColor]="true"
+                            [cardWhiteColor]="false"
+                            cardBackgroundColor="bg-indigo-100!"
+                            valueColor="text-indigo-900"
+                            (buttonClick)="onClickHoverTest()">
+                        </app-dashboard-card>
+
+                        <!-- Total Export Bill Amount Card -->
+
+                        <app-dashboard-card
+                            [value]="totalExportSummary.totalExOrBillAmount"
+                            label="Total Export Bill Amount"
+                            [currencySymbol]="getCurrencySymbol()"
+                            [cardFixedColor]="true"
+                            [cardWhiteColor]="false"
+                            cardBackgroundColor="bg-violet-100!"
+                            valueColor="text-violet-900"
+                            (buttonClick)="onClickHoverTest()">
+                        </app-dashboard-card>
+
+                        <!-- Total Export Pl Amount Card -->
+
+                        <app-dashboard-card
+                            [value]="totalExportSummary.totalExOrPLAmount"
+                            label="Total Purchase Loan Amount"
+                            currencySymbol="৳"
+                            [cardFixedColor]="true"
+                            [cardWhiteColor]="false"
+                            cardBackgroundColor="bg-purple-100!"
+                            valueColor="text-purple-900"
+                            (buttonClick)="onClickHoverTest()">
+                        </app-dashboard-card>
+                        <!-- Total Payment Disbursement Amount Card -->
+
+                        <app-dashboard-card
+                            [value]="totalExportSummary.totalExOrDisbAmount"
+                            label="Total Payment Disbursement Amount"
+                            [currencySymbol]="getCurrencySymbol()"
+                            [cardFixedColor]="true"
+                            [cardWhiteColor]="false"
+                            cardBackgroundColor="bg-fuchsia-100!"
+                            valueColor="text-fuchsia-900"
+                            (buttonClick)="onClickHoverTest()">
+                        </app-dashboard-card>
+
+                        <!-- Total Export EDF Received Amount Card -->
+
+                        <app-dashboard-card
+                            [value]="totalExportSummary.totalExEdfRecAmount"
+                            label="Total EDF Received Amount"
+                            currencySymbol="৳"
+                            [cardFixedColor]="true"
+                            [cardWhiteColor]="false"
+                            cardBackgroundColor="bg-teal-100!"
+                            valueColor="text-teal-900"
+                            (buttonClick)="onClickHoverTest()">
+                        </app-dashboard-card>
+                        <!-- Total EDF Refund Amount Card -->
+
+                        <app-dashboard-card
+                            [value]="totalExportSummary.totalExEdfRecAmount"
+                            label="Total EDF Refund Amount"
+                            currencySymbol="৳"
+                            [cardFixedColor]="true"
+                            [cardWhiteColor]="false"
+                            cardBackgroundColor="bg-cyan-100!"
+                            valueColor="text-cyan-900"
+                            (buttonClick)="onClickHoverTest()">
+                        </app-dashboard-card>
+                    </div>
                 </div>
-                <!-- <button mat-icon-button type="button"
-                    class="absolute inset-y-0 right-0 flex items-center pr-2 cursor-pointer">
-                     <mat-icon class="material-symbols-outlined text-gray-500">
-                        content_copy
-                    </mat-icon> s
-                </button> -->
-
-
-                <!-- popover dialog, positioned relative to input -->
-                <app-show-dialog [show]="showPopover" [currencies]="currencies" (select)="selectCurrency($event)"
-                    (close)="cancel()"></app-show-dialog>
-
-
 
             </div>
-
-
-        </div>
-
-    </form>
-    <div class="max-w-6xl mx-auto mb-20">
-
-
-
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
-            
-            <!-- Total Export Lc open Volume Card -->
-
-            <mat-card style="background-color: rgba(255, 255, 255, 0.966);"
-                class=" backdrop-blur-sm border-gray-400! border-2! shadow-xl! hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden ">
-                <mat-card-content class="p-6">
-                    <div class="text-2xl font-bold text-emerald-800! mb-2 ">{{ totalExportSummary.totalExportOpen}}</div>
-                    <div class="text-black text-xs font-medium mb-3">Total Export Open</div>
-                    <div class="w-53! bg-gray-500! h-px! mb-1"></div>
-                    <div class="flex flex-row  justify-center">
-
-                        <div class="inline-flex items-center px-3 py-2 text-1xl  font-medium  ">
-                            <button (click)="onClickHoverTest()" class="cursor-pointer text-emerald-800!">View Details</button>
-                        </div>
-                    </div>
-
-                </mat-card-content>
-            </mat-card>
-
-            <!-- Total Order Lc open  Volume Card -->
-
-            <mat-card style="background-color: rgba(255, 255, 255, 0.966);"
-                class=" backdrop-blur-sm border-gray-400! border-2! shadow-xl! hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden ">
-                <mat-card-content class="p-6">
-                    <div class="text-2xl font-bold text-emerald-800! mb-2 ">{{ totalExportSummary.totalOrderOpen}}</div>
-                    <div class="text-black text-xs font-medium mb-3">Total Order/Contact Open</div>
-                    <div class="w-53! bg-gray-500! h-px! mb-1"></div>
-                    <div class="flex flex-row  justify-center">
-
-                        <div class="inline-flex items-center px-3 py-2 text-1xl  font-medium  ">
-                            <button mat-button class="cursor-pointer text-emerald-800!">View Details</button>
-                        </div>
-                    </div>
-
-                </mat-card-content>
-            </mat-card>
-
-            <!--Total BTB Open Card -->
-            <mat-card style="background-color: rgba(255, 255, 255, 0.966);"
-                class=" backdrop-blur-sm border-gray-400! border-2! shadow-xl! hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden ">
-                <mat-card-content class="p-6">
-                    <div class="text-2xl font-bold text-emerald-800! mb-2 ">{{ totalExportSummary.totalBtbOpen}}</div>
-                    <div class="text-black text-xs font-medium mb-3">Total BTB Open</div>
-                    <div class="w-53! bg-gray-500! h-px! mb-1"></div>
-                    <div class="flex flex-row  justify-center">
-
-                        <div class="inline-flex items-center px-3 py-2 text-1xl  font-medium  text-white">
-                            <button mat-button class="cursor-pointer text-emerald-800!">View Details</button>
-                        </div>
-                    </div>
-
-                </mat-card-content>
-            </mat-card>
-
-           
-
-            
-
-           
-          
-
-           
-
-            <!-- Total Export Lc  Volume Card -->
-            <mat-card style="background-color: rgba(255, 255, 255, 0.966);"
-                class=" backdrop-blur-sm border-gray-400! border-2! shadow-xl! hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden ">
-                <mat-card-content class="p-6">
-                    <div class="text-2xl font-bold text-emerald-800! mb-2 ">&#x09F3; {{ totalExportSummary.totalExportAmount}}</div>
-                    <div class="text-black text-xs font-medium mb-3">Total Export Volume</div>
-                    <div class="w-53! bg-gray-500! h-px! mb-1"></div>
-                    <div class="flex flex-row  justify-center">
-
-                        <div class="inline-flex items-center px-3 py-2 text-1xl  font-medium  text-white">
-                            <button mat-button class="cursor-pointer text-emerald-800!">View Details</button>
-                        </div>
-                    </div>
-
-                </mat-card-content>
-            </mat-card>
-
-            <!-- Total Order/Contact amount Card -->
-
-             <mat-card style="background-color: rgba(255, 255, 255, 0.966);"
-                class=" backdrop-blur-sm border-gray-400! border-2! shadow-xl! hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden ">
-                <mat-card-content class="p-6">
-                    <div class="text-2xl font-bold text-emerald-800! mb-2 ">&#x09F3; {{ totalExportSummary.totalOrderAmount}}</div>
-                    <div class="text-black text-xs font-medium mb-3">Total Order/Contact Volume</div>
-                    <div class="w-53! bg-gray-500! h-px! mb-1"></div>
-                    <div class="flex flex-row  justify-center">
-
-                        <div class="inline-flex items-center px-3 py-2 text-1xl  font-medium  text-white">
-                            <button mat-button class="cursor-pointer text-emerald-800!">View Details</button>
-                        </div>
-                    </div>
-
-                </mat-card-content>
-            </mat-card>
-            
-
-            <!-- Total Export BTB amount Card -->
-            <mat-card style="background-color: rgba(255, 255, 255, 0.966);"
-                class=" backdrop-blur-sm border-gray-400! border-2! shadow-xl! hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden">
-                <mat-card-content class="p-6">
-                    <div class="text-2xl font-bold text-emerald-800! mb-2">&#x09F3;{{ totalExportSummary.totalBtbAmount}}</div>
-                    <div class="text-black text-xs font-medium mb-3">Total BTB Amount</div>
-                    <div class="w-53! bg-gray-500! h-px! mb-1"></div>
-                    <div class="flex flex-row  justify-center">
-
-                        <div class="inline-flex items-center px-3 py-2 text-1xl  font-medium  text-white">
-                            <button mat-button class="cursor-pointer text-emerald-800!">View Details</button>
-                        </div>
-                    </div>
-                </mat-card-content>
-            </mat-card>
-            <!-- Total Export BTB Bill amount Card -->
-            <mat-card style="background-color: rgba(255, 255, 255, 0.966);"
-                class=" backdrop-blur-sm border-gray-400! border-2! shadow-xl! hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden">
-                <mat-card-content class="p-6">
-                    <div class="text-2xl font-bold text-white mb-2">&#x09F3;{{ totalExportSummary.totalExpBtbBillAmount}}</div>
-                    <div class="text-black text-xs font-medium mb-3">Total BTB Bill Amount</div>
-                    <div class="w-53! bg-gray-500! h-px! mb-1"></div>
-                    <div class="flex flex-row  justify-center">
-
-                        <div class="inline-flex items-center px-3 py-2 text-1xl  font-medium  text-white">
-                            <button mat-button class="cursor-pointer text-emerald-800!">View Details</button>
-                        </div>
-                    </div>
-                </mat-card-content>
-            </mat-card>
-
-            <!-- Total Export BTB payment amount Card -->
-            <mat-card style="background-color: rgba(255, 255, 255, 0.966);"
-                class=" backdrop-blur-sm border-gray-400! border-2! shadow-xl! hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden">
-                <mat-card-content class="p-6">
-                    <div class="text-2xl font-bold text-emerald-800! mb-2">&#x09F3;{{ totalExportSummary.totalExpBtbPayAmount}}</div>
-                    <div class="text-black text-xs font-medium mb-3">Total BTB Payment Amount</div>
-                    <div class="w-53! bg-gray-500! h-px! mb-1"></div>
-                    <div class="flex flex-row  justify-center">
-
-                        <div class="inline-flex items-center px-3 py-2 text-1xl  font-medium  text-white">
-                            <button mat-button class="cursor-pointer text-emerald-800!">View Details</button>
-                        </div>
-                    </div>
-                </mat-card-content>
-            </mat-card>
-
-            
-
-            
-
-            <!-- Total Export Pc Amount Card -->
-            <mat-card style="background-color: rgba(255, 255, 255, 0.966);"
-                class=" backdrop-blur-sm border-gray-400! border-2! shadow-xl! hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden">
-                <mat-card-content class="p-6">
-                    <div class="text-2xl font-bold text-emerald-800! mb-2">&#x09F3;{{ totalExportSummary.totalExpPcAmount}}</div>
-                    <div class="text-black text-xs font-medium mb-3">Total Packing Credit Amount</div>
-                    <div class="w-53! bg-gray-500! h-px! mb-1"></div>
-                    <div class="flex flex-row  justify-center">
-
-                        <div class="inline-flex items-center px-3 py-2 text-1xl  font-medium  text-white">
-                            <button mat-button class="cursor-pointer text-emerald-800!">View Details</button>
-                        </div>
-                    </div>
-                </mat-card-content>
-            </mat-card>
-
-             <!-- Total Export Bill Amount Card -->
-            <mat-card style="background-color: rgba(255, 255, 255, 0.966);"
-                class=" backdrop-blur-sm border-gray-400! border-2! shadow-xl! hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden">
-                <mat-card-content class="p-6">
-                    <div class="text-2xl font-bold text-emerald-800! mb-2">&#x09F3;{{ totalExportSummary.totalExpBillAmount}}</div>
-                    <div class="text-black text-xs font-medium mb-3">Total Export Bill Amount</div>
-                    <div class="w-53! bg-gray-500! h-px! mb-1"></div>
-                    <div class="flex flex-row  justify-center">
-
-                        <div class="inline-flex items-center px-3 py-2 text-1xl  font-medium  text-white">
-                            <button mat-button class="cursor-pointer text-emerald-800!">View Details</button>
-                        </div>
-                    </div>
-                </mat-card-content>
-            </mat-card>
-
-             <!-- Total Export Pl Amount Card -->
-            <mat-card style="background-color: rgba(255, 255, 255, 0.966);"
-                class=" backdrop-blur-sm border-gray-400! border-2! shadow-xl! hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden">
-                <mat-card-content class="p-6">
-                    <div class="text-2xl font-bold text-emerald-800! mb-2">&#x09F3;{{ totalExportSummary.totalExpPlAmount}}</div>
-                    <div class="text-black text-xs font-medium mb-3">Total Purchase Loan Amount</div>
-                    <div class="w-53! bg-gray-500! h-px! mb-1"></div>
-                    <div class="flex flex-row  justify-center">
-
-                        <div class="inline-flex items-center px-3 py-2 text-1xl  font-medium  text-white">
-                            <button mat-button class="cursor-pointer text-emerald-800!">View Details</button>
-                        </div>
-                    </div>
-                </mat-card-content>
-            </mat-card>
-             <!-- Total Payment Disbursement Amount Card -->
-            <mat-card style="background-color: rgba(255, 255, 255, 0.966);"
-                class=" backdrop-blur-sm border-gray-400! border-2! shadow-xl! hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden">
-                <mat-card-content class="p-6">
-                    <div class="text-2xl font-bold text-emerald-800! mb-2">&#x09F3;{{ totalExportSummary.totalExpDispAmount}}</div>
-                    <div class="text-black text-xs font-medium mb-3">Total Payment Disbursement Amount</div>
-                    <div class="w-53! bg-gray-500! h-px! mb-1"></div>
-                    <div class="flex flex-row  justify-center">
-
-                        <div class="inline-flex items-center px-3 py-2 text-1xl  font-medium  text-white">
-                            <button mat-button class="cursor-pointer text-emerald-800!">View Details</button>
-                        </div>
-                    </div>
-                </mat-card-content>
-            </mat-card>
-
-             <!-- Total Export EDF Received Amount Card -->
-            <mat-card style="background-color: rgba(255, 255, 255, 0.966);"
-                class=" backdrop-blur-sm border-gray-400! border-2! shadow-xl! hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden">
-                <mat-card-content class="p-6">
-                    <div class="text-2xl font-bold text-emerald-800! mb-2">&#x09F3;{{ totalExportSummary.totalExpEdfRecvdAmount}}</div>
-                    <div class="text-black text-xs font-medium mb-3">Total EDF Received Amount</div>
-                    <div class="w-53! bg-gray-500! h-px! mb-1"></div>
-                    <div class="flex flex-row  justify-center">
-
-                        <div class="inline-flex items-center px-3 py-2 text-1xl  font-medium  text-white">
-                            <button mat-button class="cursor-pointer text-emerald-800!">View Details</button>
-                        </div>
-                    </div>
-                </mat-card-content>
-            </mat-card>
-             <!-- Total EDF Refund Amount Card -->
-            <mat-card style="background-color: rgba(255, 255, 255, 0.966);"
-                class=" backdrop-blur-sm border-gray-400! border-2! shadow-xl! hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden">
-                <mat-card-content class="p-6">
-                    <div class="text-2xl font-bold text-emerald-800! mb-2">&#x09F3;{{ totalExportSummary.totalExpEdfRefundAmount}}</div>
-                    <div class="text-black text-xs font-medium mb-3">Total EDF Refund Amount</div>
-                    <div class="w-53! bg-gray-500! h-px! mb-1"></div>
-                    <div class="flex flex-row  justify-center">
-
-                        <div class="inline-flex items-center px-3 py-2 text-1xl  font-medium  text-white">
-                            <button mat-button class="cursor-pointer text-emerald-800!">View Details</button>
-                        </div>
-                    </div>
-                </mat-card-content>
-            </mat-card>
-
-
         </div>
     </div>
+    <!-- Details View -->
+    <div [@slideIn] *ngIf="viewMode === 'details'" class="transition-slide slide-in">
+        <!-- Back Button -->
+        <div class="sticky top-0 z-10 mb-4 flex items-center">
+            <button mat-icon-button (click)="goBackToCards()" class="cursor-pointer">
+                <mat-icon><span class="font-extrabold">arrow_back</span></mat-icon>
+            </button>
+            <span class="ml-2 text-gray-700">{{ currentDetailData?.title }}</span>
+        </div>
 
-</div>
+        <!-- Debug info -->
+        <div *ngIf="!currentDetailData" class="text-red-500 p-4">Error: currentDetailData is null</div>
+
+        <div *ngIf="currentDetailData" class="bg-white rounded-xl shadow-lg p-6">
+            <!-- Debug data -->
+            <div *ngIf="currentDetailData.tableData && currentDetailData.tableData.length === 0" class="text-yellow-600 p-4">No data available</div>
+
+            <app-dynamic-table-dialog [data]="currentDetailData" (onPage)="onPageChangeHandler($event)"> </app-dynamic-table-dialog>
+        </div>
+    </div>
 </div>

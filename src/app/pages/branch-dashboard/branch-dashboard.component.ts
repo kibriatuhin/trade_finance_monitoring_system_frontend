@@ -8,17 +8,19 @@ import { Output, EventEmitter } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { MatFormFieldModule } from '@angular/material/form-field'; // ✅ এইটা import করো
+import { MatFormFieldModule } from '@angular/material/form-field'; 
+import { DashboardCardComponent } from '../../component/dashboard-card/dashboard-card.component';
 
 
 @Component({
   selector: 'app-branch-dashboard',
   standalone: true,
-  imports: [MatCardModule, MatCard, DynamicMaterialTableComponent,FormsModule,CommonModule,ReactiveFormsModule,MatFormFieldModule],
+  imports: [MatCardModule,DashboardCardComponent, MatCard, DynamicMaterialTableComponent,FormsModule,CommonModule,ReactiveFormsModule,MatFormFieldModule],
   templateUrl: './branch-dashboard.component.html',
   styleUrl: './branch-dashboard.component.css',
 })
 export class BranchDashboardComponent {
+  currentData: any = null;
   branchSummaryData: BranchSummaryData = {
     totalSnOutBrn: 0,
     totalSnInBrn: 0,

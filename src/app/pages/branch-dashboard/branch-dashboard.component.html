@@ -1,5 +1,5 @@
 <div class="flex flex-col items-center justify-center   pb-5! pt-3!">
-        <h5 class=" font-bold mb-1! text-emerald-800!">AD Branch Monitoring</h5>
+        <h5 class=" font-bold mb-1! text-blue-800!">AD Branch Monitoring</h5>
     </div>
 <div class=" bg-gray-600! h-px! mb-1"></div>
 
@@ -11,63 +11,65 @@
     
     <div class="max-w-6xl mx-auto mt-5! ">
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-3"> 
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-3"> 
             <!-- Total AD Branch List -->
-            <mat-card
-                style="background-color: rgba(255, 255, 255, 0.966);" 
-                class=" backdrop-blur-sm border-gray-400! border-2! shadow-xl! hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden h-50!  ">
-                <mat-card-content class="p-6">
-                    <div class="text-black text-lg font-medium mb-3 text-center">Total AD Branch</div>
-                    <div class="text-6xl font-bold text-emerald-800! mb-2 text-center"> {{branchSummaryData.totalBrn}}</div>
-                    <div class="w-73! bg-gray-500! h-px! mt-5 mx-7 "></div>
-                    <div class="flex flex-row  justify-center">
-                        
-                        <div
-                            class="inline-flex items-center px-3 py-2 text-1xl  font-medium  text-white">
-                            <button mat-button  class="cursor-pointer"></button>
-                        </div>
-                    </div>
+           
+            
 
-                </mat-card-content>
-            </mat-card>
+            <app-dashboard-card
+                            [value]="branchSummaryData.totalBrn"
+                            label="Active Branches"
+                            [cardFixedColor]="true"
+                            [cardWhiteColor]="false"
+                            cardBackgroundColor="bg-lime-100!"
+                            valueColor="text-lime-800!"
+                        >
+                        </app-dashboard-card>
 
              <!-- Total Sign In Branch List -->
-             <mat-card
-                style="background-color: rgba(255, 255, 255, 0.966);"
-                class=" backdrop-blur-sm border-gray-400! border-2! shadow-xl! hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden h-50!  ">
-                <mat-card-content class="p-6">
-                    <div class="text-black text-lg font-medium mb-3 text-center">Total SignIn Branch</div>
-                    <div class="text-6xl font-bold text-emerald-800! mb-2 text-center"> {{branchSummaryData.totalSnInBrn}}</div>
-                    <div class="w-73! bg-gray-500! h-px! mt-5 mx-7 "></div>
-                    <div class="flex flex-row  justify-center">
-                        
-                        <div
-                            class="inline-flex items-center px-3 py-2 text-1xl  font-medium  text-white">
-                            <button mat-button  class="cursor-pointer"></button>
-                        </div>
-                    </div>
+            
 
-                </mat-card-content>
-            </mat-card>
+
+            <app-dashboard-card
+                            [value]="branchSummaryData.totalSnInBrn"
+                            label="Signed-In Branches"
+                            [cardFixedColor]="true"
+                            [cardWhiteColor]="false"
+                            cardBackgroundColor="bg-blue-100!"
+                            valueColor="text-blue-800!"
+                        >
+                        </app-dashboard-card>
+
+            <app-dashboard-card
+                            [value]="branchSummaryData.totalSnInBrn"
+                            label="Pending Sign-In"
+                            [cardFixedColor]="true"
+                            [cardWhiteColor]="false"
+                            cardBackgroundColor="bg-red-100!"
+                            valueColor="text-red-800!"
+                        >
+                        </app-dashboard-card>
 
              <!-- Total Sign out Branch List -->
-            <mat-card
-                style="background-color: rgba(255, 255, 255, 0.966);"
-                class=" backdrop-blur-sm border-gray-400! border-2! shadow-xl! hover:shadow-xl transition-all duration-300 hover:-translate-y-1 rounded-2xl overflow-hidden h-50!  ">
-                <mat-card-content class="p-6">
-                    <div class="text-black text-lg font-medium mb-3 text-center">Total SignOut Branch</div>
-                    <div class="text-6xl font-bold text-emerald-800! mb-2 text-center"> {{branchSummaryData.totalSnOutBrn}}</div>
-                    <div class="w-73! bg-gray-500! h-px! mt-5 mx-7 "></div>
-                    <div class="flex flex-row  justify-center">
-                        
-                        <div
-                            class="inline-flex items-center px-3 py-2 text-1xl  font-medium  text-white">
-                            <button mat-button  class="cursor-pointer"></button>
-                        </div>
-                    </div>
+            
 
-                </mat-card-content>
-            </mat-card>
+            <app-dashboard-card
+                            [value]="branchSummaryData.totalSnOutBrn"
+                            label="Signed-Out Branches"
+                            [cardFixedColor]="true"
+                            [cardWhiteColor]="false"
+                            cardBackgroundColor="bg-purple-100!"
+                            valueColor="text-purple-800!"
+                        >
+                        </app-dashboard-card>
+                <app-dashboard-card
+                                [value]="branchSummaryData.totalSnOutBrn"
+                                label="Pending Sign-Out"
+                                [cardFixedColor]="true"
+                                [cardWhiteColor]="false"
+                                cardBackgroundColor="bg-red-100!"
+                                valueColor="text-red-800!">
+               </app-dashboard-card>
 
         </div>
      </div>
@@ -77,7 +79,7 @@
 
 <div class="p-6  ml-7 mb-20! bg-white border border-gray-200 rounded-lg shadow-sm w-280 overflow-visible">
     <app-dynamic-material-table [columns]="[
-    { key: 'rn', label: 'RN' },
+    { key: 'rn', label: 'RN'},
     { key: 'brnCode', label: 'Branch Code' },
     { key: 'brnName', label: 'Branch Name' },
     { key: 'currentDate', label: 'Business Date' },

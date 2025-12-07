@@ -51,14 +51,13 @@ mat-header-cell {
 
 /* Header with gradient */
 .mat-mdc-header-row {
-  background: linear-gradient( rgb(102, 99, 240), rgb(59,130,246), rgb(79,70,229));
-  color: rgb(255, 255, 255);    
-  font-weight: 600;   
+  background: linear-gradient( rgb(94, 91, 255));   
+  font-weight: 400;   
 }
 
 /* Alternating rows with subtle colors */
 .mat-mdc-row:nth-child(even) {
-  background-color: #fafafa;
+  background-color: #e2ebfd;
 }
 
 .mat-mdc-row:nth-child(odd) {
@@ -66,14 +65,14 @@ mat-header-cell {
 }
 
 /* Border between rows */
-.mat-mdc-row {
+/* .mat-mdc-row {
   border-bottom: 1px solid #e0e0e0;
-}
+} */
 
 /* Remove border from last row */
-.mat-mdc-row:last-child {
+/* .mat-mdc-row:last-child {
   border-bottom: none;
-}
+} */
 
 /* Hover effect */
 .mat-mdc-row:hover {
@@ -83,6 +82,6 @@ mat-header-cell {
 
 
 /* Remove right border from last cell */
-.mat-mdc-cell:last-child, .mat-mdc-header-cell:last-child {
+/* .mat-mdc-cell:last-child, .mat-mdc-header-cell:last-child {
   border-right: none;
-}
+} */

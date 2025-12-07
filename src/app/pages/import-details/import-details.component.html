@@ -1,46 +1,109 @@
-<div class="min-h-screen! max-h-screen! overflow-auto! bg-gray-50 p-4">
-
-  <div class="flex flex-col items-center justify-center p-4">
-    <h5 class=" font-bold mb-1!">Import Lodgement Details</h5>
-  </div>
-  <div class=" bg-gray-600! h-px! mb-1"></div>
-
-  <form [formGroup]="form" class="grid grid-cols-4 gap-4 p-4">
-
-    <!-- <div class="flex flex-col w-full">
-      <label for="brnCode" class="mb-1 font-medium text-sm text-gray-700">
-        Branch Code <span class="text-red-600">*</span>
-      </label>
-      <mat-form-field appearance="outline" class="w-full custom-compact-field"
-        [color]="isInvalid('fundServiceType') ? 'warn' : 'primary'">
-        <div class="flex flex-row items-center">
-          <input matInput id="brnCode" formControlName="brnCode" placeholder="Enter value"
-            class="text-sm h-8 leading-none px-2" />
-          <button mat-icon-button matSuffix tabindex="-1">
-            <mat-icon>content_copy</mat-icon>
-          </button>
+<div class="p-0 relative overflow-hidden">
+    <div  *ngIf="viewMode === 'cards'" class="transition-all duration-300 ease-in-out">
+        <div class="flex flex-col items-center justify-center pb-5! pt-3!">
+            <h5 class="font-bold mb-1! text-blue-700!">Export LC Monitoring</h5>
         </div>
-        <mat-error *ngIf="isInvalid('brnCode')">
-          <span class="text-red-600 text-xs">⚠️ Should not be blank</span>
-        </mat-error>
-      </mat-form-field>
-    </div> -->
+        <div class="bg-gray-600! h-px! mb-1"></div>
 
-    
+        <div class="p-6">
+            <div class="max-w-6xl mx-auto">
+                <form [formGroup]="exportForm" (ngSubmit)="onSubmit()" class="flex flex-col md:flex-row items-center pt-5! gap-3 border-1! border-gray-200! rounded-sm! pl-5!  bg-blue-50! mb-10!">
+                    <!--  
+                   Input Field : Financial  Year
+                   Author : Golam Kibria Tuhin
+                   Date : 21-08-2025
+                     -->
+                    <div class>
+                        <label for="fYear" class="block text-sm font-medium text-gray-900">Financial Year</label>
+                        <select
+                            id="fYear"
+                            name="year"
+                            formControlName="year"
+                            aria-label="Financial Year"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg px-3 py-2.5 pr-15! focus:outline-none! focus:ring-2! focus:ring-blue-500!  block w-full p-2.5"
+                        >
+                            <option *ngFor="let year of years" [value]="year">{{ year }}</option>
+                        </select>
+                        
+                    </div>
 
-    <!-- Transaction Max Limit -->
-    <div class="flex flex-col w-full">
-      <label for="transactionMaxLimit" class="mb-1 font-medium text-sm text-gray-700">
-        Transaction Max Limit <span class="text-red-600">*</span>
-      </label>
-      <mat-form-field appearance="outline" class="w-full custom-compact-field">
-        <input matInput id="transactionMaxLimit" formControlName="transactionMaxLimit" placeholder="Enter amount"
-          class="text-sm h-8 leading-none px-2" />
-      </mat-form-field>
+                    <!--  
+                     Input Field : Branch Code
+                     Author : Golam Kibria Tuhin
+                     Date : 21-08-2025
+                  -->
+                    <div class="max-w-md relative" #wrapper>
+                        <label for="branchCode" class="block text-sm font-medium text-gray-900ss mb-1"> Branch Code </label>
+                        <div class="relative" #wrapper>
+                            <input
+                                id="branchCode"
+                                type="text"
+                                name="branchCode"
+                                formControlName="branchCode"
+                                autocomplete="off"
+                                (keydown)="onKeyDownPress($event, 'currencyCode', false)"
+                                (blur)="onBranchCodeBlur()"
+                                placeholder="Enter Branch"
+                                class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block px-3 py-2.5 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+                                aria-label="Branch Code"
+                            />
+                            <div
+                                class="text-xs min-h-[20px]"
+                                [ngClass]="{
+                                    'text-green-600': branchCodeErrorMessage === 'For All Branch',
+                                    'text-red-500': branchCodeErrorMessage && branchCodeErrorMessage !== 'For All Branch'
+                                }"
+                            >
+                                {{ branchCodeErrorMessage }}
+                            </div>
+                        </div>
+                    </div>
+
+                   
+
+                    <!--  
+                      Input Field : Currency Code
+                      Author : Golam Kibria Tuhin
+                      Date : 21-08-2025
+                    -->
+                    <div class="max-w-md relative" #wrapper>
+                        <label for="currency" class="block text-sm font-medium text-gray-900ss mb-1"> Currency Code </label>
+                        <div class="relative" #wrapper>
+                            <input
+                                id="currency"
+                                type="text"
+                                name="currencyCode"
+                                formControlName="currencyCode"
+                                autocomplete="off"
+                                (keydown)="onKeyDownPress($event, 'search', false)"
+                                (input)="toUppercase($event)"
+                                placeholder="Enter Currency Code"
+                                class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block px-3 py-2.5 pr-5 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+                                aria-label="Currency Code"
+                            />
+                            <div class="text-red-800 text-xs min-h-[20px]">
+                                @if (currencyErrorMessage) {
+                                <span class="text-red-500">{{ currencyErrorMessage }}</span>
+
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="max-w-md relative" #wrapper>
+                        <div class="relative" #wrapper>
+                            <button
+                                id="search"
+                                mat-raised-button
+                                class="px-10! py-2! mt-1! rounded-[8px]!  focus:outline-none! focus:ring-2! focus:ring-blue-800! focus:text-white! text-white! bg-linear-to-r! from-cyan-700! via-blue-500! to-indigo-600! hover:text-white!"
+                                (keydown)="onKeyDownPress($event, undefined, true)"
+                            >
+                                Search
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-
-
-  </form>
-
-  <app-transaction-table class="mt-4"></app-transaction-table>
 </div>
