@@ -33,6 +33,10 @@ import { DashboardCardComponent } from "../../component/dashboard-card/dashboard
 import { ImportOpenCharge } from "../../shared/models/import/ImportOpenCharge.model";
 import { ImportLcVatDetailsData } from "../../shared/models/import/ImportLcVatDetailsData";
 import { ImportLcTaxDetailsData } from "../../shared/models/import/ImportLcTaxDetailsData";
+import { ImportLcOpenDetailsModel } from "../../shared/models/import/importLcOpen-details.model";
+import { NgxEchartsDirective } from "ngx-echarts";
+import { EChartsOption } from 'echarts';
+
 
 @Component({
     selector: "app-import-dashboard",
@@ -47,17 +51,36 @@ import { ImportLcTaxDetailsData } from "../../shared/models/import/ImportLcTaxDe
         DynamicTableDialogComponent,
         MatButtonModule,
         DashboardCardComponent,
+        NgxEchartsDirective
     ],
     templateUrl: "./import-dashboard.component.html",
     styleUrl: "./import-dashboard.component.css",
     animations: [
-        trigger("slideIn", [
-            transition(":enter", [style({ transform: "translateX(100%)", opacity: 0 }), animate("400ms cubic-bezier(0.25)", style({ transform: "translateX(0)", opacity: 1 }))]),
-            transition(":leave", [
-                style({ transform: "translateX(0)", opacity: 1 }),
-                animate("400ms cubic-bezier(0.25, 0.8, 0.25, 1)", style({ transform: "translateX(-100%)", opacity: 0 })),
+         trigger('slideIn', [
+            state('cards', style({
+                transform: 'translateX(0)',
+                opacity: 1
+            })),
+            state('details', style({
+                transform: 'translateX(0)',
+                opacity: 1
+            })),
+
+            transition('cards => details', [
+                style({ transform: 'translateX(100%)', opacity: 0 }),
+                animate(
+                    '400ms cubic-bezier(0.25, 0, 0, 0)',
+                    style({ transform: 'translateX(0)', opacity: 1 })
+                )
             ]),
-        ]),
+
+            transition('details => cards', [
+                animate(
+                    '400ms cubic-bezier(0.25, 0.8, 0.25, 1)',
+                    style({ transform: 'translateX(-100%)', opacity: 0 })
+                )
+            ]),
+        ])
     ],
 })
 export class ImportDashboardComponent {
@@ -71,6 +94,8 @@ export class ImportDashboardComponent {
     showCurrencyErrors: boolean = false;
     http = inject(HttpClient);
     years: number[] = [];
+    barChartOption!: EChartsOption;
+    importStatusPieChartOption!: EChartsOption;
 
     // Currency map for symbols
     currencyMap = new Map([
@@ -83,6 +108,159 @@ export class ImportDashboardComponent {
         ["CAD", "CA$"],
         ["AUD", "A$"],
     ]);
+
+    /**chart   */
+    private buildImportStatusChartOption(): EChartsOption {
+        const s = this.totalImportLcSummary;
+
+        const totalLcOpen = this.parseShortAmount(s.importLcOpen);
+        const totalPendingLc = this.parseShortAmount(s.impPendingLc);
+        return {
+            color: ['#3b82f6', '#fca5a5'],
+            title: { text: 'Import Status Overview', left: 'center' },
+            tooltip: { trigger: 'item' },
+            legend: {
+                orient: 'horizontal',
+                bottom: '10%',
+                left: 'center',
+                textStyle: {
+                    fontSize: 14,
+                    color: '#374151',
+                    fontWeight: 500  // <-- number
+                }
+            },
+            series: [
+                {
+                    name: 'Status',
+                    type: 'pie',
+                    radius: '50%',
+                    center: ['50%', '40%'],
+                    data: [
+                        { value: totalLcOpen, name: 'Total LC Open' },
+                        { value: totalPendingLc, name: 'Total Pending LC' }
+                    ],
+                    emphasis: {
+                        itemStyle: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                    
+                }
+
+            ]
+            
+        };
+    }
+
+    
+    paymentChartOption: EChartsOption = {
+        title: { text: 'Payment Status Overview', left: 'center' },
+        tooltip: {
+            trigger: 'item'
+        },
+        legend: {
+            top: '15%',
+            left: 'center'
+        },
+        series: [
+            {
+                name: 'Status',
+                type: 'pie',
+                radius: ['40%', '70%'],
+                center: ['50%', '70%'],
+                // adjust the start and end angle
+                startAngle: 180,
+                endAngle: 360,
+                data: [
+                    { value: 1048, name: 'Payment' },
+                    { value: 735, name: 'PAD Payment' },
+                ]
+            }
+        ]
+    };
+
+    private  buildBarChartOption(): EChartsOption {
+        const s = this.totalImportLcSummary;
+
+        const totalTradeVolume = this.parseShortAmount(s.importAmount);
+        const totalBillAmount = this.parseShortAmount(s.importBillAmt);
+        const totalPaymentAmount = this.parseShortAmount(s.importPayment);
+        const outstandingLiab = this.parseShortAmount(s.ImportOsLiab);
+        return {
+            title: { text: 'Import Status Overview', left: 'center' },
+            dataset: {
+                source: [
+                    ['score', 'amount', 'product'],
+                    [89.3, totalTradeVolume, 'Total Trade Volume'],
+                    [57.1, totalBillAmount, 'Total Bill Amount'],
+                    [74.4, totalPaymentAmount, 'Total Payment Amount'],
+                    [50.1, outstandingLiab, 'Outstanding Liability'],
+                ]
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: (params: any) => {
+                    const amount = params.value[1];
+                    return `${params.value[2]}<br/>Amount: $ ${amount.toLocaleString()}`;
+                }
+            },
+            grid: { containLabel: true },
+
+            // >>> xAxis updated <<<
+            xAxis: {
+                type: 'value',
+                min: 0,               // start 0
+                max: 2000000,         // 20L = 2,000,000
+                interval: 200000,     // 2L gap (optional)
+
+                axisLabel: {
+                    formatter: (value: number) => {
+                        const inLakh = value / 100000; // convert to L
+                        return '$' + inLakh + 'L';
+                    }
+                }
+            },
+
+            yAxis: { type: 'category' },
+
+            series: [
+                {
+                    name: 'status',
+                    type: 'bar',
+                    encode: {
+                        x: 'amount',
+                        y: 'product'
+                    },
+                    label: {
+                        show: true,
+                        position: 'right',
+                        formatter: (p: any) => '$ ' + p.value[1].toLocaleString()
+                    }
+                }
+            ],
+            emphasis: {
+                focus: 'self',        // hover korle oi bar ta highlight
+                scale: true,
+                itemStyle: {
+                    shadowBlur: 15,
+                    shadowColor: 'rgba(0,0,0,0.3)',
+                    borderColor: '#1976d2',
+                    borderWidth: 2
+                },
+                label: {
+                    show: true,
+                    formatter: (p: any) => '$ ' + p.value[1].toLocaleString(),
+                    position: 'right'
+                }
+            }
+        };
+    }
+
+    
+
+
 
     /** Reactive form group for managing export form inputs (year and currency). */
     importForm: FormGroup = new FormGroup({
@@ -113,7 +291,7 @@ export class ImportDashboardComponent {
         importOpChg: "0.0",
     };
 
-    lcOpenDetails: ImportLcTotalAmountData[] = [];
+    lcOpenDetails: ImportLcOpenDetailsModel[] = [];
     pendingLcDetails: ImportPndingLcDetailsData[] = [];
     importLcAmountDetails: ImportLcTotalAmountData[] = [];
     importBillAmountDetails: ImportBillAmtDetailsData[] = [];
@@ -162,7 +340,7 @@ export class ImportDashboardComponent {
         | "importTaxAmt"
         | null = null;
 
-    constructor(private dashboardService: DashboardDataService, private dialog: MatDialog, private cdr: ChangeDetectorRef, private el: ElementRef, private router: Router) {}
+    constructor(private dashboardService: DashboardDataService, private dialog: MatDialog, private cdr: ChangeDetectorRef, private el: ElementRef, private router: Router) { }
 
     /**
      * Initializes the component by populating the years array from 2015 to the current year.
@@ -351,6 +529,38 @@ export class ImportDashboardComponent {
     }
 
     /**
+     * sort amount to full amount conversion
+     * @param amount short amount string
+     * @returns full amount number
+     */
+
+    private parseShortAmount(amount: string | number): number {
+        if (typeof amount === 'number') return amount;
+
+        if (!amount) return 0;
+
+        const trimmed = amount.trim();
+
+        // Cr / L / K ache naki check
+        const crMatch = trimmed.match(/^([\d.]+)\s*Cr$/i);
+        const lMatch = trimmed.match(/^([\d.]+)\s*L$/i);
+        const kMatch = trimmed.match(/^([\d.]+)\s*K$/i);
+
+        if (crMatch) {
+            return parseFloat(crMatch[1]) * 10000000; // Cr -> * 1,00,00,000
+        }
+        if (lMatch) {
+            return parseFloat(lMatch[1]) * 100000;    // L -> * 1,00,000
+        }
+        if (kMatch) {
+            return parseFloat(kMatch[1]) * 1000;      // K -> * 1,000
+        }
+        const value = parseFloat(trimmed);
+        return isNaN(value) ? 0 : value;
+    }
+
+
+    /**
      * Submits the form by triggering data loading from the dashboard service.
      */
     onSubmit() {
@@ -372,6 +582,9 @@ export class ImportDashboardComponent {
                 next: (data) => {
                     console.log("Total Import LC Summary:", data);
                     this.totalImportLcSummary = data;
+                    
+                  this.barChartOption = this.buildBarChartOption();
+                  this.importStatusPieChartOption = this.buildImportStatusChartOption();
                 },
                 error: (err) => {
                     console.error("Failed to fetch import summary:", err);
@@ -415,24 +628,17 @@ export class ImportDashboardComponent {
         this.currentDetailView = "pendingLc";
 
         const columns = [
-            { key: "rn", label: "RN" },
-            { key: "lcBrnCode", label: "Branch Code" },
-            {
-                key: "lcRefNo",
-                label: "LC Ref. NO",
-                cssClass: "min-w-[150px] w-[150px]",
-            },
-            { key: "lcCustNum", label: "Cust. Number" },
-            { key: "lcCurr", label: "Currency" },
-            { key: "lcAmount", label: "Lc Amount" },
-            { key: "lcTotalAmount", label: "Total Lc Amt." },
-            { key: "lcTotalOsAmount", label: "Total OS Amount" },
-            { key: "lcEntdBy", label: "Entd. By" },
-            {
-                key: "lcEntdOn",
-                label: "Entd. On",
-                cssClass: "min-w-[150px] w-[150px]",
-            },
+            { key: "rn", label: "RN", cssClass: "min-w-[70px] w-[150px]" },
+            { key: "brnCode", label: "Branch Code", cssClass: "min-w-[100px] w-[150px]" },
+            { key: "lcRefNum", label: "LC Ref. NO", cssClass: "min-w-[150px] w-[200px]", },
+            { key: "custNum", label: "Cust. Number", cssClass: "min-w-[150px] w-[150px]" },
+            { key: "lcCurr", label: "Currency", cssClass: "min-w-[100px] w-[150px]" },
+            { key: "lcAmount", label: "Lc Amount", cssClass: "min-w-[120px] w-[250px]" },
+            { key: "totalLcAmount", label: "Total Lc Amount", cssClass: "min-w-[120px] w-[250px]" },
+            { key: "totalOsAmount", label: "Total OS Amount", cssClass: "min-w-[120px] w-[250px]" },
+            { key: "expiryDate", label: "Expiry Date", cssClass: "min-w-[130px] w-[150px]" },
+            { key: "entdBy", label: "Entd. By", cssClass: "min-w-[100px] w-[150px]" },
+            { key: "entdOn", label: "Entd. On", cssClass: "min-w-[150px] w-[250px]", },
         ];
 
         this.paginationState.pendingLc.currentPage = 0;
@@ -500,8 +706,8 @@ export class ImportDashboardComponent {
                         this.pendingLcDetails = pageResponse.lcList.map((item) => ({
                             ...item,
                             lcAmount: this.formatAmount(Number(item.lcAmount)),
-                            lcTotalAmount: this.formatAmount(Number(item.lcTotalAmount)),
-                            lcTotalOsAmount: this.formatAmount(Number(item.lcTotalOsAmount)),
+                            totalLcAmount: this.formatAmount(Number(item.totalLcAmount)),
+                            totalOsAmount: this.formatAmount(Number(item.totalOsAmount))
                         }));
                         this.paginationState.pendingLc.totalItems = pageResponse.totalElements;
                         this.paginationState.pendingLc.pageSize = pageResponse.pageSize;
@@ -643,30 +849,19 @@ export class ImportDashboardComponent {
         this.currentDetailView = "lcOpen";
 
         const columns = [
-            { key: "rn", label: "RN" },
-            {
-                key: "lcBrnCode",
-                label: "Branch Code",
-                cssClass: "min-w-[180px] w-[200px]",
-            },
-            {
-                key: "lcRefNo",
-                label: "LC Ref. NO",
-                cssClass: "min-w-[150px] w-[150px]",
-            },
-            { key: "lcCustNum", label: "Cust. Number" },
-            { key: "lcCurr", label: "Currency" },
-            {
-                key: "lcOpenAmt",
-                label: "Lc Open Amt",
-                cssClass: "min-w-[150px] w-[150px]",
-            },
-            { key: "lcEntdBy", label: "Entd. By" },
-            {
-                key: "lcEntdOn",
-                label: "Entd. On",
-                cssClass: "min-w-[220px] w-[220px]",
-            },
+            { key: "rn", label: "RN", cssClass: "min-w-[70px] w-[200px]" },
+            { key: "brnCode", label: "Branch Code", cssClass: "min-w-[100px] w-[200px]", },
+            { key: "lcRefNum", label: "LC Ref. NO", cssClass: "min-w-[150px] w-[150px]", },
+            { key: "custNum", label: "Cust. Number", cssClass: "min-w-[120px] w-[150px]" },
+            { key: "lcCurr", label: "Currency", cssClass: "min-w-[90px] w-[150px]" },
+            { key: "lcAmt", label: "Lc Open Amt", cssClass: "min-w-[150px] w-[150px]", },
+            { key: "lcConvRate", label: "Rate", cssClass: "min-w-[90px] w-[150px]", },
+            { key: "lcBaseAmt", label: "Base Amount", cssClass: "min-w-[150px] w-[150px]", },
+            { key: "expiryDate", label: "Expiry Date", cssClass: "min-w-[140px] w-[150px]", },
+            { key: "tranBatchNo", label: "Batch Num.", cssClass: "min-w-[100px] w-[150px]", },
+            { key: "tranDate", label: "Tran Date", cssClass: "min-w-[140px] w-[150px]", },
+            { key: "authBy", label: "Entd. By", cssClass: "min-w-[90px] w-[150px]" },
+            { key: "authOn", label: "Entd. On", cssClass: "min-w-[220px] w-[220px]", },
         ];
 
         this.paginationState.lcOpen.currentPage = 0;
@@ -720,7 +915,7 @@ export class ImportDashboardComponent {
 
         return new Promise((resolve, reject) => {
             this.dashboardService
-                .getPagedData<ImportLcTotalAmountData>("/importDashboard/impLcAmtDtls", {
+                .getPagedData<ImportLcOpenDetailsModel>("/importDashboard/impOpenDtls", {
                     year: this.importForm.get("year")?.value || "",
                     branchCode: this.importForm.get("branchCode")?.value || "",
                     currency: this.importForm.get("currencyCode")?.value || "",
@@ -728,14 +923,14 @@ export class ImportDashboardComponent {
                     pageSize: pageSize,
                 })
                 .subscribe({
-                    next: (pageResponse: PageResponse<ImportLcTotalAmountData>) => {
+                    next: (pageResponse: PageResponse<ImportLcOpenDetailsModel>) => {
                         console.log("Import Lc Page Response:", pageResponse);
-                         this.lcOpenDetails = pageResponse.lcList.map((item) => ({
+                        this.lcOpenDetails = pageResponse.lcList.map((item) => ({
                             ...item,
-                            lcOpenAmt: this.formatAmount(Number(item.lcOpenAmt)),
-                            totalAmdEn: this.formatAmount(Number(item.totalAmdEn)),
-                            totalAmdRd: this.formatAmount(Number(item.totalAmdRd)),
-                            totalLcAmt: this.formatAmount(Number(item.totalLcAmt))
+                            lcAmt: this.formatAmount(Number(item.lcAmt)),
+                            lcConvRate: this.formatAmount(Number(item.lcConvRate)),
+                            lcBaseAmt: this.formatAmount(Number(item.lcBaseAmt))
+
                         }));
                         //this.lcOpenDetails = pageResponse.lcList;
                         this.paginationState.lcOpen.totalItems = pageResponse.totalElements;
@@ -763,56 +958,15 @@ export class ImportDashboardComponent {
 
         const columns = [
             { key: "rn", label: "RN" },
-            {
-                key: "brnCode",
-                label: "Branch Code",
-                cssClass: "min-w-[100px] w-[200px]",
-            },
-            {
-                key: "billType",
-                label: "Bill Type",
-                cssClass: "min-w-[80px] w-[200px]",
-            },
-            {
-                key: "billYear",
-                label: "Bill Year",
-                cssClass: "min-w-[80px] w-[200px]",
-            },
-            {
-                key: "billSl",
-                label: "Bill Serial",
-                cssClass: "min-w-[80px] w-[200px]",
-            },
-            {
-                key: "lcRefNo",
-                label: "LC Ref. No.",
-                cssClass: "min-w-[160px] w-[180px]",
-            },
-            {
-                key: "lcCustNo",
-                label: "Customer No.",
-                cssClass: "min-w-[140px] w-[200px]",
-            },
-            {
-                key: "billCurr",
-                label: "Currency",
-                cssClass: "min-w-[80px] w-[200px]",
-            },
-            {
-                key: "billAmt",
-                label: "Bill Amount",
-                cssClass: "min-w-[160px] w-[280px]",
-            },
-            {
-                key: "billEntdBy",
-                label: "Entd. By",
-                cssClass: "min-w-[100px] w-[200px]",
-            },
-            {
-                key: "billEntdOn",
-                label: "Entd. On",
-                cssClass: "min-w-[220px] w-[270px]",
-            },
+            { key: "brnCode", label: "Branch Code", cssClass: "min-w-[100px] w-[200px]", },
+            { key: "billRefNum", label: "Bill Ref. Num.", cssClass: "min-w-[160px] w-[200px]", },
+            { key: "lcRefNo", label: "LC Ref. Num.", cssClass: "min-w-[160px] w-[180px]", },
+            { key: "lcCustNo", label: "Customer Num.", cssClass: "min-w-[140px] w-[200px]", },
+            { key: "billCurr", label: "Currency", cssClass: "min-w-[80px] w-[200px]", },
+            { key: "billAmt", label: "Bill Amount", cssClass: "min-w-[160px] w-[280px]", },
+            { key: "expiryDate", label: "Expiry Date", cssClass: "min-w-[140px] w-[200px]", },
+            { key: "billEntdBy", label: "Entd. By", cssClass: "min-w-[100px] w-[200px]", },
+            { key: "billEntdOn", label: "Entd. On", cssClass: "min-w-[220px] w-[270px]", },
         ];
 
         this.paginationState.importBill.currentPage = 0;
@@ -876,7 +1030,7 @@ export class ImportDashboardComponent {
                 .subscribe({
                     next: (pageResponse: PageResponse<ImportBillAmtDetailsData>) => {
                         console.log("Import Lc Page Response:", pageResponse);
-                         this.importBillAmountDetails = pageResponse.lcList.map((item) => ({
+                        this.importBillAmountDetails = pageResponse.lcList.map((item) => ({
                             ...item,
                             billAmt: this.formatAmount(Number(item.billAmt))
                         }));
@@ -1031,7 +1185,7 @@ export class ImportDashboardComponent {
                 .subscribe({
                     next: (pageResponse: PageResponse<ImportLcOsAmtDetailsData>) => {
                         console.log("Import Lc Page Response:", pageResponse);
-                         this.importOsAmtDetails = pageResponse.lcList.map((item) => ({
+                        this.importOsAmtDetails = pageResponse.lcList.map((item) => ({
                             ...item,
                             lcAmount: this.formatAmount(Number(item.lcAmount)),
                             lcAmdEn: this.formatAmount(Number(item.lcAmdEn)),
@@ -1068,16 +1222,9 @@ export class ImportDashboardComponent {
 
         const columns = [
             { key: "rn", label: "RN" },
-            {
-                key: "lcBrnCode",
-                label: "Branch Code",
-                cssClass: "min-w-[100px] w-[200px]",
-            },
-            {
-                key: "billRefNo",
-                label: "Bill Ref. No.",
-                cssClass: "min-w-[135px] w-[200px]",
-            },
+            { key: "lcBrnCode", label: "Branch Code", cssClass: "min-w-[100px] w-[200px]", },
+            { key: "lcRefNum", label: "LC Ref. No.", cssClass: "min-w-[135px] w-[200px]", },
+            { key: "billRefNo", label: "Bill Ref. No.", cssClass: "min-w-[135px] w-[200px]", },
             {
                 key: "billPaySl",
                 label: "Pay Serial",
@@ -1186,7 +1333,7 @@ export class ImportDashboardComponent {
                 .subscribe({
                     next: (pageResponse: PageResponse<ImportPayAmtDetailsData>) => {
                         console.log("Import Lc Page Response:", pageResponse);
-                         this.importPayAmtDetails = pageResponse.lcList.map((item) => ({
+                        this.importPayAmtDetails = pageResponse.lcList.map((item) => ({
                             ...item,
                             billPayAmt: this.formatAmount(Number(item.billPayAmt))
                         }));
@@ -1350,7 +1497,7 @@ export class ImportDashboardComponent {
                 .subscribe({
                     next: (pageResponse: PageResponse<ImportPayPadAmtDetailsData>) => {
                         console.log("Import Lc Page Response:", pageResponse);
-                         this.importPayPadAmtDetails = pageResponse.lcList.map((item) => ({
+                        this.importPayPadAmtDetails = pageResponse.lcList.map((item) => ({
                             ...item,
                             billPayAmt: this.formatAmount(Number(item.billPayAmt)),
                             billPaybaseAmt: this.formatAmount(Number(item.billPaybaseAmt)),
@@ -1807,7 +1954,7 @@ export class ImportDashboardComponent {
                             ...item,
                             billAmt: this.formatAmount(Number(item.billAmt)),
                             accChgAmt: this.formatAmount(Number(item.accChgAmt))
-                            
+
                         }));
                         //this.importBillAccAmtDetails = pageResponse.lcList;
                         this.paginationState.importBillAcc.totalItems = pageResponse.totalElements;
@@ -1978,7 +2125,7 @@ export class ImportDashboardComponent {
                             chrgAmt3: this.formatAmount(Number(item.chrgAmt3)),
                             totalCharges: this.formatAmount(Number(item.totalCharges))
                         }));
-                       // this.importPayChgAmtDetails = pageResponse.lcList;
+                        // this.importPayChgAmtDetails = pageResponse.lcList;
                         this.paginationState.importPayChgAmt.totalItems = pageResponse.totalElements;
                         this.paginationState.importPayChgAmt.pageSize = pageResponse.pageSize;
                         this.paginationState.importPayChgAmt.currentPage = pageResponse.pageNo;
@@ -2072,7 +2219,7 @@ export class ImportDashboardComponent {
 
                 if (this.importOpenChargeDetails && this.importOpenChargeDetails.length > 0) {
                     this.currentDetailData = {
-                        title: "View Import Acc Bill Charge Details",
+                        title: "View Import Open Charge Details",
                         columns: columns,
                         tableData: this.importOpenChargeDetails,
                         totalItems: this.paginationState.importOpnChg.totalItems,
@@ -2130,7 +2277,7 @@ export class ImportDashboardComponent {
                             commChgAmt: this.formatAmount(Number(item.commChgAmt)),
                             swfChgAmt: this.formatAmount(Number(item.swfChgAmt))
                         }));
-                       // this.importOpenChargeDetails = pageResponse.lcList;
+                        // this.importOpenChargeDetails = pageResponse.lcList;
                         this.paginationState.importOpnChg.totalItems = pageResponse.totalElements;
                         this.paginationState.importOpnChg.pageSize = pageResponse.pageSize;
                         this.paginationState.importOpnChg.currentPage = pageResponse.pageNo;
@@ -2149,9 +2296,9 @@ export class ImportDashboardComponent {
         });
     }
 
-     /**
-     * Opens the "Import Open charge amount" detail view, loads data, and configures the table.
-     */
+    /**
+    * Opens the "Import Open charge amount" detail view, loads data, and configures the table.
+    */
     importVatAmtDialog() {
         this.currentDetailView = "importVatAmt";
 
@@ -2282,7 +2429,7 @@ export class ImportDashboardComponent {
                             lcVatAmt1: this.formatAmount(Number(item.lcVatAmt1)),
                             lcVatAmt2: this.formatAmount(Number(item.lcVatAmt2))
                         }));
-                       // this.importOpenChargeDetails = pageResponse.lcList;
+                        // this.importOpenChargeDetails = pageResponse.lcList;
                         this.paginationState.importVatAmt.totalItems = pageResponse.totalElements;
                         this.paginationState.importVatAmt.pageSize = pageResponse.pageSize;
                         this.paginationState.importVatAmt.currentPage = pageResponse.pageNo;
@@ -2301,9 +2448,9 @@ export class ImportDashboardComponent {
         });
     }
 
-     /**
-     * Opens the "Import Open charge amount" detail view, loads data, and configures the table.
-     */
+    /**
+    * Opens the "Import Open charge amount" detail view, loads data, and configures the table.
+    */
     importTaxAmtDialog() {
         this.currentDetailView = "importTaxAmt";
 
@@ -2428,7 +2575,7 @@ export class ImportDashboardComponent {
                             ...item,
                             lcTaxAmt: this.formatAmount(Number(item.lcTaxAmt))
                         }));
-                       // this.importOpenChargeDetails = pageResponse.lcList;
+                        // this.importOpenChargeDetails = pageResponse.lcList;
                         this.paginationState.importTaxAmt.totalItems = pageResponse.totalElements;
                         this.paginationState.importTaxAmt.pageSize = pageResponse.pageSize;
                         this.paginationState.importTaxAmt.currentPage = pageResponse.pageNo;

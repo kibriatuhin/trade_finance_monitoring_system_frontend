@@ -11,7 +11,7 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { loadingInterceptor } from './services/interceptors/loading.interceptors';
 
 
-export const appConfig: ApplicationConfig = {
+/*export const appConfig: ApplicationConfig = {
   providers: [provideHttpClient(), 
              provideZoneChangeDetection({ eventCoalescing: true }), 
              provideRouter(routes), 
@@ -21,4 +21,15 @@ export const appConfig: ApplicationConfig = {
              { provide: MatPaginatorIntl, useClass: CustomMatPaginatorIntl }, 
              provideAnimations(), // Remove provideAnimationsAsync() - it's conflicting
     { provide: MatPaginatorIntl, useClass: CustomMatPaginatorIntl }]
+};*/
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideHttpClient(withInterceptors([loadingInterceptor])),
+    provideRouter(routes),
+    provideAnimations(),   // ✅ only one
+    provideZoneChangeDetection({ eventCoalescing: true }),
+    { provide: MatPaginatorIntl, useClass: CustomMatPaginatorIntl }
+  ]
 };
+
+

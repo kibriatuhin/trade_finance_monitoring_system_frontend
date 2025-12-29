@@ -1,92 +1,100 @@
-<div class="flex flex-col items-center justify-center   pb-5! pt-3!">
-        <h5 class=" font-bold mb-1! text-blue-800!">AD Branch Monitoring</h5>
-    </div>
-<div class=" bg-gray-600! h-px! mb-1"></div>
-
-
-     
-
-<div class="p-6">
-    
-    
-    <div class="max-w-6xl mx-auto mt-5! ">
-
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-3"> 
-            <!-- Total AD Branch List -->
-           
-            
-
-            <app-dashboard-card
-                            [value]="branchSummaryData.totalBrn"
-                            label="Active Branches"
-                            [cardFixedColor]="true"
-                            [cardWhiteColor]="false"
-                            cardBackgroundColor="bg-lime-100!"
-                            valueColor="text-lime-800!"
-                        >
-                        </app-dashboard-card>
-
-             <!-- Total Sign In Branch List -->
-            
-
-
-            <app-dashboard-card
-                            [value]="branchSummaryData.totalSnInBrn"
-                            label="Signed-In Branches"
-                            [cardFixedColor]="true"
-                            [cardWhiteColor]="false"
-                            cardBackgroundColor="bg-blue-100!"
-                            valueColor="text-blue-800!"
-                        >
-                        </app-dashboard-card>
-
-            <app-dashboard-card
-                            [value]="branchSummaryData.totalSnInBrn"
-                            label="Pending Sign-In"
-                            [cardFixedColor]="true"
-                            [cardWhiteColor]="false"
-                            cardBackgroundColor="bg-red-100!"
-                            valueColor="text-red-800!"
-                        >
-                        </app-dashboard-card>
-
-             <!-- Total Sign out Branch List -->
-            
-
-            <app-dashboard-card
-                            [value]="branchSummaryData.totalSnOutBrn"
-                            label="Signed-Out Branches"
-                            [cardFixedColor]="true"
-                            [cardWhiteColor]="false"
-                            cardBackgroundColor="bg-purple-100!"
-                            valueColor="text-purple-800!"
-                        >
-                        </app-dashboard-card>
-                <app-dashboard-card
-                                [value]="branchSummaryData.totalSnOutBrn"
-                                label="Pending Sign-Out"
-                                [cardFixedColor]="true"
-                                [cardWhiteColor]="false"
-                                cardBackgroundColor="bg-red-100!"
-                                valueColor="text-red-800!">
-               </app-dashboard-card>
-
+<div class="p-0 relative overflow-hidden">
+    <div [@slideIn] *ngIf="viewMode === 'cards'" class="transition-all duration-300 ease-in-out relative overflow-hidden">
+        <div class="flex flex-col items-center justify-center   pb-5! pt-3!">
+            <h5 class=" font-bold mb-1! text-blue-800!">AD Branch Monitoring</h5>
         </div>
-     </div>
+        <div class=" bg-gray-600! h-px! mb-1"></div>
+
+
+
+
+        <div class="p-6">
+
+
+            <div class="max-w-6xl mx-auto">
+                <div class="max-w-6xl mx-auto mb-20">
+
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
+                        <!-- Total AD Branch List -->
+
+
+
+                        <app-dashboard-card [value]="branchSummaryData.totalBrn" label="Active Branches"
+                            [cardFixedColor]="true" [cardWhiteColor]="false" cardBackgroundColor="bg-lime-100!"
+                            valueColor="text-lime-800!" (buttonClick)="adBranchDetailsDialog()">
+                        </app-dashboard-card>
+
+                        <!-- Total Sign In Branch List -->
+
+
+
+                        <app-dashboard-card [value]="branchSummaryData.totalSnInBrn" label="Signed-In Branches"
+                            [cardFixedColor]="true" [cardWhiteColor]="false" cardBackgroundColor="bg-blue-100!"
+                            valueColor="text-blue-800!" (buttonClick)="adBranchSignInDetailsDialog()">
+                        </app-dashboard-card>
+
+                        <app-dashboard-card [value]="branchSummaryData.totalPndSnInBrn" label="Pending Sign-In"
+                            [cardFixedColor]="true" [cardWhiteColor]="false" cardBackgroundColor="bg-red-100!"
+                            valueColor="text-red-800!" (buttonClick)="adBranchPnSignInDetailsDialog()">
+                        </app-dashboard-card>
+
+                        <!-- Total Sign out Branch List -->
+
+
+                        <app-dashboard-card [value]="branchSummaryData.totalSnOutBrn" label="Signed-Out Branches"
+                            [cardFixedColor]="true" [cardWhiteColor]="false" cardBackgroundColor="bg-purple-100!"
+                            valueColor="text-purple-800!" (buttonClick)="adBranchSignOutDetailsDialog()">
+                        </app-dashboard-card>
+                        <app-dashboard-card [value]="branchSummaryData.totalPndSnOutBrn" label="Pending Sign-Out"
+                            [cardFixedColor]="true" [cardWhiteColor]="false" cardBackgroundColor="bg-red-100!"
+                            valueColor="text-red-800!" (buttonClick)="adBranchPnSignOutDetailsDialog()">
+                        </app-dashboard-card>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex flex-col items-center overflow-auto mb-5 gap-6">
+            <echarts *ngIf="SignInTrendLineChart"
+                [options]="SignInTrendLineChart"
+                class="w-full max-w-3xl h-96 "
+                style="min-width: 80%">
+            </echarts>
+            
+            <echarts *ngIf="branchSummaryPieChart"
+                [options]="branchSummaryPieChart"
+                class="w-full max-w-3xl h-96 "
+                style="min-width: 80%">
+                
+            </echarts>
+            
+        </div>
+
+
+    </div>
+    <!-- Details View -->
+    <div [@slideIn] *ngIf="viewMode === 'details'" class="transition-slide slide-in">
+        <!-- Back Button -->
+        <div class="sticky top-0 z-10 mb-4 flex items-center">
+            <button mat-icon-button (click)="goBackToCards()" class="cursor-pointer">
+                <mat-icon><span class="font-extrabold">arrow_back</span></mat-icon>
+            </button>
+            <span class="ml-2 text-gray-700">{{ currentDetailData?.title
+                }}</span>
+        </div>
+
+        <!-- Debug info -->
+        <div *ngIf="!currentDetailData" class="text-red-500 p-4">Error:
+            currentDetailData is null</div>
+
+        <div *ngIf="currentDetailData" class="bg-white rounded-xl shadow-lg p-6">
+            <!-- Debug data -->
+            <div *ngIf="currentDetailData.tableData && currentDetailData.tableData.length === 0"
+                class="text-yellow-600 p-4">No data available</div>
+
+            <app-dynamic-table-dialog [data]="currentDetailData" (onPage)="onPageChangeHandler($event)">
+            </app-dynamic-table-dialog>
+        </div>
+    </div>
 </div>
-
-<div class="w-297! ml-3! bg-gray-400! h-px! mt-5! mb-5!"></div>
-
-<div class="p-6  ml-7 mb-20! bg-white border border-gray-200 rounded-lg shadow-sm w-280 overflow-visible">
-    <app-dynamic-material-table [columns]="[
-    { key: 'rn', label: 'RN'},
-    { key: 'brnCode', label: 'Branch Code' },
-    { key: 'brnName', label: 'Branch Name' },
-    { key: 'currentDate', label: 'Business Date' },
-    { key: 'brnSignIn', label: 'Sign In' },
-    { key: 'brnSignOut', label: 'Sign Out' },
-    
-  ]" [data]="branchSummary" (onPage)="onPageChangeHandler($event)" [totalItems]="totalItems" [pageSize]="pageSize"  [currentPage]="currentPage"
-  />
-</div>
-

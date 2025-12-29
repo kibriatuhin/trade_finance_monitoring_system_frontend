@@ -1,5 +1,6 @@
 export interface ImportPayAmtDetailsData {
     lcBrnCode: number;
+    lcRefNum: string;
     billRefNo: string;
     billPaySl: number;
     billCustNo: string;
@@ -14,6 +15,7 @@ export interface ImportPayAmtDetailsData {
 }
 /*
 private Integer lcBrnCode;
+lcRefNum
     private String billRefNo;
     private Integer billPaySl;
     private String billCustNo;

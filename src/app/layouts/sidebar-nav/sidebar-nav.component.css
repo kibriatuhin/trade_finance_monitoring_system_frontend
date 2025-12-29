@@ -1,21 +1,4 @@
-/* Override Angular Material's default truncation */
-/*.mat-list-item {
-  overflow: visible !important;
-}
 
-.mat-list-item-content {
-  overflow: visible !important;
-  white-space: nowrap !important;
-  flex-wrap: nowrap !important;
-}
-
-.mat-list-item-content a,
-.mat-list-item-content span {
-  overflow: visible !important;
-  white-space: nowrap !important;
-  text-overflow: clip !important;
-  min-width: max-content !important;
-}*/
 
 /* Remove default padding/margin of mat-tree */
 .mat-tree {
@@ -51,7 +34,11 @@
 .tree-parent {
   position: relative;
   padding-top: 10px;
-  background-color: white;
+}
+.mat-tree,
+.mat-nested-tree-node,
+.mat-tree-node {
+  background-color: transparent !important;
 }
 .parent-wrapping{
    padding-top: 10px;
@@ -66,18 +53,9 @@
   cursor: pointer;
 }
 
-
-/* Icon + text */
-/* .icon-text {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  
-} */
-
 /* ---------- CHILDREN CONTAINER ---------- */
 .children-container {
-  margin-left: 22px; /* indent children */
+  margin-left: 15px; /* indent children */
   position: relative;
   padding-left: 12px;
 }
@@ -87,12 +65,33 @@
   content: "";
   position: absolute;
   left: 0;
-  top: 0;
-  bottom: 0;
+  top: 0px;      
+  bottom: 18px; 
   width: 1px;
   background: #b5b5b5;
   opacity: 0.8;
 }
+/* Remove vertical line for last child */
+.children-container > .tree-leaf:last-child .leaf-connector::after {
+  display: none;
+}
+/* leaf-like parent behaves like normal child */
+.leaf-like-parent {
+  padding-top: 0 !important;
+}
+
+/* parent row looking like leaf */
+
+
+/* horizontal line for parent-with-children */
+.parent-leaf-connector {
+  left: -12px;
+  width: 12px;
+  height: 1px;
+  background: #b5b5b5;
+}
+
+
 
 /* ---------- LEAF NODES ---------- */
 .tree-leaf {
@@ -108,7 +107,7 @@
   left: -12px;
   width: 12px;
   height: 1px;
-  background: #b5b5b5;
+  background: #c25353;
 }
 
 /* Leaf text link */
@@ -127,4 +126,37 @@
 .active-leaf {
   color: #1976d2 !important;
   font-weight: 600;
+}
+
+
+.animate-expand {
+  overflow: hidden;
+  animation: accordion-open 650ms ease;
+}
+
+@keyframes accordion-open {
+  0% {
+    opacity: 0;
+    max-height: 0;
+  }
+  100% {
+    opacity: 1;
+    max-height: 600px;
+  }
+}
+/* Disable text selection for entire tree */
+.mat-tree,
+.tree-parent,
+.tree-leaf,
+.leaf-text,
+.parent-row {
+  user-select: none;
+  -webkit-user-select: none; 
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+
+:host {
+  transition: width 0.15s ease;
 }

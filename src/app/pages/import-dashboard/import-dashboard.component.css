@@ -17,6 +17,13 @@
     margin-bottom: 10px;
 }
 /* In your component styles */
+.chart-clickable {
+  cursor: default;
+}
+
+.chart-clickable:hover {
+  cursor: pointer; 
+}
 
 
 

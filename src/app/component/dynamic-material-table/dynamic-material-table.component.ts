@@ -30,7 +30,7 @@ export class DynamicMaterialTableComponent  implements OnChanges {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  ngOnChanges(changes: SimpleChanges): void {
+ /* ngOnChanges(changes: SimpleChanges): void {
     this.displayedColumns = this.columns.map(c => c.key);
 
     // 🔥 Critical: Manually update paginator's length & index
@@ -49,6 +49,36 @@ export class DynamicMaterialTableComponent  implements OnChanges {
     console.log(this.pageSize);
     this.onPage.emit(event);
     // Emit to parent if needed
+  }*/
+ ngOnChanges(changes: SimpleChanges): void {
+  this.displayedColumns = this.columns.map(c => c.key);
+
+  if (
+    (changes['currentPage'] ||
+     changes['pageSize'] ||
+     changes['totalItems']) &&
+    this.paginator
+  ) {
+    this.syncPaginator();
   }
+}
+
+ngAfterViewInit() {
+  this.syncPaginator();
+}
+onPageChange(event: PageEvent) {
+    console.log(this.currentPage);
+    console.log(this.pageSize);
+    this.onPage.emit(event);
+    // Emit to parent if needed
+  }
+
+private syncPaginator() {
+  if (!this.paginator) return;
+
+  this.paginator.pageIndex = this.currentPage;
+  this.paginator.pageSize = this.pageSize;
+  this.paginator.length = this.totalItems;
+}
 
 }

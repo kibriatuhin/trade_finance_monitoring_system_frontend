@@ -26,6 +26,7 @@
             "styles": [
               "node_modules/ngx-spinner/animations/ball-spin-clockwise-fade.css",
               "@angular/material/prebuilt-themes/azure-blue.css",
+               "node_modules/tabulator-tables/dist/css/tabulator.min.css",
               "src/styles.css"
             ],
             "scripts": []
