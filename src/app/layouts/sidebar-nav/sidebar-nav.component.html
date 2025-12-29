@@ -1,196 +1,36 @@
-<!-- 
-<div class="bg-white h-full overflow-y-auto overflow-x-auto border-r border-gray-300 text-xs!">
-  <mat-list>
-  
-    <mat-list-item>
-      <button
-        class="flex items-center justify-between w-full px-4 py-2 rounded-lg hover:bg-blue-100 transition-all" 
-        [ngClass]="{ 'bg-blue-100': isActiveMenu.includes(1), 'hover:bg-blue-100': !isActiveMenu.includes(1) }"
-        (click)="toggleSubmenu(1)">
-        <div class="flex items-center gap-3 text-sm!">
-          <mat-icon 
-            class="rounded-xl bg-linear-to-r! from-cyan-700! via-blue-500! to-indigo-600! text-white! text-sm! w-6! h-6! flex! items-center! justify-center! leading-none!" >
-            dashboard
-          </mat-icon>
-          <span>DashBoard</span>
-        </div>
-        <mat-icon>{{ isSubmenuOpen.includes(1) ? 'expand_less' : 'expand_more' }}</mat-icon>
-      </button>
-    </mat-list-item>
-
-    
-    <div *ngIf="isSubmenuOpen.includes(1)" class="relative ml-12">
-      
-      <div class="absolute left-0 top-0 h-55 w-px bg-gray-500"></div>
-
-      
-      <mat-list-item class="relative pl-1 flex items-center">
-        
-        <div class="absolute -left-6 h-px w-6 bg-gray-500 top-1/2 transform -translate-y-1/2 pl-10"></div>
-        <a (click)="openTab('IMPMNTG', '/import')" routerLink="/import" routerLinkActive="text-blue-600! font-bold"
-          class="block py-1 rounded-4xl text-sm! transition-all pl-2 whitespace-nowrap">
-          <span>Import Monitoring</span>
-        </a>
-      </mat-list-item>
-
-      
-      <mat-list-item class="relative pl-0 flex items-center">
-        
-        <div class="absolute -left-6 h-px w-6 bg-gray-500 top-1/2 transform -translate-y-1/2 pl-10"></div>
-        <a (click)="openTab('EXPMNTG', '/export')" routerLink="/export" routerLinkActive="text-blue-600! font-bold"
-          class="block py-1 transition-all pl-2 text-sm! whitespace-nowrap">
-          Export Monitoring
-        </a>
-      </mat-list-item>
-
-      
-      <mat-list-item class="relative pl-0 flex items-center">
-        
-        <div class="absolute -left-6 h-px w-6 bg-gray-500 top-1/2 transform -translate-y-1/2 pl-10"></div>
-        <a (click)="openTab('BRMNTG', '/branches')" routerLink="/branches" routerLinkActive="text-blue-600! font-bold"
-          class="block py-1 transition-all pl-2 text-sm! whitespace-nowrap">
-          Branch Monitoring
-        </a>
-      </mat-list-item>
-
-      
-      <mat-list-item class="relative pl-0 flex items-center">
-        
-        <div class="absolute -left-6 h-px w-6 bg-gray-500 top-1/2 transform -translate-y-1/2 pl-10"></div>
-        <a (click)="openTab('IMTRNMNTG', '/import-transactions')" routerLink="/import-transactions"
-          routerLinkActive="text-blue-600! font-bold"
-          class="block py-1 transition-all pl-2 text-sm! whitespace-nowrap min-w-max">
-          Import Transactions Monitoring
-        </a>
-      </mat-list-item>
-      
-      <mat-list-item class="relative pl-0 flex items-center">
-        
-        <div class="absolute -left-6 h-px w-6 bg-gray-500 top-1/2 transform -translate-y-1/2 pl-10"></div>
-        <a (click)="openTab('EXTRNMNTG', '/export-transactions')" routerLink="/export-transactions"
-          routerLinkActive="text-blue-600! font-bold"
-          class="block py-1 transition-all pl-2 text-sm! whitespace-nowrap min-w-max">
-          Export Transactions Monitoring
-        </a>
-      </mat-list-item>
-    </div>
-
-     
-    <mat-list-item>
-      <button
-        class="flex items-center justify-between w-full px-4 py-2 rounded-lg hover:bg-blue-100 transition-all"
-         [ngClass]="{ 'bg-blue-100': isActiveMenu.includes(2), 'hover:bg-blue-100': !isActiveMenu.includes(2) }"
-        (click)="toggleSubmenu(2)">
-        <div class="flex items-center gap-3 text-sm!">
-          <mat-icon 
-            class="bg-linear-to-r! from-cyan-700! via-blue-500! to-indigo-600! rounded-xl text-white! text-sm! w-6! h-6! flex! items-center! justify-center! leading-none!">
-            flight_land
-          </mat-icon>
-          <span>Import Report</span>
-        </div>
-        <mat-icon>{{ isSubmenuOpen.includes(2) ? 'expand_less' : 'expand_more' }}</mat-icon>
-      </button>
-    </mat-list-item>
-
-    
-    <div *ngIf="isSubmenuOpen.includes(2)" class="relative ml-12">
-      
-      <div class="absolute left-0 top-0 h-20 w-px bg-gray-500"></div>
-
-      <mat-list-item class="relative pl-1 flex items-center">
-        
-        <div class="absolute -left-6 h-px w-6 bg-gray-500 top-1/2 transform -translate-y-1/2 pl-10"></div>
-        <a (click)="openTab('Details', '/import-details')" routerLink="/import-details"
-          routerLinkActive="text-blue-950 font-bold"
-          class="block py-1 rounded-4xl text-sm! transition-all pl-2 whitespace-nowrap min-w-max">
-          Import Details
-        </a>
-      </mat-list-item>
-
-      <mat-list-item class="relative pl-0 flex items-center">
-        
-        <div class="absolute -left-6 h-px w-6 bg-gray-500 top-1/2 transform -translate-y-1/2 pl-10"></div>
-        <a routerLink="/import/history" routerLinkActive="bg-blue-400 text-white"
-          class="block py-1 rounded-4xl text-sm! transition-all pl-2 whitespace-nowrap min-w-max">
-          Import Payment Details
-        </a>
-      </mat-list-item>
-    </div>
-
-    <mat-list-item>
-      <a routerLink="/setting" routerLinkActive="bg-blue-600 text-white rounded-full"
-        [routerLinkActiveOptions]="{ exact: true }"
-        class="flex items-center gap-3 px-4 py-2 w-full rounded-lg transition-all duration-200 hover:bg-blue-100 text-sm! whitespace-nowrap min-w-max">
-        <mat-icon 
-          class="bg-linear-to-r! from-cyan-700! via-blue-500! to-indigo-600! rounded-xl text-white! text-sm! w-6! h-6! flex! items-center! justify-center! leading-none!">
-          flight_takeoff
-        </mat-icon>
-        <span>Export Report</span>
-      </a>
-    </mat-list-item>
-  </mat-list>
-</div>
--->
-<!--
-<div class="bg-white h-full overflow-y-auto overflow-x-auto border-r border-gray-300 text-xs!">
-  <mat-tree [dataSource]="treeDataSource" [treeControl]="treeControl">
-
-    <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild" class="relative">
-      <div class="flex items-center justify-between w-full px-4 py-2 rounded-lg hover:bg-blue-100 transition-all"
-           [ngClass]="{ 'bg-blue-100': isActiveMenu.includes(node.id), 'hover:bg-blue-100': !isActiveMenu.includes(node.id) }"
-           (click)="toggleSubmenu(node.id)">
-        <div class="flex items-center gap-3 text-sm!">
-          <mat-icon 
-            class="rounded-xl bg-linear-to-r! from-cyan-700! via-blue-500! to-indigo-600! text-white! text-sm! w-6! h-6! flex! items-center! justify-center! leading-none!">
-            {{ node.icon }}
-          </mat-icon>
-          <span>{{ node.name }}</span>
-        </div>
-        <mat-icon>{{ treeControl.isExpanded(node) ? 'expand_less' : 'expand_more' }}</mat-icon>
-      </div>
-    </mat-nested-tree-node>
-
- 
-    <mat-nested-tree-node *matTreeNodeDef="let node" class="relative pl-12">
-
-      <div class="absolute -left-6 h-px w-6 bg-gray-500 top-1/2 transform -translate-y-1/2"></div>
-      
-      <a (click)="openTab(node.tabKey, node.route)"
-         [routerLink]="node.route"
-         routerLinkActive="text-blue-600! font-bold"
-         class="block py-1 rounded-4xl text-sm! transition-all pl-2 whitespace-nowrap min-w-max">
-        {{ node.name }}
-      </a>
-    </mat-nested-tree-node>
-
-  </mat-tree>
-</div> -->
-<div
-  class="h-full overflow-y-auto overflow-x-auto border-r border-gray-300 text-xs!">
+<div class=" relative h-full bg-linear-to-r! from-slate-50! via-slate-50! to-slate-50!
+         overflow-y-auto overflow-x-hidden border-r border-gray-300 text-xs!">
   <mat-tree [dataSource]="treeDataSource" [treeControl]="treeControl">
 
     <!-- Parent Node -->
-    <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild"
-      class="tree-parent">
+    <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild" class="tree-parent" [class.leaf-like-parent]="isLeafLikeParent(node)"  >
       <div class="parent-wrapping">
-        <div class="parent-row hover:bg-blue-100!"
-        (click)="toggleSubmenu(node.id)">
-        <div class="flex items-center gap-3 text-sm!">
+        
+        <div class="parent-row hover:bg-blue-100!" [ngClass]="{ 'expanded-node': treeControl.isExpanded(node),
+       'leaf-row': isLeafLikeParent(node) }"
+          (click)="toggleSubmenu(node.id)">
 
-          <mat-icon
-            class="rounded-xl bg-linear-to-r! from-cyan-700! via-blue-500! to-indigo-600! text-white! text-sm! w-6! h-6! flex! items-center! justify-center! leading-none!">
-            {{ node.icon }}
-          </mat-icon>
+            <!-- horizontal line -->
+  <span
+    *ngIf="isLeafLikeParent(node)"
+    class="leaf-connector parent-leaf-connector">
+  </span>
+          <div class="flex items-center gap-3 text-sm!">
 
-          <span>{{ node.name }}</span>
+            <!--rounded-xl bg-linear-to-r! from-cyan-700! via-blue-500! to-indigo-600!-->
+            <mat-icon *ngIf="node.icon" 
+              class=" text-black! text-xl! w-6! h-6! flex! items-center! justify-center! leading-none!">
+              {{ node.icon }}
+            </mat-icon>
+
+            <span class="truncate whitespace-nowrap overflow-hidden">{{ node.name }}</span>
+          </div>
+          <mat-icon class="shrink-0">{{ treeControl.isExpanded(node) ? 'expand_less' :
+            'expand_more' }}</mat-icon>
         </div>
-        <mat-icon>{{ treeControl.isExpanded(node) ? 'expand_less' :
-          'expand_more' }}</mat-icon>
       </div>
-      </div>
-      
 
-      <div *ngIf="treeControl.isExpanded(node)" class="children-container">
+      <div *ngIf="treeControl.isExpanded(node)" class="children-container  animate-expand ">
         <ng-container matTreeNodeOutlet></ng-container>
       </div>
     </mat-nested-tree-node>
@@ -198,9 +38,7 @@
     <mat-tree-node *matTreeNodeDef="let node" class="tree-leaf">
       <span class="leaf-connector"></span>
 
-      <a (click)="openTab(node.tabKey, node.route)"
-        [routerLink]="node.route"
-        routerLinkActive="active-leaf"
+      <a (click)="openTab(node.tabKey, node.route)" [routerLink]="node.route" routerLinkActive="active-leaf"
         class="leaf-text">
         {{ node.name }}
       </a>

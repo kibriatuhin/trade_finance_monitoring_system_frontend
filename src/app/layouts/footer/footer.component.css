@@ -1,0 +1,15 @@
+footer {
+    position: sticky;
+    bottom: 0;
+    width: calc(100% - 280px);
+    background: white;
+    margin-left: 280px;
+    z-index: 20;
+}
+/* footer {
+  position: sticky;
+  bottom: 0;
+  width: calc(100% - 240px);
+  margin-left: 240px;
+  background: white;
+} */

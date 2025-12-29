@@ -5,8 +5,17 @@ import { BusyService } from '../spinner-Service/busy.service';
 
 export const loadingInterceptor: HttpInterceptorFn = (req, next) => {
   const busyService = inject(BusyService);
+  if (req.headers.has('skipLoader')) {
+    const cleanReq = req.clone({
+      headers: req.headers.delete('skipLoader')
+    });
+    return next(cleanReq);
+  }
+
   busyService.busy();
+
+
   return next(req).pipe(
-    //delay(500),
-    finalize(() => busyService.idle()));
+    finalize(() => busyService.idle())
+  );
 };

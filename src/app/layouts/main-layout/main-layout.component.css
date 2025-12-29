@@ -2,3 +2,25 @@
   border-radius: 0 !important;
 }
 
+/* 🔒 Disable text selection when resizing */
+.no-select {
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+}
+
+
+
+/* Force cursor during resize */
+body.resize-active,
+body.resize-active * {
+  cursor: col-resize !important;
+}
+
+.no-select {
+  user-select: none;
+}
+
+
+/* Optional: new  effect */

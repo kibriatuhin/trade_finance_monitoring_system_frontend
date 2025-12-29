@@ -6,11 +6,16 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatDividerModule} from '@angular/material/divider';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { PageEvent } from '@angular/material/paginator';
+import { AdBranchDetailsData } from '../../shared/models/branch/AdBranchDetailsData.model';
+import { DashboardDataService } from '../../services/dashboard/dashboard-data.service';
+import { PageResponse } from '../../shared/interface/PageResponse';
+
 
 @Component({
   selector: 'app-export-transaction-dashboard',
   standalone: true,
-  imports: [ReactiveFormsModule,FormsModule,CommonModule, MatButtonModule,MatIconModule,MatDividerModule],
+  imports: [ReactiveFormsModule, FormsModule, CommonModule, MatButtonModule, MatIconModule, MatDividerModule],
   templateUrl: './export-transaction-dashboard.component.html',
   styleUrl: './export-transaction-dashboard.component.css'
 })
@@ -20,7 +25,7 @@ export class ExportTransactionDashboardComponent {
     @Input() selectedYear!: number;
     showBranchCodeErrors: boolean = false;
   
-    constructor(private el: ElementRef,private router: Router) {}
+    constructor(private el: ElementRef,private router: Router,private dashboardService: DashboardDataService,) {}
     /** Reference to the year select input field for initial focus. */
      @ViewChild('branchCode') branchCode!: ElementRef<HTMLInputElement>;
   
@@ -247,4 +252,159 @@ export class ExportTransactionDashboardComponent {
         this.router.navigate([currentUrl]);
       });
     }
+
+
+
+    /**
+     * For dynamic  table  Test
+     */
+    currentDetailData: any = null;
+    adBranchDetails: AdBranchDetailsData[] = [];
+    currentDetailView:
+        | "pendingLc"
+        | "adBranch"
+        | null = null;
+     paginationState = {
+        pendingLc: { totalItems: 0, currentPage: 0, pageSize: 10 },
+        adBranch : { totalItems: 0, currentPage: 0, pageSize: 10 }
+     }
+
+     ngOnInit(): void {
+        this.loadAdBranchDetails(); // initial load
+        this.adBranchDetailsDialog();
+    }
+
+
+
+     /**
+              * Opens the Ad Branch detail view, loads data, and configures the table.
+         */
+         adBranchDetailsDialog() {
+             this.currentDetailView = "adBranch";
+     
+             const columns = [
+                 { key: "rn", label: "RN", cssClass: "min-w-[70px] w-[100px]", },
+                 { key: "brnCode", label: "Branch Code", cssClass: "min-w-[90px] w-[150px]", },
+                 { key: "brnName", label: "Name", cssClass: "min-w-[200px] w-[550px]", },
+                 { key: "brnAddr", label: "Address", cssClass: "min-w-[150px] w-[450px]", },
+                 { key: "brnOpnDate", label: "Open Date", cssClass: "min-w-[130px] w-[170px]", },
+                 { key: "brnCurr", label: "Currency", cssClass: "min-w-[90px] w-[150px]", },
+                 { key: "brnDlrCode", label: "AD Code", cssClass: "min-w-[120px] w-[250px]", },
+                 { key: "brnSwfCode", label: "Swift Code", cssClass: "min-w-[170px] w-[250px]", },
+     
+             ];
+     
+             this.paginationState.adBranch.currentPage = 0;
+     
+             this.loadAdBranchDetails()
+                 .then(() => {
+                     console.log("Data loaded:", this.adBranchDetails);
+     
+                     if (this.adBranchDetails && this.adBranchDetails.length > 0) {
+                         this.currentDetailData = {
+                             title: "View AD Branch Details",
+                             columns: columns,
+                             tableData: this.adBranchDetails,
+                             totalItems: this.paginationState.adBranch.totalItems,
+                             pageSize: this.paginationState.adBranch.pageSize,
+                             currentPage: this.paginationState.adBranch.currentPage,
+                             showActionColumn: true,          // 👈 control here
+                             actionLabel: 'Details',     
+                         };
+                     } else {
+                         console.warn("No data available for display");
+                         this.currentDetailData = {
+                             title: "View AD Branch Details",
+                             columns: columns,
+                             tableData: [],
+                             totalItems: 0,
+                             pageSize: this.paginationState.adBranch.pageSize,
+                             currentPage: this.paginationState.adBranch.currentPage,
+                         };
+                     }
+                     //this.viewMode = "details";
+                 })
+                 .catch((error) => {
+                     console.error("Error loading data:", error);
+                     this.currentDetailData = {
+                         title: "View AD Branch Details",
+                         columns: columns,
+                         tableData: [],
+                         totalItems: 0,
+                         pageSize: this.paginationState.adBranch.pageSize,
+                         currentPage: this.paginationState.adBranch.currentPage,
+                     };
+                     //this.viewMode = "details";
+                 });
+         }
+     
+         /**
+          * Loads paginated AD Branch details from the backend.
+          * @returns A promise that resolves when data is loaded or rejects on error.
+          */
+         loadAdBranchDetails(): Promise<void> {
+             const { currentPage, pageSize } = this.paginationState.adBranch;
+     
+             return new Promise((resolve, reject) => {
+                 this.dashboardService
+                     .getPagedData<AdBranchDetailsData>("/branch/AdbrnDtls", {
+                         pageNo: currentPage,
+                         pageSize: pageSize,
+                     })
+                     .subscribe({
+                         next: (pageResponse: PageResponse<AdBranchDetailsData>) => {
+                             console.log("Page Response:", pageResponse);
+                             this.adBranchDetails = pageResponse.lcList.map((item) => ({
+                                 ...item,
+     
+                             }));
+                             //this.lcOpenDetails = pageResponse.lcList;
+                             this.paginationState.adBranch.totalItems = pageResponse.totalElements;
+                             this.paginationState.adBranch.pageSize = pageResponse.pageSize;
+                             this.paginationState.adBranch.currentPage = pageResponse.pageNo;
+     
+                             this.updateLcDialogData();
+                             resolve();
+                         },
+                         error: (err) => {
+                             console.error("Failed to fetch AD Branch details:", err);
+                             this.adBranchDetails = [];
+                             this.paginationState.adBranch.totalItems = 0;
+                             this.updateLcDialogData();
+                             reject(err);
+                         },
+                     });
+             });
+         }
+
+  /**
+     * Updates the current detail dialog data based on the active view type
+     * to reflect the latest table data and pagination state.
+     */
+    private updateLcDialogData() {
+        if (this.currentDetailView === "adBranch" ) {
+            this.currentDetailData = {
+                ...this.currentDetailData,
+                tableData: this.adBranchDetails,
+                totalItems: this.paginationState.adBranch.totalItems,
+                pageSize: this.paginationState.adBranch.pageSize,
+                currentPage: this.paginationState.adBranch.currentPage,
+            };
+        }
+       
+
+    }
+
+    /**
+      * Handles pagination events and reloads the appropriate data set
+      * based on the currently active detail view.
+      * @param event The pagination event containing page index and size.
+     */
+        onPageChangeHandler(event: PageEvent) {
+            if (this.currentDetailView === "pendingLc") {
+                this.paginationState.pendingLc.currentPage = event.pageIndex;
+                this.paginationState.pendingLc.pageSize = event.pageSize;
+                //this.loadImportPendingLcDetails();
+            }
+        }
 }

@@ -8,17 +8,8 @@ import { TabService } from "../../services/tabServices/tab.service";
 import { FlatTreeControl, NestedTreeControl } from '@angular/cdk/tree';
 import { MatTreeFlatDataSource, MatTreeFlattener, MatTree, MatTreeNode, MatTreeNestedDataSource } from '@angular/material/tree';
 import { MatTreeModule } from '@angular/material/tree';
-
-
-
-interface MenuItem {
-  id: number;
-  name: string;
-  icon?: string;
-  route?: string;
-  tabKey?: string;
-  children?: MenuItem[];
-}
+import { MenuItem } from '../../shared/models/MenuItem.model';
+import { TREE_DATA } from "../../shared/utils/menu-data";
 
 
 
@@ -35,28 +26,7 @@ export class SidebarNavComponent implements OnInit{
     @Input() isSidebarOpen: boolean = true;
     @Output() sidebarToggle = new EventEmitter<void>();
 
-    
-/*
-    isSubmenuOpen: number[] = []; // store open submenu indexes
-    isActiveMenu: number[] = []; // store active button indexes
-
-    constructor(private tabService: TabService) {}
-
-    openTab(title: string, route: string) {
-        this.tabService.openTab(title, route);
-    }
-
-    toggleSubmenu(menuIndex: number) {
-        if (this.isSubmenuOpen.includes(menuIndex)) {
-            // if already open → close it
-            this.isSubmenuOpen = this.isSubmenuOpen.filter((i) => i !== menuIndex);
-            this.isActiveMenu = this.isActiveMenu.filter((i) => i !== menuIndex);
-        } else {
-            // if closed → open it
-            this.isSubmenuOpen.push(menuIndex);
-            this.isActiveMenu.push(menuIndex);
-        }
-    }*/
+  
 
    // Track expanded menus
   isActiveMenu: number[] = [];
@@ -68,35 +38,18 @@ export class SidebarNavComponent implements OnInit{
 
   constructor(private router: Router,private tabService: TabService) {}
 
-  ngOnInit(): void {
-    const TREE_DATA: MenuItem[] = [
-      {
-        id: 1,
-        name: 'DashBoard',
-        icon: 'dashboard',
-        children: [
-          { id: 101, name: 'Import Monitoring', route: '/import', tabKey: 'IMPMNTG' },
-          { id: 102, name: 'Export Monitoring', route: '/export', tabKey: 'EXPMNTG' },
-          { id: 103, name: 'Branch Monitoring', route: '/branches', tabKey: 'BRMNTG' },
-          { id: 104, name: 'Import Transactions Monitoring', route: '/import-transactions', tabKey: 'IMTRNMNTG' },
-          { id: 105, name: 'Export Transactions Monitoring', route: '/export-transactions', tabKey: 'EXTRNMNTG' }
-        ]
-      },
-      {
-        id: 2,
-        name: 'Import Report',
-        icon: 'flight_land',
-        children: [
-          { id: 201, name: 'Import Details', route: '/import-details', tabKey: 'Details' },
-          { id: 202, name: 'Import Payment Details', route: '/import/history', tabKey: 'ImportPayment' }
-        ]
-      }
-    ];
+  isLeafLikeParent(node: MenuItem): boolean {
+  if (!node.children || node.children.length === 0) {
+    return false;
+  }
+  return node.children.every(child => !child.children || child.children.length === 0);
+}
 
+
+  ngOnInit(): void {
     this.treeDataSource.data = TREE_DATA;
   }
 
-   // ✅ Correctly typed hasChild function
   hasChild = (_: number, node: MenuItem) => !!node.children && node.children.length > 0;
 
   toggleSubmenu(id: number): void {
@@ -109,14 +62,12 @@ export class SidebarNavComponent implements OnInit{
         this.treeControl.expand(node);
         this.isSubmenuOpen.push(id);
       }
-      this.isActiveMenu = [id]; // Optional: highlight only current open menu
+      this.isActiveMenu = [id]; 
     }
   }
 
   openTab(tabKey: string, route: string): void {
-   // console.log('Opening tab:', tabKey, 'Route:', route);
     this.tabService.openTab(tabKey, route);
-    // Add your logic here
   }
 
   private findNodeById(id: number): MenuItem | undefined {
@@ -130,4 +81,6 @@ export class SidebarNavComponent implements OnInit{
     }
     return undefined;
   }
+
+  
 }

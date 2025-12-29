@@ -17,13 +17,23 @@ import { DashboardCardComponent } from "../../component/dashboard-card/dashboard
 import { DashboardDataService } from "../../services/dashboard/dashboard-data.service";
 import { MatDialog } from "@angular/material/dialog";
 import { Router } from "@angular/router";
+import { NGX_ECHARTS_CONFIG, NgxEchartsDirective } from "ngx-echarts";
+import { EChartsOption } from 'echarts';
+import * as echarts from 'echarts';
 
 @Component({
   selector: 'app-import-details',
   standalone: true,
   imports: [
-    CommonModule, DashboardCardComponent, MatCardModule, MatSelectModule, FormsModule, MatIcon, ReactiveFormsModule, ShowDialogComponent
+    CommonModule, DashboardCardComponent, MatCardModule, MatSelectModule, FormsModule, MatIcon, ReactiveFormsModule, ShowDialogComponent,
+    NgxEchartsDirective
 ],
+providers: [
+    {
+      provide: NGX_ECHARTS_CONFIG,
+      useValue: { echarts: () => import('echarts') }
+    }
+  ],
   templateUrl: './import-details.component.html',
   styleUrls: ['./import-details.component.css'] // fixed from `styleUrl`
 })
@@ -34,6 +44,34 @@ export class ImportDetailsComponent {
     showBranchCodeErrors: boolean = false;
     showCurrencyErrors: boolean = false;
     years: number[] = [];
+
+
+    chartOption: EChartsOption = {
+        title: { text: 'Referer of a Website', subtext: 'Fake Data', left: 'center' },
+        tooltip: { trigger: 'item' },
+        legend: { orient: 'vertical', left: 'left' },
+        series: [
+          {
+            name: 'Access From',
+            type: 'pie',
+            radius: '50%',
+            data: [
+              { value: 1048, name: 'Search Engine' },
+              { value: 735, name: 'Direct' },
+              { value: 580, name: 'Email' },
+              { value: 484, name: 'Union Ads' },
+              { value: 300, name: 'Video Ads' }
+            ],
+            emphasis: {
+              itemStyle: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: 'rgba(0, 0, 0, 0.5)'
+              }
+            }
+          }
+        ]
+      };
 
     /** Reference to the year select input field for initial focus. */
     @ViewChild("yearSelect") yearSelect!: ElementRef<HTMLSelectElement>;
@@ -47,6 +85,9 @@ export class ImportDetailsComponent {
         for (let year = startYear; year <= currentYear; year++) {
             this.years.push(year);
         }
+
+        
+
     }
 
     /**
@@ -57,6 +98,8 @@ export class ImportDetailsComponent {
         setTimeout(() => {
             this.yearSelect?.nativeElement.focus();
         }, 0);
+
+        
         
     }
 

@@ -1,67 +1,71 @@
-<mat-toolbar class="bg-blue-50! border-0 shadow-none custom-toolbar flex items-center justify-between px-4">
- <div class="flex items-center">
-  <!-- Menu Button -->
-  <button 
-    mat-icon-button 
-    
-    class="rounded-sm text-white! p-0.5 hover:text-white! transition cursor-pointer bg-linear-to-r! from-cyan-700! via-blue-500! to-indigo-600!"
-    (click)="sideBarToggleButton()">
-    
-    <mat-icon 
-      class="text-white"
-      style="font-size: 24px; line-height: 1;">
-      menu
-    </mat-icon>
-  </button>
+<mat-toolbar
+  class="bg-white! border-1! border-gray-300! shadow-none custom-toolbar flex items-center justify-between px-4">
+  <div class="flex items-center">
+    <!-- Menu Button -->
+    <button mat-icon-button
+      class="rounded-sm text-white! p-0.5 hover:text-white! transition cursor-pointer bg-linear-to-r! from-cyan-700! via-blue-500! to-indigo-600!"
+      (click)="sideBarToggleButton()">
 
-  <!-- Logo -->
-  <span class="ml-2">
-    <img src="assets/logo-spftl.jpg" alt="Company logo" class="h-8 w-auto inline-block" />
-  </span>
-</div>
+      <mat-icon class="text-white" style="font-size: 24px; line-height: 1;">
+        menu
+      </mat-icon>
+    </button>
 
-  <!-- Centered Search Input -->
-  <!-- <div class="flex-grow flex justify-end mx-3">
-    <input type="text" 
-           class="filter-input" 
-           placeholder="Search..." 
-           id="searchInput">
-  </div> -->
-
-
-<!-- Profile Section with Custom Dropdown -->
-<div class="relative" (click)="toggleDropdown()" (blur)="onBlur()" tabindex="0">
-  <div class="flex items-center cursor-pointer group">
-    <img 
-      src="#" 
-      alt="Profile" 
-      class="w-10 h-10 rounded-full border-2 border-white shadow-sm mr-2"
-    />
-    <span class="text-sm font-medium text-gray-800 group-hover:text-gray-900">
-      GK Tuhin
+    <!-- Logo -->
+    <span class="ml-2">
+      <img src="assets/logo-spftl.jpg" alt="Company logo" class="h-8 w-auto inline-block" />
     </span>
-    <mat-icon class="text-gray-500 ml-1 text-xs">expand_more</mat-icon>
   </div>
 
-<!-- Custom Dropdown Menu -->
-  <div 
-    *ngIf="isDropdownOpen" 
-    class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 border border-gray-200"
-    (click)="$event.stopPropagation()">
-    
-    <button 
-      (click)="onSetting()" 
-      class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-      Setting
-    </button>
-    
-    <button 
-      (click)="onLogout()" 
-      class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-      Logout
-    </button>
-  </div>
+
+   <!-- Centered Search Input -->
+<div class="flex-grow flex justify-end mx-3 relative">
+  
+  <input type="text"
+         class="filter-input uppercase-input "
+         placeholder="Search..."
+         #searchInput
+         (keyup)="onSearchKeyup(searchInput.value)" 
+         (keydown.enter)="onSearchEnter()" />
+
+  <!-- Dialog just under input -->
+  <app-dynamic-dialog
+    class="absolute top-full left-10 mt-1"
+    [show]="showProgramDialog"
+    [title]="dialogTitle"
+    [columns]="programColumns"
+    [data]="filteredPrograms"
+    (select)="onProgramSelect($event)"
+    (close)="showProgramDialog = false">
+  </app-dynamic-dialog>
+
 </div>
+
+
+
+  <!-- Profile Section with Custom Dropdown -->
+  <div class="relative" (click)="toggleDropdown()" (blur)="onBlur()" tabindex="0">
+    <div class="flex items-center cursor-pointer group">
+      <img src="#" alt="Profile" class="w-10 h-10 rounded-full border-2 border-white shadow-sm mr-2" />
+      <span class="text-sm font-medium text-gray-800 group-hover:text-gray-900">
+        GK Tuhin
+      </span>
+      <mat-icon class="text-gray-500 ml-1 text-xs">expand_more</mat-icon>
+    </div>
+
+    <!-- Custom Dropdown Menu -->
+    <div *ngIf="isDropdownOpen"
+      class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 border border-gray-200"
+      (click)="$event.stopPropagation()">
+
+      <button (click)="onSetting()" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+        Setting
+      </button>
+
+      <button (click)="onLogout()" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+        Logout
+      </button>
+    </div>
+  </div>
 
 </mat-toolbar>
-

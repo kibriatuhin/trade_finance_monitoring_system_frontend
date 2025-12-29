@@ -1,18 +1,29 @@
 export interface ImportPndingLcDetailsData {
-    lcBrnCode: number;
-    lcType: string;
-    lcYear: number;
-    lcSl: number;
-    lcRefNo: string;
-    lcCustNum: string;
+    brnCode: number;
+    lcRefNum: string;
+    custNum: string;
     lcCurr: string;
     lcAmount: string;
-    lcTotalAmount: string;
-    lcTotalOsAmount: string;
-    lcEntdBy: string;
-    lcEntdOn: string | null;
+    totalLcAmount: string;
+    totalOsAmount: string;
+    expiryDate: string | null;
+    entdBy: string;
+    entdOn: string | null;
 
 }
+
+/*
+private Integer BrnCode;
+    private String lcRefNum;
+    private String custNum;
+    private String lcCurr;
+    private BigDecimal lcAmount;
+    totalLcAmount
+    private BigDecimal totalOsAmount;
+    private LocalDate expiryDate;
+    private String entdBy;
+    private LocalDateTime entdOn;
+*/
 export interface PendingLcPageResponse {
   lcList: ImportPndingLcDetailsData[];
   pageNo: number;
@@ -29,17 +40,3 @@ export interface ApiResponseN<T> {
   message: string;
   status: string;
 }
-
-// private Integer lcBrnCode;
-//     private String lcType;
-//     private String lcYear;
-//     private String lcSl;
-//     private String lcRefNo;
-//     private String lcCustNum;
-//     private String lcCurr;
-//     private BigDecimal lcAmount;
-//     private BigDecimal lcTotalAmount;
-//     private BigDecimal lcTotalOsAmount;
-//     private String lcEntdBy;
-//     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss a")
-//     private LocalDateTime lcEntdOn;

@@ -4,7 +4,8 @@ html, body {
       height: 100%; /* Show only 90% of the body height */
       overflow: hidden; /* Hide the rest if needed */
 }
- 
+ @import "tabulator-tables/dist/css/tabulator.min.css";
+
 @font-face {
   font-display: swap;
   font-family: 'Poppins';

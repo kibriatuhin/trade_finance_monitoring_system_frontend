@@ -37,7 +37,9 @@ export class TabBarComponent {
         this.router.navigateByUrl('/blank');
       }
       
-      this.cdr.detectChanges();
+      
+  this.cdr.detectChanges();
+      //this.cdr.markForCheck();
     });
   } 
 

@@ -43,7 +43,9 @@ fetchFormattedBranch(url: string): Observable<BranchSummaryData> {
       return of({
         totalSnOutBrn: 0,
         totalSnInBrn: 0,
-        totalBrn: 0
+        totalBrn: 0,
+        totalPndSnInBrn: 0,
+        totalPndSnOutBrn: 0
       } as BranchSummaryData);
     })
   );

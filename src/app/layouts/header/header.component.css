@@ -13,6 +13,9 @@
   max-width: 326px;
   font-size: 0.875rem; /* Optional: also reduce input text size */
 }
+.uppercase-input{
+  text-transform: uppercase;
+}
 
 .filter-input:focus {
   border-color: #064e3b;
@@ -35,5 +38,12 @@
   font-size: 1.05rem; /* 12px — adjust as needed */
   color: #9ca3af;     /* optional: slightly muted gray */
 }
+
+/* Adjust search help */
+.mat-toolbar {
+  overflow: visible !important; /* default Material toolbar overflow cuts absolute children */
+}
+
+
 
 

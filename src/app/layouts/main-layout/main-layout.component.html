@@ -1,15 +1,20 @@
-
+<!---->
 <app-header (sideBarToggle)="drawer.toggle()"></app-header>
 <mat-drawer-container autosize class="!border-t-0 !shadow-none">
-    
-<mat-drawer #drawer mode="side" [opened]="isSidebarOpen" class="w-78!">
-     <app-sidebar-nav  [isSidebarOpen]="isSidebarOpen" ></app-sidebar-nav>
-</mat-drawer>
 
-    <mat-drawer-content >
-        <app-tab-bar ></app-tab-bar>  <!--background-color: rgb(247, 249, 250);-->
-        <div class="flex-1 overflow-y-auto h-[calc(100vh)] " style="background-color: white" >
-            
+    <mat-drawer #drawer mode="side" [opened]="isSidebarOpen" [style.width.px]="sidebarWidth" class="relative">
+        <app-sidebar-nav [isSidebarOpen]="isSidebarOpen"></app-sidebar-nav>
+        <div class="absolute top-0 right-0 h-full w-1
+         cursor-col-resize bg-transparent z-50" (pointerdown)="startResize($event)">
+        </div>
+
+
+    </mat-drawer>
+
+    <mat-drawer-content>
+        <app-tab-bar></app-tab-bar>
+        <div class="flex-1 overflow-y-auto h-[calc(100vh)] " style="background-color: white">
+
             <router-outlet></router-outlet>
 
         </div>
@@ -17,5 +22,6 @@
     </mat-drawer-content>
 
 </mat-drawer-container>
+<!-- <app-footer></app-footer> -->
 
 <!-- bg-indigo-50 -->
