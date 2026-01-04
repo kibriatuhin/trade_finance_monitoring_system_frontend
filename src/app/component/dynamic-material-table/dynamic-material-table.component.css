@@ -31,57 +31,46 @@ mat-cell {
 
 
 /* Professional table styling */
+/* wrapper that controls body scroll */
+.table-scroll {
+  max-height: 356px;      /* 5 rows + header */
+  overflow-y: auto;
+  border-radius: 8px;
+}
+
+/* table base */
 .mat-mdc-table {
+  width: 100%;
   border-collapse: separate;
   border-spacing: 0;
-  border-radius: 8px;
-  overflow: auto;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-.mat-mdc-row .mat-mdc-cell {
-  border-bottom: 1px solid transparent;
-  border-top: 1px solid transparent;
-  cursor: pointer;
 }
 
-mat-header-cell {
-  font-size: 14px;
-  text-align: center;
-}
-
-/* Header with gradient */
+/* sticky header (professional feel) */
 .mat-mdc-header-row {
-  background: linear-gradient( rgb(94, 91, 255));   
-  font-weight: 400;   
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background:  #464e55;
+  font-weight: 400;
+   color: #ffffff !important; 
 }
 
-/* Alternating rows with subtle colors */
-.mat-mdc-row:nth-child(even) {
-  background-color: #e2ebfd;
-}
+/* row zebra + hover */
+.mat-mdc-row:nth-child(even) { background-color: #ffffff;cursor: pointer; }
+.mat-mdc-row:nth-child(odd)  { background-color: #ffffff; cursor: pointer; }
 
-.mat-mdc-row:nth-child(odd) {
-  background-color: #ffffff;
-}
-
-/* Border between rows */
-/* .mat-mdc-row {
-  border-bottom: 1px solid #e0e0e0;
-} */
-
-/* Remove border from last row */
-/* .mat-mdc-row:last-child {
-  border-bottom: none;
-} */
-
-/* Hover effect */
 .mat-mdc-row:hover {
   background-color: #e3f2fd !important;
   transition: background-color 0.2s ease;
+  
+}
+.mat-mdc-row{
+  font-size: 11.5px;
+  
 }
 
-
-/* Remove right border from last cell */
-/* .mat-mdc-cell:last-child, .mat-mdc-header-cell:last-child {
-  border-right: none;
-} */
+mat-header-cell {
+  font-size: 12px;
+  text-align: center;
+  color:#ffffff !important;
+}

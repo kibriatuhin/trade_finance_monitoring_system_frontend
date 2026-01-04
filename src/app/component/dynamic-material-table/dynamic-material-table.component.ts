@@ -24,6 +24,10 @@ export class DynamicMaterialTableComponent  implements OnChanges {
   @Input() currentPage = 0;
   @Output() onPage = new EventEmitter<any>();
 
+   @Input() showActionColumn = false;   // 👈 condition
+    @Input() actionLabel = 'Details';    // button text
+    @Output() detailsClick = new EventEmitter<any>();
+
   displayedColumns: string[] = [];
  // dataSource = new MatTableDataSource<any>();
 
@@ -53,6 +57,9 @@ export class DynamicMaterialTableComponent  implements OnChanges {
  ngOnChanges(changes: SimpleChanges): void {
   this.displayedColumns = this.columns.map(c => c.key);
 
+  if (this.showActionColumn) {
+    this.displayedColumns = [...this.displayedColumns, 'action'];
+  }
   if (
     (changes['currentPage'] ||
      changes['pageSize'] ||
@@ -62,13 +69,15 @@ export class DynamicMaterialTableComponent  implements OnChanges {
     this.syncPaginator();
   }
 }
-
+ onDetails(row: any) {
+    this.detailsClick.emit(row);
+  }
 ngAfterViewInit() {
   this.syncPaginator();
 }
 onPageChange(event: PageEvent) {
-    console.log(this.currentPage);
-    console.log(this.pageSize);
+    //console.log(this.currentPage);
+    //console.log(this.pageSize);
     this.onPage.emit(event);
     // Emit to parent if needed
   }

@@ -82,7 +82,7 @@ export class HeaderComponent {
       .flexibleConnectedTo(this.searchInput.nativeElement)
       .withPositions([
         { originX: 'start', originY: 'bottom', overlayX: 'start', overlayY: 'top',
-          offsetX: 110, offsetY: 2
+          offsetX: 5, offsetY: 2
          }
       ])
       .withFlexibleDimensions(false)

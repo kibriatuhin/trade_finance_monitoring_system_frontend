@@ -1,87 +1,115 @@
 /* You can add global styles to this file, and also import other style files */
 @import "tailwindcss";
-html, body { 
-      height: 100%; /* Show only 90% of the body height */
-      overflow: hidden; /* Hide the rest if needed */
-}
- @import "tabulator-tables/dist/css/tabulator.min.css";
-
-@font-face {
-  font-display: swap;
-  font-family: 'Poppins';
-  font-weight: 300;
-  font-style: normal;
-  src: url('app/assets/fonts/poppins-v23-latin-300.woff2') format('woff2');
+@import "tabulator-tables/dist/css/tabulator.min.css";
+html {
+   height: 100%;
+   overflow: hidden;
 }
 
 body {
-    margin: 0;
-    font-family: "Poppins", serif;
-    font-weight: 300;
+  min-height: 100%;
+  margin: 0;
+  overflow-x: hidden;   /* safe */
+  overflow-y: auto;     /* allow scroll */
+  font-family: "Poppins", serif;
+}
+* { box-sizing: border-box; }
+
+
+@font-face {
+    font-display: swap;
+    font-family: "Poppins";
     font-style: normal;
-  
-}
-* {
-    box-sizing: border-box;
-}
-html {
-  zoom: 0.9; /* 90% zoom */
+    src: url("app/assets/fonts/poppins-v23-latin-300.woff2") format("woff2");
 }
 
+
+/* Edge/IE built-in password reveal & clear buttons */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none;
+}
+
+/* Some setups need this too */
+input[type="password"] {
+  -webkit-appearance: none;
+  appearance: none;
+}
 
 /* ===== Modern Scrollbar — Applied ONLY to Real Scroll Containers ===== */
 
-/* Target common Angular Material scroll containers */
-.mat-tab-body-content,
-.mat-sidenav-content,
-.cdk-overlay-container,
-.app-scrollable-container {
-  scrollbar-width: thin;
-  scrollbar-color: #B0BEC5 #ECEFF1;
+/* ========== Professional Scrollbar (Global) ========== */
+
+/* Chrome, Edge, Safari */
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px; /* horizontal scrollbar */
 }
 
-/* WebKit (Chrome, Edge, Safari) */
-.mat-tab-body-content::-webkit-scrollbar,
-.mat-sidenav-content::-webkit-scrollbar,
-.cdk-overlay-container::-webkit-scrollbar,
-.app-scrollable-container::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+*::-webkit-scrollbar-track {
+  background: transparent;          /* clean */
+  border-radius: 9999px;
 }
 
-.mat-tab-body-content::-webkit-scrollbar-track,
-.mat-sidenav-content::-webkit-scrollbar-track,
-.cdk-overlay-container::-webkit-scrollbar-track,
-.app-scrollable-container::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.mat-tab-body-content::-webkit-scrollbar-thumb,
-.mat-sidenav-content::-webkit-scrollbar-thumb,
-.cdk-overlay-container::-webkit-scrollbar-thumb,
-.app-scrollable-container::-webkit-scrollbar-thumb {
-  background-color: #B0BEC5;
-  border-radius: 10px;
-  border: 2px solid transparent;
+*::-webkit-scrollbar-thumb {
+  background-color: rgba(100, 116, 139, 0.45); /* slate-500-ish */
+  border-radius: 9999px;
+  border: 2px solid transparent;   /* makes thumb look slimmer */
   background-clip: content-box;
-  opacity: 0.7;
-  transition: 
-    background-color 0.2s ease,
-    opacity 0.2s ease;
 }
 
-.mat-tab-body-content::-webkit-scrollbar-thumb:hover,
-.mat-sidenav-content::-webkit-scrollbar-thumb:hover,
-.cdk-overlay-container::-webkit-scrollbar-thumb:hover,
-.app-scrollable-container::-webkit-scrollbar-thumb:hover {
-  background-color: #78909C;
-  opacity: 1;
+*::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(100, 116, 139, 0.65);
 }
 
-.mat-tab-body-content::-webkit-scrollbar-thumb:active,
-.mat-sidenav-content::-webkit-scrollbar-thumb:active,
-.cdk-overlay-container::-webkit-scrollbar-thumb:active,
-.app-scrollable-container::-webkit-scrollbar-thumb:active {
-  background-color: #546E7A;
-  opacity: 1;
+/* Firefox */
+* {
+  scrollbar-width: thin; /* auto | thin | none */
+  scrollbar-color: rgba(100,116,139,0.55) transparent;
+}
+
+
+
+/*dialog animation */
+.cdk-overlay-backdrop.custom-details-backdrop {
+    animation: backdropFadeIn 600ms ease-out forwards;
+}
+
+.cdk-overlay-pane.custom-details-dialog {
+    animation: dialogIn 640ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    transform-origin: center;
+}
+
+/* remove only Material shell look */
+.cdk-overlay-pane.custom-details-dialog .mat-mdc-dialog-surface {
+    background: whitesmoke !important;
+    box-shadow: none !important;
+}
+
+/* keep container padding reset so Tailwind controls spacing */
+.cdk-overlay-pane.custom-details-dialog .mat-mdc-dialog-container {
+    padding: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+@keyframes dialogIn {
+    from {
+        opacity: 0;
+        transform: translateY(18px) scale(1.5);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    } /* crisp text fix */
+}
+
+@keyframes backdropFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(18px) scale(1.98);
+    }
+    to {
+        opacity: 1;
+    }
 }

@@ -13,6 +13,7 @@ import { CommonModule } from '@angular/common';
 export class DynamicTableDialogComponent {
    @Input() data: any;
   @Output() onPage = new EventEmitter<any>();
+  @Output() detailsClick = new EventEmitter<any>();
 
   constructor(@Optional() @Inject(MAT_DIALOG_DATA) public dialogData: any) {}
 
@@ -25,5 +26,10 @@ export class DynamicTableDialogComponent {
 
   onPageChangeHandler(event: any) {
     this.onPage.emit(event);
+  }
+  onDetailsClick(row: any) {
+    console.log('Clicked Row:', row);
+    this.detailsClick.emit(row);
+    // dialog open / navigation / API call
   }
 }

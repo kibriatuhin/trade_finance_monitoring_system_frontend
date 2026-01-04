@@ -35,6 +35,8 @@ import { ExpOrdBillAmtDetailsData } from "../../shared/models/export/exportBillA
 import { ExpOrdPlLoanDetailsData } from "../../shared/models/export/expOrdPLAmt-details.model";
 import { ExpOrdDisbAmtDetailsData } from "../../shared/models/export/expOrdDisbAmt-details.model";
 import { ExpOrdEdfRcDetailsData } from "../../shared/models/export/expOrdEdfRc-details.model";
+import { DetailField, TableDetailsDialogComponent } from "../../component/table-details-dialog/table-details-dialog.component";
+import { Overlay } from "@angular/cdk/overlay";
 
 @Component({
     selector: "app-export-dashboard",
@@ -43,13 +45,31 @@ import { ExpOrdEdfRcDetailsData } from "../../shared/models/export/expOrdEdfRc-d
     templateUrl: "./export-dashboard.component.html",
     styleUrl: "./export-dashboard.component.css",
     animations: [
-        trigger("slideIn", [
-            transition(":enter", [style({ transform: "translateX(100%)", opacity: 0 }), animate("400ms cubic-bezier(0.25)", style({ transform: "translateX(0)", opacity: 1 }))]),
-            transition(":leave", [
-                style({ transform: "translateX(0)", opacity: 1 }),
-                animate("400ms cubic-bezier(0.25, 0.8, 0.25, 1)", style({ transform: "translateX(-100%)", opacity: 0 })),
+        trigger('slideIn', [
+            state('cards', style({
+                transform: 'translateX(0)',
+                opacity: 1
+            })),
+            state('details', style({
+                transform: 'translateX(0)',
+                opacity: 1
+            })),
+
+            transition('cards => details', [
+                style({ transform: 'translateX(100%)', opacity: 0 }),
+                animate(
+                    '400ms cubic-bezier(0.25, 0, 0, 0)',
+                    style({ transform: 'translateX(0)', opacity: 1 })
+                )
             ]),
-        ]),
+
+            transition('details => cards', [
+                animate(
+                    '400ms cubic-bezier(0.25, 0.8, 0.25, 1)',
+                    style({ transform: 'translateX(-100%)', opacity: 0 })
+                )
+            ]),
+        ])
     ],
 })
 export class ExportDashboardComponent {
@@ -176,7 +196,8 @@ export class ExportDashboardComponent {
         private dialog: MatDialog,
         private cdr: ChangeDetectorRef,
         private el: ElementRef,
-        private router: Router
+        private router: Router,
+        private overlay: Overlay
     ) {}
 
     /**
@@ -538,12 +559,12 @@ export class ExportDashboardComponent {
                 label: "Lc Open Amt",
                 cssClass: "min-w-[150px] w-[150px]",
             },
-            { key: "entdBy", label: "Entd. By" },
-            {
-                key: "entdOn",
-                label: "Entd. On",
-                cssClass: "min-w-[220px] w-[220px]",
-            },
+            // { key: "entdBy", label: "Entd. By" },
+            // {
+            //     key: "entdOn",
+            //     label: "Entd. On",
+            //     cssClass: "min-w-[220px] w-[220px]",
+            // },
         ];
 
         this.paginationState.exportOpen.currentPage = 0;
@@ -560,6 +581,8 @@ export class ExportDashboardComponent {
                         totalItems: this.paginationState.exportOpen.totalItems,
                         pageSize: this.paginationState.exportOpen.pageSize,
                         currentPage: this.paginationState.exportOpen.currentPage,
+                        showActionColumn: true,
+                        actionLabel: 'Details',
                     };
                 } else {
                     console.warn("No data available for display");
@@ -570,6 +593,7 @@ export class ExportDashboardComponent {
                         totalItems: 0,
                         pageSize: this.paginationState.exportOpen.pageSize,
                         currentPage: this.paginationState.exportOpen.currentPage,
+
                     };
                 }
                 this.viewMode = "details";
@@ -655,12 +679,12 @@ export class ExportDashboardComponent {
                 label: "Lc Open Amt",
                 cssClass: "min-w-[150px] w-[150px]",
             },
-            { key: "entdBy", label: "Entd. By" },
-            {
-                key: "entdOn",
-                label: "Entd. On",
-                cssClass: "min-w-[220px] w-[220px]",
-            },
+            // { key: "entdBy", label: "Entd. By" },
+            // {
+            //     key: "entdOn",
+            //     label: "Entd. On",
+            //     cssClass: "min-w-[220px] w-[220px]",
+            // },
         ];
 
         this.paginationState.orderOpen.currentPage = 0;
@@ -677,6 +701,8 @@ export class ExportDashboardComponent {
                         totalItems: this.paginationState.orderOpen.totalItems,
                         pageSize: this.paginationState.orderOpen.pageSize,
                         currentPage: this.paginationState.orderOpen.currentPage,
+                        showActionColumn: true,
+                        actionLabel: 'Details',
                     };
                 } else {
                     console.warn("No data available for display");
@@ -771,12 +797,12 @@ export class ExportDashboardComponent {
                 label: "Lc Open Amt",
                 cssClass: "min-w-[150px] w-[150px]",
             },
-            { key: "entdBy", label: "Entd. By" },
-            {
-                key: "entdOn",
-                label: "Entd. On",
-                cssClass: "min-w-[220px] w-[220px]",
-            },
+            // { key: "entdBy", label: "Entd. By" },
+            // {
+            //     key: "entdOn",
+            //     label: "Entd. On",
+            //     cssClass: "min-w-[220px] w-[220px]",
+            // },
         ];
 
         this.paginationState.btbOpen.currentPage = 0;
@@ -793,6 +819,8 @@ export class ExportDashboardComponent {
                         totalItems: this.paginationState.btbOpen.totalItems,
                         pageSize: this.paginationState.btbOpen.pageSize,
                         currentPage: this.paginationState.btbOpen.currentPage,
+                        showActionColumn: true,
+                        actionLabel: 'Details',
                     };
                 } else {
                     console.warn("No data available for display");
@@ -903,22 +931,10 @@ export class ExportDashboardComponent {
                 label: "LC Ship Date",
                 cssClass: "min-w-[100px] w-[220px]",
             },
-            {
-                key: "btbAllowAmt",
-                label: "BTB Allow Amt.",
-                cssClass: "min-w-[150px] w-[150px]",
-            },
-            {
-                key: "pcAllowAmt",
-                label: "PC Allow Amt.",
-                cssClass: "min-w-[150px] w-[150px]",
-            },
-            { key: "entdBy", label: "Entd. By", cssClass: "min-w-[90px] w-[150px]" },
-            {
-                key: "entdOn",
-                label: "Entd. On",
-                cssClass: "min-w-[220px] w-[220px]",
-            },
+            // {key: "btbAllowAmt",label: "BTB Allow Amt.",cssClass: "min-w-[150px] w-[150px]",},
+            // {key: "pcAllowAmt",label: "PC Allow Amt.", cssClass: "min-w-[150px] w-[150px]", },
+            // { key: "entdBy", label: "Entd. By", cssClass: "min-w-[90px] w-[150px]" },
+            // {key: "entdOn",  label: "Entd. On", cssClass: "min-w-[220px] w-[220px]",},
         ];
 
         this.paginationState.exportVolume.currentPage = 0;
@@ -935,6 +951,8 @@ export class ExportDashboardComponent {
                         totalItems: this.paginationState.exportVolume.totalItems,
                         pageSize: this.paginationState.exportVolume.pageSize,
                         currentPage: this.paginationState.exportVolume.currentPage,
+                        showActionColumn: true,
+                        actionLabel: 'Details',
                     };
                 } else {
                     console.warn("No data available for display");
@@ -1024,10 +1042,10 @@ export class ExportDashboardComponent {
             { key: "lcFobAmt", label: "LC FOB Amt.", cssClass: "min-w-[150px] w-[150px]" },
             { key: "lcExpiryDate", label: "LC Expiry Date", cssClass: "min-w-[120px] w-[220px]" },
             { key: "lcShipDate", label: "LC Ship Date", cssClass: "min-w-[120px] w-[220px]" },
-            { key: "btbAllowAmt", label: "BTB Allow Amt.", cssClass: "min-w-[150px] w-[150px]" },
-            { key: "pcAllowAmt", label: "PC Allow Amt.", cssClass: "min-w-[150px] w-[150px]" },
-            { key: "entdBy", label: "Entd. By", cssClass: "min-w-[90px] w-[150px]" },
-            { key: "entdOn", label: "Entd. On", cssClass: "min-w-[220px] w-[220px]" },
+            // { key: "btbAllowAmt", label: "BTB Allow Amt.", cssClass: "min-w-[150px] w-[150px]" },
+            // { key: "pcAllowAmt", label: "PC Allow Amt.", cssClass: "min-w-[150px] w-[150px]" },
+            // { key: "entdBy", label: "Entd. By", cssClass: "min-w-[90px] w-[150px]" },
+            // { key: "entdOn", label: "Entd. On", cssClass: "min-w-[220px] w-[220px]" },
         ];
 
         this.paginationState.orderVolume.currentPage = 0;
@@ -1044,6 +1062,8 @@ export class ExportDashboardComponent {
                         totalItems: this.paginationState.orderVolume.totalItems,
                         pageSize: this.paginationState.orderVolume.pageSize,
                         currentPage: this.paginationState.orderVolume.currentPage,
+                        showActionColumn: true,
+                        actionLabel: 'Details',
                     };
                 } else {
                     console.warn("No data available for display");
@@ -1132,10 +1152,10 @@ export class ExportDashboardComponent {
             { key: "lcEnAmt", label: "LC En. Amt.", cssClass: "min-w-[150px] w-[150px]" },
             { key: "lcRdAmt", label: "LC Rd. Amt.", cssClass: "min-w-[150px] w-[150px]" },
             { key: "lcTotalAmount", label: "Total Amount", cssClass: "min-w-[150px] w-[150px]" },
-            { key: "tranBatchNo", label: "Batch Num.", cssClass: "min-w-[100px] w-[220px]" },
-            { key: "tranDate", label: "Tran Date", cssClass: "min-w-[120px] w-[220px]" },
-            { key: "entdBy", label: "Entd. By", cssClass: "min-w-[90px] w-[150px]" },
-            { key: "entdOn", label: "Entd. On", cssClass: "min-w-[220px] w-[220px]" },
+            // { key: "tranBatchNo", label: "Batch Num.", cssClass: "min-w-[100px] w-[220px]" },
+            // { key: "tranDate", label: "Tran Date", cssClass: "min-w-[120px] w-[220px]" },
+            // { key: "entdBy", label: "Entd. By", cssClass: "min-w-[90px] w-[150px]" },
+            // { key: "entdOn", label: "Entd. On", cssClass: "min-w-[220px] w-[220px]" },
         ];
 
         this.paginationState.btbVolume.currentPage = 0;
@@ -1152,6 +1172,8 @@ export class ExportDashboardComponent {
                         totalItems: this.paginationState.btbVolume.totalItems,
                         pageSize: this.paginationState.btbVolume.pageSize,
                         currentPage: this.paginationState.btbVolume.currentPage,
+                        showActionColumn: true,
+                        actionLabel: 'Details',
                     };
                 } else {
                     console.warn("No data available for display");
@@ -1235,7 +1257,7 @@ export class ExportDashboardComponent {
             { key: "rn", label: "RN", cssClass: "min-w-[50px] w-[150px]" },
             { key: "brnCode", label: "Branch Code", cssClass: "min-w-[90px] w-[200px]" },
             { key: "btbRefNum", label: "LC Ref. NO", cssClass: "min-w-[150px] w-[150px]" },
-            { key: "exOrRefNum", label: "LC Serial", cssClass: "min-w-[150px] w-[150px]" },
+            
             { key: "custNum", label: "Cust. Number", cssClass: "min-w-[120px] w-[150px]" },
             { key: "lcCurr", label: "Currency", cssClass: "min-w-[90px] w-[150px]" },
             { key: "lcAmount", label: "LC Open Amt.", cssClass: "min-w-[150px] w-[150px]" },
@@ -1246,8 +1268,9 @@ export class ExportDashboardComponent {
             { key: "lcAccBill", label: "Acc Bill Amt.", cssClass: "min-w-[150px] w-[150px]" },
             { key: "lcPay", label: "LC Pay. Amt.", cssClass: "min-w-[150px] w-[150px]" },
             { key: "totalOsAmount", label: "Total OS Amount", cssClass: "min-w-[150px] w-[150px]" },
-            { key: "entdBy", label: "Entd. By", cssClass: "min-w-[90px] w-[150px]" },
-            { key: "entdOn", label: "Entd. On", cssClass: "min-w-[220px] w-[220px]" },
+            // { key: "exOrRefNum", label: "LC Serial", cssClass: "min-w-[150px] w-[150px]" },
+            // { key: "entdBy", label: "Entd. By", cssClass: "min-w-[90px] w-[150px]" },
+            // { key: "entdOn", label: "Entd. On", cssClass: "min-w-[220px] w-[220px]" },
         ];
 
         this.paginationState.btbOsAmount.currentPage = 0;
@@ -1264,6 +1287,8 @@ export class ExportDashboardComponent {
                         totalItems: this.paginationState.btbOsAmount.totalItems,
                         pageSize: this.paginationState.btbOsAmount.pageSize,
                         currentPage: this.paginationState.btbOsAmount.currentPage,
+                        showActionColumn: true,
+                        actionLabel: 'Details',
                     };
                 } else {
                     console.warn("No data available for display");
@@ -1355,8 +1380,8 @@ export class ExportDashboardComponent {
             { key: "custNum", label: "Cust. Number", cssClass: "min-w-[120px] w-[150px]" },
             { key: "billCurr", label: "Currency", cssClass: "min-w-[90px] w-[150px]" },
             { key: "billAmount", label: "LC Open Amt.", cssClass: "min-w-[150px] w-[150px]" },
-            { key: "entdBy", label: "Entd. By", cssClass: "min-w-[90px] w-[150px]" },
-            { key: "entdOn", label: "Entd. On", cssClass: "min-w-[220px] w-[220px]" },
+            // { key: "entdBy", label: "Entd. By", cssClass: "min-w-[90px] w-[150px]" },
+            // { key: "entdOn", label: "Entd. On", cssClass: "min-w-[220px] w-[220px]" },
         ];
 
         this.paginationState.btbBillAmount.currentPage = 0;
@@ -1373,6 +1398,8 @@ export class ExportDashboardComponent {
                         totalItems: this.paginationState.btbBillAmount.totalItems,
                         pageSize: this.paginationState.btbBillAmount.pageSize,
                         currentPage: this.paginationState.btbBillAmount.currentPage,
+                        showActionColumn: true,
+                        actionLabel: 'Details',
                     };
                 } else {
                     console.warn("No data available for display");
@@ -1459,10 +1486,10 @@ export class ExportDashboardComponent {
             { key: "custNum", label: "Cust. Number", cssClass: "min-w-[120px] w-[150px]" },
             { key: "billCurr", label: "Currency", cssClass: "min-w-[90px] w-[150px]" },
             { key: "billPayAmt", label: "LC Open Amt.", cssClass: "min-w-[150px] w-[150px]" },
-            { key: "tranBatchNo", label: "Batch Num.", cssClass: "min-w-[100px] w-[220px]" },
-            { key: "tranDate", label: "Tran Date", cssClass: "min-w-[120px] w-[220px]" },
-            { key: "entdBy", label: "Entd. By", cssClass: "min-w-[90px] w-[150px]" },
-            { key: "entdOn", label: "Entd. On", cssClass: "min-w-[220px] w-[220px]" },
+            // { key: "tranBatchNo", label: "Batch Num.", cssClass: "min-w-[100px] w-[220px]" },
+            // { key: "tranDate", label: "Tran Date", cssClass: "min-w-[120px] w-[220px]" },
+            // { key: "entdBy", label: "Entd. By", cssClass: "min-w-[90px] w-[150px]" },
+            // { key: "entdOn", label: "Entd. On", cssClass: "min-w-[220px] w-[220px]" },
         ];
 
         this.paginationState.btbPayAmount.currentPage = 0;
@@ -1479,6 +1506,8 @@ export class ExportDashboardComponent {
                         totalItems: this.paginationState.btbPayAmount.totalItems,
                         pageSize: this.paginationState.btbPayAmount.pageSize,
                         currentPage: this.paginationState.btbPayAmount.currentPage,
+                        showActionColumn: true,
+                        actionLabel: 'Details',
                     };
                 } else {
                     console.warn("No data available for display");
@@ -1569,10 +1598,10 @@ export class ExportDashboardComponent {
             { key: "billPayBaseAmt", label: "Base Amount", cssClass: "min-w-[150px] w-[150px]" },
             { key: "billPadAccNo", label: "Account Num.", cssClass: "min-w-[140px] w-[150px]" },
             { key: "billPadAmt", label: "PAD Amount", cssClass: "min-w-[150px] w-[150px]" },
-            { key: "tranBatchNo", label: "Batch Num.", cssClass: "min-w-[100px] w-[220px]" },
-            { key: "tranDate", label: "Tran Date", cssClass: "min-w-[120px] w-[220px]" },
-            { key: "billEntdBy", label: "Entd. By", cssClass: "min-w-[90px] w-[150px]" },
-            { key: "billEntdOn", label: "Entd. On", cssClass: "min-w-[220px] w-[220px]" },
+            // { key: "tranBatchNo", label: "Batch Num.", cssClass: "min-w-[100px] w-[220px]" },
+            // { key: "tranDate", label: "Tran Date", cssClass: "min-w-[120px] w-[220px]" },
+            // { key: "billEntdBy", label: "Entd. By", cssClass: "min-w-[90px] w-[150px]" },
+            // { key: "billEntdOn", label: "Entd. On", cssClass: "min-w-[220px] w-[220px]" },
         ];
 
         this.paginationState.btbPadAmount.currentPage = 0;
@@ -1589,6 +1618,8 @@ export class ExportDashboardComponent {
                         totalItems: this.paginationState.btbPadAmount.totalItems,
                         pageSize: this.paginationState.btbPadAmount.pageSize,
                         currentPage: this.paginationState.btbPadAmount.currentPage,
+                        showActionColumn: true,
+                        actionLabel: 'Details',
                     };
                 } else {
                     console.warn("No data available for display");
@@ -1681,10 +1712,10 @@ export class ExportDashboardComponent {
             { key: "billPadAcc", label: "Account Num.", cssClass: "min-w-[140px] w-[150px]" },
             { key: "billPadAmt", label: "PAD Amount", cssClass: "min-w-[150px] w-[150px]" },
             { key: "billPadOsAmt", label: "PAD Amount", cssClass: "min-w-[150px] w-[150px]" },
-            { key: "tranBatchNo", label: "Batch Num.", cssClass: "min-w-[100px] w-[220px]" },
-            { key: "tranDate", label: "Tran Date", cssClass: "min-w-[120px] w-[220px]" },
-            { key: "entdBy", label: "Entd. By", cssClass: "min-w-[90px] w-[150px]" },
-            { key: "entdOn", label: "Entd. On", cssClass: "min-w-[220px] w-[220px]" },
+            // { key: "tranBatchNo", label: "Batch Num.", cssClass: "min-w-[100px] w-[220px]" },
+            // { key: "tranDate", label: "Tran Date", cssClass: "min-w-[120px] w-[220px]" },
+            // { key: "entdBy", label: "Entd. By", cssClass: "min-w-[90px] w-[150px]" },
+            // { key: "entdOn", label: "Entd. On", cssClass: "min-w-[220px] w-[220px]" },
         ];
 
         this.paginationState.btbPadOsAmount.currentPage = 0;
@@ -1701,6 +1732,8 @@ export class ExportDashboardComponent {
                         totalItems: this.paginationState.btbPadOsAmount.totalItems,
                         pageSize: this.paginationState.btbPadOsAmount.pageSize,
                         currentPage: this.paginationState.btbPadOsAmount.currentPage,
+                        showActionColumn: true,
+                        actionLabel: 'Details',
                     };
                 } else {
                     console.warn("No data available for display");
@@ -1791,10 +1824,10 @@ export class ExportDashboardComponent {
             { key: "pcAmount", label: "PC Amount", cssClass: "min-w-[150px] w-[150px]" },
             { key: "pcRate", label: "Rate", cssClass: "min-w-[100px] w-[150px]" },
             { key: "pcBaseAmount", label: "Base Amount", cssClass: "min-w-[150px] w-[150px]" },
-            { key: "tranBatchNo", label: "Batch Num.", cssClass: "min-w-[100px] w-[220px]" },
-            { key: "tranDate", label: "Tran Date", cssClass: "min-w-[120px] w-[220px]" },
-            { key: "entdBy", label: "Entd. By", cssClass: "min-w-[90px] w-[150px]" },
-            { key: "entdOn", label: "Entd. On", cssClass: "min-w-[220px] w-[220px]" },
+            // { key: "tranBatchNo", label: "Batch Num.", cssClass: "min-w-[100px] w-[220px]" },
+            // { key: "tranDate", label: "Tran Date", cssClass: "min-w-[120px] w-[220px]" },
+            // { key: "entdBy", label: "Entd. By", cssClass: "min-w-[90px] w-[150px]" },
+            // { key: "entdOn", label: "Entd. On", cssClass: "min-w-[220px] w-[220px]" },
         ];
 
         this.paginationState.expOrdPcAmount.currentPage = 0;
@@ -1811,6 +1844,8 @@ export class ExportDashboardComponent {
                         totalItems: this.paginationState.expOrdPcAmount.totalItems,
                         pageSize: this.paginationState.expOrdPcAmount.pageSize,
                         currentPage: this.paginationState.expOrdPcAmount.currentPage,
+                        showActionColumn: true,
+                        actionLabel: 'Details',
                     };
                 } else {
                     console.warn("No data available for display");
@@ -1898,10 +1933,10 @@ export class ExportDashboardComponent {
             { key: "billAmount", label: "Bill Amount", cssClass: "min-w-[150px] w-[150px]" },
             { key: "billConvRate", label: "Rate", cssClass: "min-w-[100px] w-[150px]" },
             { key: "billAmountBase", label: "Base Amount", cssClass: "min-w-[150px] w-[150px]" },
-            { key: "tranBatchNo", label: "Batch Num.", cssClass: "min-w-[100px] w-[220px]" },
-            { key: "tranDate", label: "Tran Date", cssClass: "min-w-[120px] w-[220px]" },
-            { key: "entdBy", label: "Entd. By", cssClass: "min-w-[90px] w-[150px]" },
-            { key: "entdOn", label: "Entd. On", cssClass: "min-w-[220px] w-[220px]" },
+            // { key: "tranBatchNo", label: "Batch Num.", cssClass: "min-w-[100px] w-[220px]" },
+            // { key: "tranDate", label: "Tran Date", cssClass: "min-w-[120px] w-[220px]" },
+            // { key: "entdBy", label: "Entd. By", cssClass: "min-w-[90px] w-[150px]" },
+            // { key: "entdOn", label: "Entd. On", cssClass: "min-w-[220px] w-[220px]" },
         ];
 
         this.paginationState.expOrdBillAmt.currentPage = 0;
@@ -1918,6 +1953,8 @@ export class ExportDashboardComponent {
                         totalItems: this.paginationState.expOrdBillAmt.totalItems,
                         pageSize: this.paginationState.expOrdBillAmt.pageSize,
                         currentPage: this.paginationState.expOrdBillAmt.currentPage,
+                        showActionColumn: true,
+                        actionLabel: 'Details',
                     };
                 } else {
                     console.warn("No data available for display");
@@ -2008,10 +2045,10 @@ export class ExportDashboardComponent {
             { key: "loanAmount", label: "Loan Amount", cssClass: "min-w-[150px] w-[250px]" },
             { key: "loanBaseCurr", label: "Base Amount", cssClass: "min-w-[150px] w-[250px]" },
             { key: "loanOsAmt", label: "Loan OS Amt.", cssClass: "min-w-[150px] w-[250px]" },
-            { key: "tranBatchNo", label: "Batch Num.", cssClass: "min-w-[100px] w-[220px]" },
-            { key: "tranDate", label: "Tran Date", cssClass: "min-w-[120px] w-[220px]" },
-            { key: "entdBy", label: "Entd. By", cssClass: "min-w-[90px] w-[150px]" },
-            { key: "entdOn", label: "Entd. On", cssClass: "min-w-[220px] w-[220px]" },
+            // { key: "tranBatchNo", label: "Batch Num.", cssClass: "min-w-[100px] w-[220px]" },
+            // { key: "tranDate", label: "Tran Date", cssClass: "min-w-[120px] w-[220px]" },
+            // { key: "entdBy", label: "Entd. By", cssClass: "min-w-[90px] w-[150px]" },
+            // { key: "entdOn", label: "Entd. On", cssClass: "min-w-[220px] w-[220px]" },
         ];
 
         this.paginationState.expOrdPlAmt.currentPage = 0;
@@ -2028,6 +2065,8 @@ export class ExportDashboardComponent {
                         totalItems: this.paginationState.expOrdPlAmt.totalItems,
                         pageSize: this.paginationState.expOrdPlAmt.pageSize,
                         currentPage: this.paginationState.expOrdPlAmt.currentPage,
+                        showActionColumn: true,
+                        actionLabel: 'Details',
                     };
                 } else {
                     console.warn("No data available for display");
@@ -2116,10 +2155,10 @@ export class ExportDashboardComponent {
             { key: "billCurr", label: "Bill Curr.", cssClass: "min-w-[100px] w-[150px]" },
             { key: "disbAmount", label: "Disb. Amount", cssClass: "min-w-[150px] w-[250px]" },
            
-            { key: "tranBatchNo", label: "Batch Num.", cssClass: "min-w-[100px] w-[220px]" },
-            { key: "tranDate", label: "Tran Date", cssClass: "min-w-[120px] w-[220px]" },
-            { key: "entdBy", label: "Entd. By", cssClass: "min-w-[90px] w-[150px]" },
-            { key: "entdOn", label: "Entd. On", cssClass: "min-w-[220px] w-[220px]" },
+            // { key: "tranBatchNo", label: "Batch Num.", cssClass: "min-w-[100px] w-[220px]" },
+            // { key: "tranDate", label: "Tran Date", cssClass: "min-w-[120px] w-[220px]" },
+            // { key: "entdBy", label: "Entd. By", cssClass: "min-w-[90px] w-[150px]" },
+            // { key: "entdOn", label: "Entd. On", cssClass: "min-w-[220px] w-[220px]" },
         ];
 
         this.paginationState.expOrdDisbAmt.currentPage = 0;
@@ -2136,6 +2175,8 @@ export class ExportDashboardComponent {
                         totalItems: this.paginationState.expOrdDisbAmt.totalItems,
                         pageSize: this.paginationState.expOrdDisbAmt.pageSize,
                         currentPage: this.paginationState.expOrdDisbAmt.currentPage,
+                        showActionColumn: true,
+                        actionLabel: 'Details',
                     };
                 } else {
                     console.warn("No data available for display");
@@ -2224,10 +2265,10 @@ export class ExportDashboardComponent {
             { key: "edfRcAmtCurr", label: "Received Curr", cssClass: "min-w-[90px] w-[150px]" },
             { key: "edfRcAmt", label: "Amount", cssClass: "min-w-[150px] w-[250px]" },
            { key: "edfOsAmt", label: "O/S Amount", cssClass: "min-w-[150px] w-[250px]" },
-            { key: "tranBatchNo", label: "Batch Num.", cssClass: "min-w-[100px] w-[220px]" },
-            { key: "tranDate", label: "Tran Date", cssClass: "min-w-[120px] w-[220px]" },
-            { key: "entdBy", label: "Entd. By", cssClass: "min-w-[90px] w-[150px]" },
-            { key: "entdOn", label: "Entd. On", cssClass: "min-w-[220px] w-[220px]" },
+            // { key: "tranBatchNo", label: "Batch Num.", cssClass: "min-w-[100px] w-[220px]" },
+            // { key: "tranDate", label: "Tran Date", cssClass: "min-w-[120px] w-[220px]" },
+            // { key: "entdBy", label: "Entd. By", cssClass: "min-w-[90px] w-[150px]" },
+            // { key: "entdOn", label: "Entd. On", cssClass: "min-w-[220px] w-[220px]" },
         ];
 
         this.paginationState.expOrdEdfRc.currentPage = 0;
@@ -2244,6 +2285,8 @@ export class ExportDashboardComponent {
                         totalItems: this.paginationState.expOrdEdfRc.totalItems,
                         pageSize: this.paginationState.expOrdEdfRc.pageSize,
                         currentPage: this.paginationState.expOrdEdfRc.currentPage,
+                        showActionColumn: true,
+                        actionLabel: 'Details',
                     };
                 } else {
                     console.warn("No data available for display");
@@ -2564,6 +2607,186 @@ export class ExportDashboardComponent {
         }
         
     }
+
+    openRowDetails(row: any) {
+        const fields: DetailField[] = this.buildDetailsFields(row);
+    
+        this.dialog.open(TableDetailsDialogComponent, {
+          scrollStrategy: this.overlay.scrollStrategies.noop(),
+          width: '720px',
+          maxWidth: '95vw',
+          panelClass: 'custom-details-dialog',
+          backdropClass: 'custom-details-backdrop',
+          data: {
+            title: 'Branch Details',
+            fields
+          }
+        });
+      }
+    
+      private buildDetailsFields(row: any): DetailField[] {
+    
+         if (this.currentDetailView === 'exportOpen') {
+          return [
+            { label: 'Entd By', value: row.entdBy ?? '-' },
+            { label: 'Entd On', value: row.entdOn },
+          ];
+        }
+        
+        if (this.currentDetailView === "orderOpen") {
+             return [
+            
+            { label: 'Entd By', value: row.entdBy ?? '-' },
+            { label: 'Entd On', value: row.entdOn },
+          ];
+        }
+        if (this.currentDetailView === "btbOpen") {
+             return [
+           
+            { label: 'Entd By', value: row.entdBy ?? '-' },
+            { label: 'Entd On', value: row.entdOn },
+          ];
+        }
+        if (this.currentDetailView === "exportVolume") {
+             return [
+
+                /*
+                {key: "btbAllowAmt",label: "BTB Allow Amt.",cssClass: "min-w-[150px] w-[150px]",},
+            {key: "pcAllowAmt",label: "PC Allow Amt.", cssClass: "min-w-[150px] w-[150px]", },
+            { key: "entdBy", label: "Entd. By", cssClass: "min-w-[90px] w-[150px]" },
+            {key: "entdOn",  label: "Entd. On", cssClass: "min-w-[220px] w-[220px]",},
+                */
+            { label: 'BTB Allow', value: row.btbAllowAmt ?? '-' },
+            { label: 'PC Allow', value: row.pcAllowAmt },
+            { label: 'Entd By', value: row.entdBy ?? '-' },
+            { label: 'Entd On', value: row.entdOn },
+          ];
+        }
+        if (this.currentDetailView === "orderVolume") {
+             return [
+                // { key: "btbAllowAmt", label: "BTB Allow Amt.", cssClass: "min-w-[150px] w-[150px]" },
+            // { key: "pcAllowAmt", label: "PC Allow Amt.", cssClass: "min-w-[150px] w-[150px]" },
+            // { key: "entdBy", label: "Entd. By", cssClass: "min-w-[90px] w-[150px]" },
+            // { key: "entdOn", label: "Entd. On", cssClass: "min-w-[220px] w-[220px]" },
+            { label: 'BTB Allow', value: row.btbAllowAmt ?? '-' },
+            { label: 'PC Allow', value: row.pcAllowAmt },
+            { label: 'Entd By', value: row.entdBy ?? '-' },
+            { label: 'Entd On', value: row.entdOn },
+          ];
+        }
+        if (this.currentDetailView === "btbVolume") {
+             return [
+                // { key: "tranBatchNo", label: "Batch Num.", cssClass: "min-w-[100px] w-[220px]" },
+            // { key: "tranDate", label: "Tran Date", cssClass: "min-w-[120px] w-[220px]" },
+            // { key: "entdBy", label: "Entd. By", cssClass: "min-w-[90px] w-[150px]" },
+            // { key: "entdOn", label: "Entd. On", cssClass: "min-w-[220px] w-[220px]" },
+            { label: 'Batch Num', value: row.tranBatchNo ?? '-' },
+            { label: 'Tran Date', value: row.tranDate },
+            { label: 'Entd By', value: row.entdBy ?? '-' },
+            { label: 'Entd On', value: row.entdOn },
+          ];
+        }
+        if (this.currentDetailView === "btbOsAmount") {
+            return [
+                // { key: "exOrRefNum", label: "LC Serial", cssClass: "min-w-[150px] w-[150px]" },
+            // { key: "entdBy", label: "Entd. By", cssClass: "min-w-[90px] w-[150px]" },
+            // { key: "entdOn", label: "Entd. On", cssClass: "min-w-[220px] w-[220px]" },
+            { label: 'Exp Ref. Num', value: row.exOrRefNum ?? '-' },
+            { label: 'Entd By', value: row.entdBy ?? '-' },
+            { label: 'Entd On', value: row.entdOn },
+          ];
+        }
+        if (this.currentDetailView === "btbBillAmount") { 
+             return [
+                 // { key: "entdBy", label: "Entd. By", cssClass: "min-w-[90px] w-[150px]" },
+            // { key: "entdOn", label: "Entd. On", cssClass: "min-w-[220px] w-[220px]" },
+            
+            { label: 'Entd By', value: row.entdBy ?? '-' },
+            { label: 'Entd On', value: row.entdOn },
+          ];
+        }
+        if (this.currentDetailView === "btbPayAmount") { 
+             return [
+                // { key: "tranBatchNo", label: "Batch Num.", cssClass: "min-w-[100px] w-[220px]" },
+            // { key: "tranDate", label: "Tran Date", cssClass: "min-w-[120px] w-[220px]" },
+            // { key: "entdBy", label: "Entd. By", cssClass: "min-w-[90px] w-[150px]" },
+            // { key: "entdOn", label: "Entd. On", cssClass: "min-w-[220px] w-[220px]" },
+            { label: 'Batch Num', value: row.tranBatchNo ?? '-' },
+            { label: 'Tran Date', value: row.tranDate },
+            { label: 'Entd By', value: row.entdBy ?? '-' },
+            { label: 'Entd On', value: row.entdOn },
+          ];
+        }
+        if (this.currentDetailView === "btbPadAmount") { 
+            return [
+                // { key: "tranBatchNo", label: "Batch Num.", cssClass: "min-w-[100px] w-[220px]" },
+            // { key: "tranDate", label: "Tran Date", cssClass: "min-w-[120px] w-[220px]" },
+            // { key: "billEntdBy", label: "Entd. By", cssClass: "min-w-[90px] w-[150px]" },
+            // { key: "billEntdOn", label: "Entd. On", cssClass: "min-w-[220px] w-[220px]" },
+            { label: 'Batch Num', value: row.tranBatchNo ?? '-' },
+            { label: 'Tran Date', value: row.tranDate },
+            { label: 'Entd By', value: row.billEntdBy ?? '-' },
+            { label: 'Entd On', value: row.billEntdOn },
+          ];
+        }
+        if (this.currentDetailView === "btbPadOsAmount") { 
+             return [
+                 // { key: "tranBatchNo", label: "Batch Num.", cssClass: "min-w-[100px] w-[220px]" },
+            // { key: "tranDate", label: "Tran Date", cssClass: "min-w-[120px] w-[220px]" },
+            // { key: "entdBy", label: "Entd. By", cssClass: "min-w-[90px] w-[150px]" },
+            // { key: "entdOn", label: "Entd. On", cssClass: "min-w-[220px] w-[220px]" },
+            { label: 'Batch Num', value: row.tranBatchNo ?? '-' },
+            { label: 'Tran Date', value: row.tranDate },
+            { label: 'Entd By', value: row.entdBy ?? '-' },
+            { label: 'Entd On', value: row.entdOn },
+          ];
+        }
+        if (this.currentDetailView === "expOrdPcAmount") { 
+             return [
+                // { key: "tranBatchNo", label: "Batch Num.", cssClass: "min-w-[100px] w-[220px]" },
+            // { key: "tranDate", label: "Tran Date", cssClass: "min-w-[120px] w-[220px]" },
+            // { key: "entdBy", label: "Entd. By", cssClass: "min-w-[90px] w-[150px]" },
+            // { key: "entdOn", label: "Entd. On", cssClass: "min-w-[220px] w-[220px]" },
+            { label: 'Batch Num', value: row.tranBatchNo ?? '-' },
+            { label: 'Tran Date', value: row.tranDate },
+            { label: 'Entd By', value: row.entdBy ?? '-' },
+            { label: 'Entd On', value: row.entdOn },
+          ];
+        }
+        if (this.currentDetailView === "expOrdBillAmt") { 
+             return [
+            { label: 'Batch Num', value: row.tranBatchNo ?? '-' },
+            { label: 'Tran Date', value: row.tranDate },
+            { label: 'Entd By', value: row.entdBy ?? '-' },
+            { label: 'Entd On', value: row.entdOn },
+          ];
+        }
+        if (this.currentDetailView === "expOrdPlAmt") { 
+             return [
+            { label: 'Batch Num', value: row.tranBatchNo ?? '-' },
+            { label: 'Tran Date', value: row.tranDate },
+            { label: 'Entd By', value: row.entdBy ?? '-' },
+            { label: 'Entd On', value: row.entdOn },
+          ];
+        }
+        if (this.currentDetailView === "expOrdDisbAmt") { 
+             return [
+            { label: 'Batch Num', value: row.tranBatchNo ?? '-' },
+            { label: 'Tran Date', value: row.tranDate },
+            { label: 'Entd By', value: row.entdBy ?? '-' },
+            { label: 'Entd On', value: row.entdOn },
+          ];
+        }
+        if (this.currentDetailView === "expOrdEdfRc") { 
+             return [
+            { label: 'Batch Num', value: row.tranBatchNo ?? '-' },
+            { label: 'Tran Date', value: row.tranDate },
+            { label: 'Entd By', value: row.entdBy ?? '-' },
+            { label: 'Entd On', value: row.entdOn },
+          ];
+        }
+        return [];
+      }
     private formatAmount(value: number | null | undefined): string {
         if (value === null || value === undefined) return "0.00";
         return value.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });

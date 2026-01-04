@@ -1,6 +1,22 @@
+/* 
 
 
-/* Remove default padding/margin of mat-tree */
+
+.mat-tree {
+  font-size: 12px !important;   
+}
+
+.parent-row,
+.parent-row span,
+.parent-row mat-icon {
+  font-size: 13px !important;
+}
+
+
+.leaf-text {
+  font-size: 12px !important;
+}
+
 .mat-tree {
   padding: 0;
   margin: 0;
@@ -11,26 +27,23 @@
   margin: 0 !important;
 }
 
-/* Ensure vertical connector lines are visible */
+
 .mat-tree-node .absolute {
   pointer-events: none;
 }
 
-/* Optional: Adjust spacing for nested items */
+
 .mat-tree-node[role="treeitem"] {
   position: relative;
 }
 
-/* Fix for horizontal connector alignment */
+
 .mat-tree-node .absolute.left-0 {
   top: 50%;
   transform: translateY(-50%);
 }
 
-/* Style for Node menu  */
 
-
-/* ---------- Parent Node ---------- */
 .tree-parent {
   position: relative;
   padding-top: 10px;
@@ -53,14 +66,14 @@
   cursor: pointer;
 }
 
-/* ---------- CHILDREN CONTAINER ---------- */
+
 .children-container {
-  margin-left: 15px; /* indent children */
+  margin-left: 15px; 
   position: relative;
   padding-left: 12px;
 }
 
-/* Vertical line for children */
+
 .children-container::before {
   content: "";
   position: absolute;
@@ -71,19 +84,16 @@
   background: #b5b5b5;
   opacity: 0.8;
 }
-/* Remove vertical line for last child */
+
 .children-container > .tree-leaf:last-child .leaf-connector::after {
   display: none;
 }
-/* leaf-like parent behaves like normal child */
+
 .leaf-like-parent {
   padding-top: 0 !important;
 }
 
-/* parent row looking like leaf */
 
-
-/* horizontal line for parent-with-children */
 .parent-leaf-connector {
   left: -12px;
   width: 12px;
@@ -93,7 +103,7 @@
 
 
 
-/* ---------- LEAF NODES ---------- */
+
 .tree-leaf {
   position: relative;
   padding: 6px 0;
@@ -101,7 +111,7 @@
   align-items: center;
 }
 
-/* Horizontal line connector */
+
 .leaf-connector {
   position: absolute;
   left: -12px;
@@ -110,7 +120,7 @@
   background: #c25353;
 }
 
-/* Leaf text link */
+
 .leaf-text {
   padding: 4px 6px;
   font-size: 14px;
@@ -122,7 +132,7 @@
   color: #1976d2;
 }
 
-/* Active link */
+
 .active-leaf {
   color: #1976d2 !important;
   font-weight: 600;
@@ -144,7 +154,7 @@
     max-height: 600px;
   }
 }
-/* Disable text selection for entire tree */
+
 .mat-tree,
 .tree-parent,
 .tree-leaf,
@@ -159,4 +169,185 @@
 
 :host {
   transition: width 0.15s ease;
+} */
+
+/* ===== Base Tree Reset ===== */
+.pro-tree {
+  padding: 8px 10px;
+  margin: 0;
+  font-size: 12px;
+}
+
+.mat-tree,
+.mat-nested-tree-node,
+.mat-tree-node {
+  background: transparent !important;
+}
+
+.mat-tree-node {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* ===== Parent Node ===== */
+.tree-parent {
+  padding-top: 0;           /* FIX: remove extra gap */
+  position: relative;
+}
+
+.parent-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+
+  padding: 5px 8px;        /* professional spacing */
+  margin: 2px 0;
+  border-radius: 10px;
+
+  cursor: pointer;
+  color: #0f172a;           /* slate-900 */
+  transition: background 120ms ease;
+}
+
+.parent-row:hover {
+  background: rgba(2, 132, 199, 0.08); /* soft blue hover */
+}
+
+/* Left side */
+.row-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.node-icon {
+  font-size: 18px !important;
+  width: 18px !important;
+  height: 18px !important;
+  color: #334155 !important; /* slate-700 */
+}
+
+.node-label {
+  font-size: 11.7px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Chevron rotate */
+.chev {
+  font-size: 18px !important;
+  width: 18px !important;
+  height: 18px !important;
+  color: #64748b; /* slate-500 */
+  transition: transform 150ms ease;
+}
+
+.chev.rot {
+  transform: rotate(180deg);
+}
+
+/* ===== Children Container + Vertical Line ===== */
+.children-container {
+  margin-left: 0;
+  padding-left: 16px;      /* indent children */
+  margin-top: 1px;
+  position: relative;
+}
+
+/* subtle vertical connector line */
+.children-container::before {
+  content: "";
+  position: absolute;
+  left: 18px;
+  top: 2px;
+  bottom: 15px;
+  width: 1px;
+  background: rgba(148, 163, 184, 0.6); /* slate-400 */
+}
+
+/* ===== Leaf Nodes ===== */
+.tree-leaf {
+  position: relative;
+  padding-top: 5px !important;
+  padding-bottom: 5px !important;
+  margin: 0 !important;
+  min-height: 0 !important;          /* FIX: smaller gap */
+  display: flex;
+  align-items: center;
+}
+
+/* subtle horizontal connector (NO RED) */
+.leaf-connector {
+  position: absolute;
+  left: 7px;
+  width: 12px;
+  height: 1px;
+  background: rgba(148, 163, 184, 0.7); /* slate-400 */
+}
+
+/* leaf text */
+.leaf-text {
+  display: block;
+  width: 100%;
+  margin-left: 18px;       /* align with connector */
+  padding: 4px 8px !important;
+  
+
+  border-radius: 10px;
+  font-size: 12px;
+  color: #334155;          /* slate-700 */
+  text-decoration: none;
+
+  transition: background 120ms ease, color 120ms ease;
+}
+
+.leaf-text:hover {
+  background: rgba(2, 132, 199, 0.08);
+  color: #0f172a;
+}
+
+/* Active leaf: background + indicator */
+.active-leaf {
+  background: rgba(2, 132, 199, 0.14);
+  color: #0369a1 !important; /* sky-700 */
+  font-weight: 600;
+  position: relative;
+}
+
+.active-leaf::before {
+  content: "";
+  position: absolute;
+  left: -10px;
+  top: 7px;
+  bottom: 7px;
+  width: 3px;
+  border-radius: 999px;
+  background: #0284c7; /* sky-600 */
+}
+
+/* ===== Expand animation (faster & cleaner) ===== */
+.animate-expand {
+  overflow: hidden;
+  animation: accordion-open 220ms ease;
+}
+
+@keyframes accordion-open {
+  from { opacity: 0; max-height: 0; }
+  to   { opacity: 1; max-height: 600px; }
+}
+
+/* Disable selection */
+.pro-tree,
+.tree-parent,
+.tree-leaf,
+.leaf-text,
+.parent-row {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }

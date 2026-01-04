@@ -1,31 +1,63 @@
 <div class="example-container mat-elevation-z0">
+
+  <!-- TABLE SCROLL WRAPPER -->
+  <div class="table-scroll">
     <mat-table [dataSource]="data" matSort>
 
-        <ng-container *ngFor="let col of columns" [matColumnDef]="col.key">
-            <mat-header-cell *matHeaderCellDef [class]="col.cssClass" [style.width]="col.width" [style.min-width]="col.minWidth">
-                <span *ngIf="col.sortable !== false" [mat-sort-header]="col.key">{{ col.label }}</span>
-                <span *ngIf="col.sortable === false">{{ col.label }}</span>
+      <ng-container *ngFor="let col of columns" [matColumnDef]="col.key">
+        <mat-header-cell *matHeaderCellDef
+          [class]="col.cssClass"
+          [style.width]="col.width"
+          [style.min-width]="col.minWidth">
+          <span *ngIf="col.sortable !== false" [mat-sort-header]="col.key">{{ col.label }}</span>
+          <span *ngIf="col.sortable === false">{{ col.label }}</span>
+        </mat-header-cell>
+
+        <mat-cell *matCellDef="let row; let i = index"
+          [class]="col.cssClass"
+          [style.width]="col.width"
+          [style.min-width]="col.minWidth">
+          <ng-container [ngSwitch]="col.key">
+            <ng-container *ngSwitchCase="'rn'">
+              {{ currentPage * pageSize + i + 1 }}
+            </ng-container>
+            <ng-container *ngSwitchDefault>
+              {{ row[col.key] }}
+            </ng-container>
+          </ng-container>
+
+        </mat-cell>
+      </ng-container>
+       <!-- ACTION COLUMN -->
+        <ng-container *ngIf="showActionColumn" matColumnDef="action">
+            <mat-header-cell *matHeaderCellDef class="text-center min-w-[130px] w-[130px] whitespace-nowrap">
+                Action
             </mat-header-cell>
 
+            <mat-cell *matCellDef="let row" class="text-center min-w-[130px] w-[130px] whitespace-nowrap">
 
-            <mat-cell *matCellDef="let row; let i = index" [class]="col.cssClass" [style.width]="col.width"  [style.min-width]="col.minWidth">
-                <ng-container [ngSwitch]="col.key">
-                    <ng-container *ngSwitchCase="'rn'">
-                        {{ currentPage * pageSize + i + 1 }}
-                    </ng-container>
-                    
-                    <ng-container *ngSwitchDefault>
-                        {{ row[col.key] }}
-                    </ng-container>
-                </ng-container>
+                <button type="button"  class="px-2 py-1 text-sm font-medium text-white
+                                             bg-gray-500 rounded-md hover:bg-gray-700 active:bg-gray-800
+                                             focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-1 transition
+                                             cursor-pointer" (click)="onDetails(row)">
+                    {{ actionLabel }}
+                </button>
+
             </mat-cell>
         </ng-container>
 
-        <mat-header-row *matHeaderRowDef="displayedColumns" class="text-white!"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: displayedColumns" style="border-bottom: 1px solid #ddd;"></mat-row>
-    </mat-table>
+      <mat-header-row *matHeaderRowDef="displayedColumns" ></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns" ></mat-row>
 
-    <mat-paginator [length]="totalItems" [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 15, 20, 25]"
-        (page)="onPageChange($event)" class="text-gray-700 text-sm">
-    </mat-paginator>
+    </mat-table>
+  </div>
+
+  <mat-paginator
+    [length]="totalItems"
+    [pageSize]="pageSize"
+    [pageSizeOptions]="[5, 10, 15, 20, 25]"
+    (page)="onPageChange($event)"
+    class="text-gray-700 text-sm">
+  </mat-paginator>
+
 </div>

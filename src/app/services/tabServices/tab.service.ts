@@ -48,7 +48,7 @@ openTab(title: string, route: string) {
       this.tabs[nextActiveIndex].isActive = true;
       this.router.navigateByUrl(this.tabs[nextActiveIndex].route);
     } else if (wasActive && this.tabs.length === 0) {
-      this.router.navigateByUrl('/blank');
+      this.router.navigateByUrl('/home');
     }
 
     // Important: Send new array reference to trigger change detection

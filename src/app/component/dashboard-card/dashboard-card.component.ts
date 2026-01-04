@@ -1,11 +1,12 @@
 import { CommonModule } from "@angular/common";
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { MatCardModule } from "@angular/material/card";
+import { MatIcon, MatIconModule } from "@angular/material/icon";
 
 @Component({
     selector: "app-dashboard-card",
     standalone: true,
-    imports: [CommonModule, MatCardModule],
+    imports: [CommonModule, MatCardModule , MatIconModule,MatIcon],
     templateUrl: "./dashboard-card.component.html",
     styleUrl: "./dashboard-card.component.css",
 })
@@ -20,6 +21,10 @@ export class DashboardCardComponent {
     @Input() cardFixedColor: boolean = false;
     @Input() cardBackgroundColor: string = "bg-white";
     @Input() cardWhiteColor: boolean = true;
+    // ✅ NEW (Dynamic Icon Concept)
+  @Input() icon: string = "description";          // mat-icon name
+  @Input() iconColor: string = "text-blue-600";   // icon color class
+  @Input() iconBgColor: string = "bg-blue-50";    // icon container bg class
 
     @Output() buttonClick = new EventEmitter<void>();
 

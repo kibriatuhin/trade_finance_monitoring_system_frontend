@@ -36,6 +36,8 @@ import { ImportLcTaxDetailsData } from "../../shared/models/import/ImportLcTaxDe
 import { ImportLcOpenDetailsModel } from "../../shared/models/import/importLcOpen-details.model";
 import { NgxEchartsDirective } from "ngx-echarts";
 import { EChartsOption } from 'echarts';
+import { DetailField, TableDetailsDialogComponent } from "../../component/table-details-dialog/table-details-dialog.component";
+import { Overlay } from "@angular/cdk/overlay";
 
 
 @Component({
@@ -56,7 +58,7 @@ import { EChartsOption } from 'echarts';
     templateUrl: "./import-dashboard.component.html",
     styleUrl: "./import-dashboard.component.css",
     animations: [
-         trigger('slideIn', [
+        trigger('slideIn', [
             state('cards', style({
                 transform: 'translateX(0)',
                 opacity: 1
@@ -117,18 +119,26 @@ export class ImportDashboardComponent {
         const totalPendingLc = this.parseShortAmount(s.impPendingLc);
         return {
             color: ['#3b82f6', '#fca5a5'],
-            title: { text: 'Import Status Overview', left: 'center' },
+            title: {
+                text: 'Import Status Overview', left: 'center',
+                textStyle: {
+                    fontSize: 14,
+                    fontWeight: 500,
+                    color: '#1f2937'
+                }
+            },
             tooltip: { trigger: 'item' },
             legend: {
                 orient: 'horizontal',
                 bottom: '10%',
                 left: 'center',
                 textStyle: {
-                    fontSize: 14,
+                    fontSize: 11,
                     color: '#374151',
-                    fontWeight: 500  // <-- number
+                    fontWeight: 400  // <-- number
                 }
             },
+            backgroundColor: '#ffffff',
             series: [
                 {
                     name: 'Status',
@@ -146,15 +156,15 @@ export class ImportDashboardComponent {
                             shadowColor: 'rgba(0, 0, 0, 0.5)'
                         }
                     }
-                    
+
                 }
 
             ]
-            
+
         };
     }
 
-    
+
     paymentChartOption: EChartsOption = {
         title: { text: 'Payment Status Overview', left: 'center' },
         tooltip: {
@@ -181,7 +191,7 @@ export class ImportDashboardComponent {
         ]
     };
 
-    private  buildBarChartOption(): EChartsOption {
+    private buildBarChartOption(): EChartsOption {
         const s = this.totalImportLcSummary;
 
         const totalTradeVolume = this.parseShortAmount(s.importAmount);
@@ -189,7 +199,13 @@ export class ImportDashboardComponent {
         const totalPaymentAmount = this.parseShortAmount(s.importPayment);
         const outstandingLiab = this.parseShortAmount(s.ImportOsLiab);
         return {
-            title: { text: 'Import Status Overview', left: 'center' },
+            title: {
+                text: 'Import Status Overview', left: 'center', textStyle: {
+                    fontSize: 14,
+                    fontWeight: 500,
+                    color: '#1f2937'
+                }
+            },
             dataset: {
                 source: [
                     ['score', 'amount', 'product'],
@@ -199,6 +215,14 @@ export class ImportDashboardComponent {
                     [50.1, outstandingLiab, 'Outstanding Liability'],
                 ]
             },
+            grid: {
+                left: 16,     // 👈 chart start closer to left
+                right: 20,
+                top: 60,
+                bottom: 60,
+                containLabel: true
+            },
+
             tooltip: {
                 trigger: 'item',
                 formatter: (params: any) => {
@@ -206,14 +230,27 @@ export class ImportDashboardComponent {
                     return `${params.value[2]}<br/>Amount: $ ${amount.toLocaleString()}`;
                 }
             },
-            grid: { containLabel: true },
+            legend: {
+                orient: 'horizontal',
+                bottom: '8%',
+                left: 'center',
+                itemGap: 20,
+                textStyle: {
+                    fontSize: 11,
+                    color: '#374151',
+                    fontWeight: 400
+                }
+            },
+
+            backgroundColor: '#ffffff',
+
 
             // >>> xAxis updated <<<
             xAxis: {
                 type: 'value',
                 min: 0,               // start 0
                 max: 2000000,         // 20L = 2,000,000
-                interval: 200000,     // 2L gap (optional)
+                interval: 500000,     // 2L gap (optional)
 
                 axisLabel: {
                     formatter: (value: number) => {
@@ -223,7 +260,15 @@ export class ImportDashboardComponent {
                 }
             },
 
-            yAxis: { type: 'category' },
+            yAxis: {
+                type: 'category',
+                axisLabel: {
+                    margin: 8,
+                    color: '#374151',
+                    fontSize: 11
+                }
+            },
+
 
             series: [
                 {
@@ -258,7 +303,7 @@ export class ImportDashboardComponent {
         };
     }
 
-    
+
 
 
 
@@ -340,7 +385,8 @@ export class ImportDashboardComponent {
         | "importTaxAmt"
         | null = null;
 
-    constructor(private dashboardService: DashboardDataService, private dialog: MatDialog, private cdr: ChangeDetectorRef, private el: ElementRef, private router: Router) { }
+    constructor(private dashboardService: DashboardDataService, private dialog: MatDialog, 
+        private cdr: ChangeDetectorRef, private el: ElementRef, private router: Router , private overlay: Overlay) { }
 
     /**
      * Initializes the component by populating the years array from 2015 to the current year.
@@ -351,6 +397,8 @@ export class ImportDashboardComponent {
         for (let year = startYear; year <= currentYear; year++) {
             this.years.push(year);
         }
+        this.barChartOption = this.buildBarChartOption();
+        this.importStatusPieChartOption = this.buildImportStatusChartOption();
     }
 
     /**
@@ -582,9 +630,9 @@ export class ImportDashboardComponent {
                 next: (data) => {
                     console.log("Total Import LC Summary:", data);
                     this.totalImportLcSummary = data;
-                    
-                  this.barChartOption = this.buildBarChartOption();
-                  this.importStatusPieChartOption = this.buildImportStatusChartOption();
+
+                    this.barChartOption = this.buildBarChartOption();
+                    this.importStatusPieChartOption = this.buildImportStatusChartOption();
                 },
                 error: (err) => {
                     console.error("Failed to fetch import summary:", err);
@@ -637,8 +685,8 @@ export class ImportDashboardComponent {
             { key: "totalLcAmount", label: "Total Lc Amount", cssClass: "min-w-[120px] w-[250px]" },
             { key: "totalOsAmount", label: "Total OS Amount", cssClass: "min-w-[120px] w-[250px]" },
             { key: "expiryDate", label: "Expiry Date", cssClass: "min-w-[130px] w-[150px]" },
-            { key: "entdBy", label: "Entd. By", cssClass: "min-w-[100px] w-[150px]" },
-            { key: "entdOn", label: "Entd. On", cssClass: "min-w-[150px] w-[250px]", },
+            // { key: "entdBy", label: "Entd. By", cssClass: "min-w-[100px] w-[150px]" },
+            // { key: "entdOn", label: "Entd. On", cssClass: "min-w-[150px] w-[250px]", },
         ];
 
         this.paginationState.pendingLc.currentPage = 0;
@@ -655,6 +703,8 @@ export class ImportDashboardComponent {
                         totalItems: this.paginationState.pendingLc.totalItems,
                         pageSize: this.paginationState.pendingLc.pageSize,
                         currentPage: this.paginationState.pendingLc.currentPage,
+                        showActionColumn: true,
+                        actionLabel: 'Details',
                     };
                 } else {
                     console.warn("No data available for display");
@@ -747,12 +797,11 @@ export class ImportDashboardComponent {
             { key: "totalAmdEn", label: "Lc En. Amount" },
             { key: "totalAmdRd", label: "Lc Rd. Amount" },
             { key: "totalLcAmt", label: "Lc Amount" },
-            { key: "lcEntdBy", label: "Entd. By" },
-            {
-                key: "lcEntdOn",
-                label: "Entd. On",
-                cssClass: "min-w-[180px] w-[180px]",
-            },
+            // { key: "lcEntdBy", label: "Entd. By" },
+            // { key: "lcEntdOn",
+            //     label: "Entd. On",
+            //     cssClass: "min-w-[180px] w-[180px]",
+            // },
         ];
 
         this.paginationState.importAmt.currentPage = 0;
@@ -769,6 +818,8 @@ export class ImportDashboardComponent {
                         totalItems: this.paginationState.importAmt.totalItems,
                         pageSize: this.paginationState.importAmt.pageSize,
                         currentPage: this.paginationState.importAmt.currentPage,
+                        showActionColumn: true,
+                        actionLabel: 'Details',
                     };
                 } else {
                     console.warn("No data available for display");
@@ -858,10 +909,10 @@ export class ImportDashboardComponent {
             { key: "lcConvRate", label: "Rate", cssClass: "min-w-[90px] w-[150px]", },
             { key: "lcBaseAmt", label: "Base Amount", cssClass: "min-w-[150px] w-[150px]", },
             { key: "expiryDate", label: "Expiry Date", cssClass: "min-w-[140px] w-[150px]", },
-            { key: "tranBatchNo", label: "Batch Num.", cssClass: "min-w-[100px] w-[150px]", },
-            { key: "tranDate", label: "Tran Date", cssClass: "min-w-[140px] w-[150px]", },
-            { key: "authBy", label: "Entd. By", cssClass: "min-w-[90px] w-[150px]" },
-            { key: "authOn", label: "Entd. On", cssClass: "min-w-[220px] w-[220px]", },
+            // { key: "tranBatchNo", label: "Batch Num.", cssClass: "min-w-[100px] w-[150px]", },
+            // { key: "tranDate", label: "Tran Date", cssClass: "min-w-[140px] w-[150px]", },
+            // { key: "authBy", label: "Entd. By", cssClass: "min-w-[90px] w-[150px]" },
+            // { key: "authOn", label: "Entd. On", cssClass: "min-w-[220px] w-[220px]", },
         ];
 
         this.paginationState.lcOpen.currentPage = 0;
@@ -878,6 +929,8 @@ export class ImportDashboardComponent {
                         totalItems: this.paginationState.lcOpen.totalItems,
                         pageSize: this.paginationState.lcOpen.pageSize,
                         currentPage: this.paginationState.lcOpen.currentPage,
+                        showActionColumn: true,          
+                        actionLabel: 'Details',
                     };
                 } else {
                     console.warn("No data available for display");
@@ -965,8 +1018,8 @@ export class ImportDashboardComponent {
             { key: "billCurr", label: "Currency", cssClass: "min-w-[80px] w-[200px]", },
             { key: "billAmt", label: "Bill Amount", cssClass: "min-w-[160px] w-[280px]", },
             { key: "expiryDate", label: "Expiry Date", cssClass: "min-w-[140px] w-[200px]", },
-            { key: "billEntdBy", label: "Entd. By", cssClass: "min-w-[100px] w-[200px]", },
-            { key: "billEntdOn", label: "Entd. On", cssClass: "min-w-[220px] w-[270px]", },
+            // { key: "billEntdBy", label: "Entd. By", cssClass: "min-w-[100px] w-[200px]", },
+            // { key: "billEntdOn", label: "Entd. On", cssClass: "min-w-[220px] w-[270px]", },
         ];
 
         this.paginationState.importBill.currentPage = 0;
@@ -983,6 +1036,8 @@ export class ImportDashboardComponent {
                         totalItems: this.paginationState.importBill.totalItems,
                         pageSize: this.paginationState.importBill.pageSize,
                         currentPage: this.paginationState.importBill.currentPage,
+                        showActionColumn: true,
+                        actionLabel: 'Details',
                     };
                 } else {
                     console.warn("No data available for display");
@@ -1112,16 +1167,16 @@ export class ImportDashboardComponent {
                 label: "LC Os Amount",
                 cssClass: "min-w-[100px] w-[280px]",
             },
-            {
-                key: "lcEntdBy",
-                label: "Entd. By",
-                cssClass: "min-w-[100px] w-[200px]",
-            },
-            {
-                key: "lcEntOn",
-                label: "Entd. On",
-                cssClass: "min-w-[220px] w-[270px]",
-            },
+            // {
+            //     key: "lcEntdBy",
+            //     label: "Entd. By",
+            //     cssClass: "min-w-[100px] w-[200px]",
+            // },
+            // {
+            //     key: "lcEntOn",
+            //     label: "Entd. On",
+            //     cssClass: "min-w-[220px] w-[270px]",
+            // },
         ];
 
         this.paginationState.importOsAmt.currentPage = 0;
@@ -1138,6 +1193,8 @@ export class ImportDashboardComponent {
                         totalItems: this.paginationState.importOsAmt.totalItems,
                         pageSize: this.paginationState.importOsAmt.pageSize,
                         currentPage: this.paginationState.importOsAmt.currentPage,
+                        showActionColumn: true,
+                        actionLabel: 'Details',
                     };
                 } else {
                     console.warn("No data available for display");
@@ -1250,26 +1307,26 @@ export class ImportDashboardComponent {
                 label: "Payment Amount",
                 cssClass: "min-w-[100px] w-[200px]",
             },
-            {
-                key: "tranBatchNo",
-                label: "Tran Batch No.",
-                cssClass: "min-w-[100px] w-[200px]",
-            },
-            {
-                key: "tranDate",
-                label: "Tran Date",
-                cssClass: "min-w-[100px] w-[200px]",
-            },
-            {
-                key: "billEntdBy",
-                label: "Entd. By",
-                cssClass: "min-w-[80px] w-[200px]",
-            },
-            {
-                key: "billEntdOn",
-                label: "Entd. On",
-                cssClass: "min-w-[220px] w-[270px]",
-            },
+            // {
+            //     key: "tranBatchNo",
+            //     label: "Tran Batch No.",
+            //     cssClass: "min-w-[100px] w-[200px]",
+            // },
+            // {
+            //     key: "tranDate",
+            //     label: "Tran Date",
+            //     cssClass: "min-w-[100px] w-[200px]",
+            // },
+            // {
+            //     key: "billEntdBy",
+            //     label: "Entd. By",
+            //     cssClass: "min-w-[80px] w-[200px]",
+            // },
+            // {
+            //     key: "billEntdOn",
+            //     label: "Entd. On",
+            //     cssClass: "min-w-[220px] w-[270px]",
+            // },
         ];
 
         this.paginationState.importPayAmt.currentPage = 0;
@@ -1286,6 +1343,8 @@ export class ImportDashboardComponent {
                         totalItems: this.paginationState.importPayAmt.totalItems,
                         pageSize: this.paginationState.importPayAmt.pageSize,
                         currentPage: this.paginationState.importPayAmt.currentPage,
+                        showActionColumn: true,
+                        actionLabel: 'Details',
                     };
                 } else {
                     console.warn("No data available for display");
@@ -1379,11 +1438,11 @@ export class ImportDashboardComponent {
                 label: "Pay Serial",
                 cssClass: "min-w-[100px] w-[200px]",
             },
-            {
-                key: "billPartFinal",
-                label: "Part/Final",
-                cssClass: "min-w-[80px] w-[280px]",
-            },
+            // {
+            //     key: "billPartFinal",
+            //     label: "Part/Final",
+            //     cssClass: "min-w-[80px] w-[280px]",
+            // },
             {
                 key: "billCustNo",
                 label: "Customer No.",
@@ -1414,26 +1473,26 @@ export class ImportDashboardComponent {
                 label: "PAD Payment Amt.",
                 cssClass: "min-w-[100px] w-[200px]",
             },
-            {
-                key: "tranBatchNo",
-                label: "Tran Batch No.",
-                cssClass: "min-w-[100px] w-[200px]",
-            },
-            {
-                key: "tranDate",
-                label: "Tran Date",
-                cssClass: "min-w-[100px] w-[200px]",
-            },
-            {
-                key: "billEntdBy",
-                label: "Entd. By",
-                cssClass: "min-w-[80px] w-[200px]",
-            },
-            {
-                key: "billEntdOn",
-                label: "Entd. On",
-                cssClass: "min-w-[220px] w-[270px]",
-            },
+            // {
+            //     key: "tranBatchNo",
+            //     label: "Tran Batch No.",
+            //     cssClass: "min-w-[100px] w-[200px]",
+            // },
+            // {
+            //     key: "tranDate",
+            //     label: "Tran Date",
+            //     cssClass: "min-w-[100px] w-[200px]",
+            // },
+            // {
+            //     key: "billEntdBy",
+            //     label: "Entd. By",
+            //     cssClass: "min-w-[80px] w-[200px]",
+            // },
+            // {
+            //     key: "billEntdOn",
+            //     label: "Entd. On",
+            //     cssClass: "min-w-[220px] w-[270px]",
+            // },
         ];
 
         this.paginationState.importPayPadAmt.currentPage = 0;
@@ -1450,6 +1509,8 @@ export class ImportDashboardComponent {
                         totalItems: this.paginationState.importPayPadAmt.totalItems,
                         pageSize: this.paginationState.importPayPadAmt.pageSize,
                         currentPage: this.paginationState.importPayPadAmt.currentPage,
+                        showActionColumn: true,
+                        actionLabel: 'Details',
                     };
                 } else {
                     console.warn("No data available for display");
@@ -1580,26 +1641,26 @@ export class ImportDashboardComponent {
                 label: "PAD Pay. Os Amt.",
                 cssClass: "min-w-[100px] w-[200px]",
             },
-            {
-                key: "tranBatchNo",
-                label: "Tran Batch No.",
-                cssClass: "min-w-[100px] w-[200px]",
-            },
-            {
-                key: "tranDate",
-                label: "Tran Date",
-                cssClass: "min-w-[100px] w-[200px]",
-            },
-            {
-                key: "billEntdBy",
-                label: "Entd. By",
-                cssClass: "min-w-[80px] w-[200px]",
-            },
-            {
-                key: "billEntdOn",
-                label: "Entd. On",
-                cssClass: "min-w-[220px] w-[270px]",
-            },
+            // {
+            //     key: "tranBatchNo",
+            //     label: "Tran Batch No.",
+            //     cssClass: "min-w-[100px] w-[200px]",
+            // },
+            // {
+            //     key: "tranDate",
+            //     label: "Tran Date",
+            //     cssClass: "min-w-[100px] w-[200px]",
+            // },
+            // {
+            //     key: "billEntdBy",
+            //     label: "Entd. By",
+            //     cssClass: "min-w-[80px] w-[200px]",
+            // },
+            // {
+            //     key: "billEntdOn",
+            //     label: "Entd. On",
+            //     cssClass: "min-w-[220px] w-[270px]",
+            // },
         ];
 
         this.paginationState.importPayPadOs.currentPage = 0;
@@ -1616,6 +1677,8 @@ export class ImportDashboardComponent {
                         totalItems: this.paginationState.importPayPadOs.totalItems,
                         pageSize: this.paginationState.importPayPadOs.pageSize,
                         currentPage: this.paginationState.importPayPadOs.currentPage,
+                        showActionColumn: true,
+                        actionLabel: 'Details',
                     };
                 } else {
                     console.warn("No data available for display");
@@ -1875,18 +1938,18 @@ export class ImportDashboardComponent {
                 cssClass: "min-w-[120px] w-[220px]",
             },
             { key: "glCode", label: "Gl Code ", cssClass: "min-w-[140px] w-[240px]" },
-            {
-                key: "tranBatchNo",
-                label: "Tran Batch No.",
-                cssClass: "min-w-[100px] w-[250px]",
-            },
-            {
-                key: "tranDate",
-                label: "Tran Date",
-                cssClass: "min-w-[100px] w-[200px]",
-            },
-            { key: "entdBy", label: "Entd. By", cssClass: "min-w-[80px] w-[200px]" },
-            { key: "entdOn", label: "Entd. On", cssClass: "min-w-[220px] w-[270px]" },
+            // {
+            //     key: "tranBatchNo",
+            //     label: "Tran Batch No.",
+            //     cssClass: "min-w-[100px] w-[250px]",
+            // },
+            // {
+            //     key: "tranDate",
+            //     label: "Tran Date",
+            //     cssClass: "min-w-[100px] w-[200px]",
+            // },
+            // { key: "entdBy", label: "Entd. By", cssClass: "min-w-[80px] w-[200px]" },
+            // { key: "entdOn", label: "Entd. On", cssClass: "min-w-[220px] w-[270px]" },
         ];
 
         this.paginationState.importBillAcc.currentPage = 0;
@@ -1903,6 +1966,8 @@ export class ImportDashboardComponent {
                         totalItems: this.paginationState.importBillAcc.totalItems,
                         pageSize: this.paginationState.importBillAcc.pageSize,
                         currentPage: this.paginationState.importBillAcc.currentPage,
+                        showActionColumn: true,
+                        actionLabel: 'Details',
                     };
                 } else {
                     console.warn("No data available for display");
@@ -2043,18 +2108,18 @@ export class ImportDashboardComponent {
                 label: "Total Charge Amt.",
                 cssClass: "min-w-[120px] w-[240px]",
             },
-            {
-                key: "tranBatchNo",
-                label: "Tran Batch No.",
-                cssClass: "min-w-[100px] w-[250px]",
-            },
-            {
-                key: "tranDate",
-                label: "Tran Date",
-                cssClass: "min-w-[100px] w-[200px]",
-            },
-            { key: "entdBy", label: "Entd. By", cssClass: "min-w-[80px] w-[200px]" },
-            { key: "entdOn", label: "Entd. On", cssClass: "min-w-[220px] w-[270px]" },
+            // {
+            //     key: "tranBatchNo",
+            //     label: "Tran Batch No.",
+            //     cssClass: "min-w-[100px] w-[250px]",
+            // },
+            // {
+            //     key: "tranDate",
+            //     label: "Tran Date",
+            //     cssClass: "min-w-[100px] w-[200px]",
+            // },
+            // { key: "entdBy", label: "Entd. By", cssClass: "min-w-[80px] w-[200px]" },
+            // { key: "entdOn", label: "Entd. On", cssClass: "min-w-[220px] w-[270px]" },
         ];
 
         this.paginationState.importPayChgAmt.currentPage = 0;
@@ -2071,6 +2136,8 @@ export class ImportDashboardComponent {
                         totalItems: this.paginationState.importPayChgAmt.totalItems,
                         pageSize: this.paginationState.importPayChgAmt.pageSize,
                         currentPage: this.paginationState.importPayChgAmt.currentPage,
+                        showActionColumn: true,
+                        actionLabel: 'Details',
                     };
                 } else {
                     console.warn("No data available for display");
@@ -2197,18 +2264,18 @@ export class ImportDashboardComponent {
                 label: "Charge amt.",
                 cssClass: "min-w-[120px] w-[240px]",
             },
-            {
-                key: "tranBatchNo",
-                label: "Tran Batch No.",
-                cssClass: "min-w-[100px] w-[250px]",
-            },
-            {
-                key: "tranDate",
-                label: "Tran Date",
-                cssClass: "min-w-[100px] w-[200px]",
-            },
-            { key: "entdBy", label: "Entd. By", cssClass: "min-w-[80px] w-[200px]" },
-            { key: "entdOn", label: "Entd. On", cssClass: "min-w-[220px] w-[270px]" },
+            // {
+            //     key: "tranBatchNo",
+            //     label: "Tran Batch No.",
+            //     cssClass: "min-w-[100px] w-[250px]",
+            // },
+            // {
+            //     key: "tranDate",
+            //     label: "Tran Date",
+            //     cssClass: "min-w-[100px] w-[200px]",
+            // },
+            // { key: "entdBy", label: "Entd. By", cssClass: "min-w-[80px] w-[200px]" },
+            // { key: "entdOn", label: "Entd. On", cssClass: "min-w-[220px] w-[270px]" },
         ];
 
         this.paginationState.importOpnChg.currentPage = 0;
@@ -2225,6 +2292,8 @@ export class ImportDashboardComponent {
                         totalItems: this.paginationState.importOpnChg.totalItems,
                         pageSize: this.paginationState.importOpnChg.pageSize,
                         currentPage: this.paginationState.importOpnChg.currentPage,
+                        showActionColumn: true,
+                        actionLabel: 'Details',
                     };
                 } else {
                     console.warn("No data available for display");
@@ -2349,18 +2418,18 @@ export class ImportDashboardComponent {
                 label: "Vat amt.",
                 cssClass: "min-w-[120px] w-[240px]",
             },
-            {
-                key: "tranBatchNo",
-                label: "Tran Batch No.",
-                cssClass: "min-w-[100px] w-[250px]",
-            },
-            {
-                key: "tranDate",
-                label: "Tran Date",
-                cssClass: "min-w-[100px] w-[200px]",
-            },
-            { key: "entdBy", label: "Entd. By", cssClass: "min-w-[80px] w-[200px]" },
-            { key: "entdOn", label: "Entd. On", cssClass: "min-w-[220px] w-[270px]" },
+            // {
+            //     key: "tranBatchNo",
+            //     label: "Tran Batch No.",
+            //     cssClass: "min-w-[100px] w-[250px]",
+            // },
+            // {
+            //     key: "tranDate",
+            //     label: "Tran Date",
+            //     cssClass: "min-w-[100px] w-[200px]",
+            // },
+            // { key: "entdBy", label: "Entd. By", cssClass: "min-w-[80px] w-[200px]" },
+            // { key: "entdOn", label: "Entd. On", cssClass: "min-w-[220px] w-[270px]" },
         ];
 
         this.paginationState.importVatAmt.currentPage = 0;
@@ -2377,6 +2446,8 @@ export class ImportDashboardComponent {
                         totalItems: this.paginationState.importVatAmt.totalItems,
                         pageSize: this.paginationState.importVatAmt.pageSize,
                         currentPage: this.paginationState.importVatAmt.currentPage,
+                        showActionColumn: true,
+                        actionLabel: 'Details',
                     };
                 } else {
                     console.warn("No data available for display");
@@ -2496,18 +2567,18 @@ export class ImportDashboardComponent {
                 label: "Tax Amount",
                 cssClass: "min-w-[130px] w-[240px]",
             },
-            {
-                key: "tranBatchNo",
-                label: "Tran Batch No.",
-                cssClass: "min-w-[100px] w-[250px]",
-            },
-            {
-                key: "tranDate",
-                label: "Tran Date",
-                cssClass: "min-w-[100px] w-[200px]",
-            },
-            { key: "entdBy", label: "Entd. By", cssClass: "min-w-[80px] w-[200px]" },
-            { key: "entdOn", label: "Entd. On", cssClass: "min-w-[220px] w-[270px]" },
+            // {
+            //     key: "tranBatchNo",
+            //     label: "Tran Batch No.",
+            //     cssClass: "min-w-[100px] w-[250px]",
+            // },
+            // {
+            //     key: "tranDate",
+            //     label: "Tran Date",
+            //     cssClass: "min-w-[100px] w-[200px]",
+            // },
+            // { key: "entdBy", label: "Entd. By", cssClass: "min-w-[80px] w-[200px]" },
+            // { key: "entdOn", label: "Entd. On", cssClass: "min-w-[220px] w-[270px]" },
         ];
 
         this.paginationState.importTaxAmt.currentPage = 0;
@@ -2524,6 +2595,8 @@ export class ImportDashboardComponent {
                         totalItems: this.paginationState.importTaxAmt.totalItems,
                         pageSize: this.paginationState.importTaxAmt.pageSize,
                         currentPage: this.paginationState.importTaxAmt.currentPage,
+                        showActionColumn: true,
+                        actionLabel: 'Details',
                     };
                 } else {
                     console.warn("No data available for display");
@@ -2915,6 +2988,138 @@ export class ImportDashboardComponent {
             this.loadImportTaxDetails();
         }
     }
+
+    openRowDetails(row: any) {
+        const fields: DetailField[] = this.buildDetailsFields(row);
+    
+        this.dialog.open(TableDetailsDialogComponent, {
+          scrollStrategy: this.overlay.scrollStrategies.noop(),
+          width: '720px',
+          maxWidth: '95vw',
+          panelClass: 'custom-details-dialog',
+          backdropClass: 'custom-details-backdrop',
+          data: {
+            title: 'LC Details',
+            fields
+          }
+        });
+      }
+    
+      private buildDetailsFields(row: any): DetailField[] {
+    
+        if (this.currentDetailView === 'lcOpen') {
+          return [
+            
+            { label: 'Batch Num', value: row.tranBatchNo ?? '-' },
+            { label: 'Tran Date', value: row.tranDate },
+            { label: 'Entd By', value: row.authBy ?? '-' },
+            { label: 'Entd On', value: row.authOn },
+    
+          ];
+        }
+        if (this.currentDetailView === 'pendingLc') {
+          return [
+            
+            { label: 'Entd By', value: row.entdBy ?? '-' },
+            { label: 'Entd On', value: row.entdOn },
+    
+          ];
+        }
+        if (this.currentDetailView === 'importAmt') {
+          return [
+            
+            { label: 'Entd By', value: row.lcEntdBy ?? '-' },
+            { label: 'Entd On', value: row.lcEntdOn },
+    
+          ];
+        }
+        if (this.currentDetailView === 'importBill') {
+          return [
+            
+            { label: 'Entd By', value: row.billEntdBy ?? '-' },
+            { label: 'Entd On', value: row.billEntdOn },
+    
+          ];
+        }
+        if (this.currentDetailView === 'importOsAmt') {
+          return [
+            { label: 'Entd By', value: row.lcEntdBy ?? '-' },
+            { label: 'Entd On', value: row.lcEntOn },
+          ];
+        }
+        if (this.currentDetailView === 'importPayAmt') {
+          return [
+            { label: 'Batch Num', value: row.tranBatchNo ?? '-' },
+            { label: 'Tran Date', value: row.tranDate },
+            { label: 'Entd By', value: row.billEntdBy ?? '-' },
+            { label: 'Entd On', value: row.billEntdOn },
+          ];
+        }
+        if (this.currentDetailView === 'importPayPadAmt') {
+          return [
+            {label: 'Part/Final', value: row.billPartFinal ?? '-' },
+             { label: 'Batch Num', value: row.tranBatchNo ?? '-' },
+            { label: 'Tran Date', value: row.tranDate },
+            { label: 'Entd By', value: row.billEntdBy ?? '-' },
+            { label: 'Entd On', value: row.billEntdOn },
+          ];
+        }
+        if (this.currentDetailView === 'importPayPadOs') {
+          return [
+            { label: 'Batch Num', value: row.tranBatchNo ?? '-' },
+            { label: 'Tran Date', value: row.tranDate },
+            { label: 'Entd By', value: row.billEntdBy ?? '-' },
+            { label: 'Entd On', value: row.billEntdOn },
+          ];
+        }
+        if (this.currentDetailView === 'importCommChg') {
+          return [
+            { label: 'Entd By', value: row.entdBy ?? '-' },
+            { label: 'Entd On', value: row.entdOn },
+          ];
+        }
+        if (this.currentDetailView === 'importBillAcc') {
+          return [
+            { label: 'Batch Num', value: row.tranBatchNo ?? '-' },
+            { label: 'Tran Date', value: row.tranDate },
+            { label: 'Entd By', value: row.entdBy ?? '-' },
+            { label: 'Entd On', value: row.entdOn },
+          ];
+        }
+        if (this.currentDetailView === 'importPayChg') {
+          return [
+            { label: 'Batch Num', value: row.tranBatchNo ?? '-' },
+            { label: 'Tran Date', value: row.tranDate },
+            { label: 'Entd By', value: row.entdBy ?? '-' },
+            { label: 'Entd On', value: row.entdOn },
+          ];
+        }
+        if (this.currentDetailView === 'importOpnChg') {
+          return [
+            { label: 'Batch Num', value: row.tranBatchNo ?? '-' },
+            { label: 'Tran Date', value: row.tranDate },
+            { label: 'Entd By', value: row.entdBy ?? '-' },
+            { label: 'Entd On', value: row.entdOn },
+          ];
+        }
+        if (this.currentDetailView === 'importVatAmt') {
+          return [
+            { label: 'Batch Num', value: row.tranBatchNo ?? '-' },
+            { label: 'Tran Date', value: row.tranDate },
+            { label: 'Entd By', value: row.entdBy ?? '-' },
+            { label: 'Entd On', value: row.entdOn },
+          ];
+        }
+        if (this.currentDetailView === 'importTaxAmt') {
+          return [
+            { label: 'Batch Num', value: row.tranBatchNo ?? '-' },
+            { label: 'Tran Date', value: row.tranDate },
+            { label: 'Entd By', value: row.entdBy ?? '-' },
+            { label: 'Entd On', value: row.entdOn },
+          ];
+        }
+        return [];
+      }
     private formatAmount(value: number | null | undefined): string {
         if (value === null || value === undefined) return "0.00";
         return value.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
