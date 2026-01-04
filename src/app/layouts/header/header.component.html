@@ -1,5 +1,5 @@
 <mat-toolbar
-  class="bg-white! border-1! border-gray-300! shadow-none custom-toolbar flex items-center justify-between px-4">
+  class="custom-toolbar bg-white! border-1! border-gray-300! shadow-none custom-toolbar flex items-center justify-between px-4">
   <div class="flex items-center">
     <!-- Menu Button -->
     <button mat-icon-button
@@ -13,7 +13,7 @@
 
     <!-- Logo -->
     <span class="ml-2">
-      <img src="assets/logo-spftl.jpg" alt="Company logo" class="h-8 w-auto inline-block" />
+      <img src="assets/logo-spftl.jpg" alt="Company logo" class="h-6 w-auto inline-block" />
     </span>
   </div>
 
@@ -30,7 +30,7 @@
 
   <!-- Dialog just under input -->
   <app-dynamic-dialog
-    class="absolute top-full left-10 mt-1"
+    class="absolute  mt-1"
     [show]="showProgramDialog"
     [title]="dialogTitle"
     [columns]="programColumns"
@@ -46,8 +46,10 @@
   <!-- Profile Section with Custom Dropdown -->
   <div class="relative" (click)="toggleDropdown()" (blur)="onBlur()" tabindex="0">
     <div class="flex items-center cursor-pointer group">
-      <img src="#" alt="Profile" class="w-10 h-10 rounded-full border-2 border-white shadow-sm mr-2" />
-      <span class="text-sm font-medium text-gray-800 group-hover:text-gray-900">
+      <mat-icon class="text-white" style="font-size: 24px; line-height: 1;">
+        account_circle
+      </mat-icon>
+      <span class="text-sm font-medium text-gray-800">
         GK Tuhin
       </span>
       <mat-icon class="text-gray-500 ml-1 text-xs">expand_more</mat-icon>

@@ -1,131 +1,105 @@
 <div class="p-0 relative overflow-hidden">
     <div [@slideIn] *ngIf="viewMode === 'cards'"
         class="transition-all duration-300 ease-in-out">
-        <div class="flex flex-col items-center justify-center pb-5! pt-3!">
-            <h5 class="font-bold mb-1! text-blue-700!">Export LC Monitoring</h5>
+        <div class="flex flex-col items-center justify-center pb-2! pt-3!">
+            <h5 class="font-bold mb-1! text-gray-700! text-xl!">Export LC Monitoring</h5>
         </div>
-        <div class="bg-gray-600! h-px! mb-1"></div>
+        <div class="bg-gray-400! h-px! mb-1"></div>
 
         <div class="p-6">
             <div class="max-w-6xl mx-auto">
                 <form [formGroup]="exportForm" (ngSubmit)="onSubmit()"
-                    class="flex flex-col md:flex-row items-center pt-5! gap-3 border-1! border-gray-200! rounded-sm! pl-5!  bg-blue-50! mb-10!">
-                    <!--  
-                   Input Field : Financial  Year
-                   Author : Golam Kibria Tuhin
-                   Date : 21-08-2025
-                     -->
-                    <div class>
-                        <label for="fYear"
-                            class="block text-sm font-medium text-gray-900">Financial
-                            Year</label>
-                        <select
-                            id="fYear"
-                            name="year"
-                            (ngModel)="(selectedYear)"
-                            formControlName="year"
-                            #yearSelect
-                            (keydown)="onKeyDownPress($event, 'branchCode', false)"
-                            (change)="onYearChange()"
-                            aria-label="Financial Year"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg px-3 py-2.5 pr-15! focus:outline-none! focus:ring-2! focus:ring-blue-500!  block w-full p-2.5">
-                            <option *ngFor="let year of years" [value]="year">{{
-                                year }}</option>
-                        </select>
-                        <div class="text-red-800 text-xs min-h-[20px]">
-                            @if ((exportForm.get('year')?.dirty ||
-                            exportForm.get('year')?.touched) &&
-                            exportForm.get('year')?.errors?.['required']) {
-                            <span class="text-red-500">Year is required.</span>
-                            }
-                        </div>
-                    </div>
+                    class="bg-blue-50 border border-gray-300 rounded-xl px-4!  py-3 md:px-6 mb-4! overflow-hidden!">
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-4 ">
 
-                    <!--  
-                     Input Field : Branch Code
-                     Author : Golam Kibria Tuhin
-                     Date : 21-08-2025
-                  -->
-                    <div class="max-w-md relative" #wrapper>
-                        <label for="branchCode"
-                            class="block text-sm font-medium text-gray-900ss mb-1">
-                            Branch Code </label>
-                        <div class="relative" #wrapper>
-                            <input
-                                id="branchCode"
-                                type="text"
-                                name="branchCode"
-                                formControlName="branchCode"
-                                autocomplete="off"
-                                (keydown)="onKeyDownPress($event, 'currencyCode', false)"
-                                (blur)="onBranchCodeBlur()"
-                                placeholder="Enter Branch"
-                                class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block px-3 py-2.5 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-                                aria-label="Branch Code" />
-                            <div
-                                class="text-xs min-h-[20px]"
-                                [ngClass]="{
-                                    'text-green-600': branchCodeErrorMessage === 'For All Branch',
-                                    'text-red-500': branchCodeErrorMessage && branchCodeErrorMessage !== 'For All Branch'
-                                }">
-                                {{ branchCodeErrorMessage }}
-                            </div>
-                        </div>
-                    </div>
+                        <!-- Financial Year -->
+                        <div class="md:col-span-2">
+                            <label for="fYear" class="block text-xs font-medium text-gray-700 mb-1">
+                                Financial Year
+                            </label>
 
-                    <!--  
-                      Input Field : Currency Code
-                      Author : Golam Kibria Tuhin
-                      Date : 21-08-2025
-                    -->
-                    <div class="max-w-md relative" #wrapper>
-                        <label for="currency"
-                            class="block text-sm font-medium text-gray-900ss mb-1">
-                            Currency Code </label>
-                        <div class="relative" #wrapper>
-                            <input
-                                id="currency"
-                                type="text"
-                                name="currencyCode"
-                                formControlName="currencyCode"
-                                autocomplete="off"
-                                (keydown)="onKeyDownPress($event, 'search', false)"
-                                (input)="toUppercase($event)"
-                                placeholder="Enter Currency Code"
-                                class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block px-3 py-2.5 pr-5 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-                                aria-label="Currency Code" />
-                            <div class="text-red-800 text-xs min-h-[20px]">
-                                @if (currencyErrorMessage) {
-                                <span class="text-red-500">{{
-                                    currencyErrorMessage }}</span>
+                            <select id="fYear" formControlName="year" #yearSelect
+                                (keydown)="onKeyDownPress($event, 'branchCode', false)" (change)="onYearChange()" class="w-full h-9 text-xs bg-white border border-gray-300 rounded-md px-3
+               focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-300">
+                                <option *ngFor="let year of years" [value]="year">{{ year }}</option>
+                            </select>
 
+                            <!-- reserved space without extra bottom gap -->
+                            <div class=" text-[10px] text-red-600 ">
+                                @if ((exportForm.get('year')?.dirty || exportForm.get('year')?.touched) &&
+                                exportForm.get('year')?.errors?.['required']) {
+                                <span>Year is required.</span>
                                 }
                             </div>
                         </div>
-                    </div>
 
-                    <div class="max-w-md relative" #wrapper>
-                        <div class="relative" #wrapper>
-                            <button
-                                id="search"
-                                mat-raised-button
-                                class="px-10! py-2! mt-1! rounded-[8px]!  focus:outline-none! focus:ring-2! focus:ring-blue-800! focus:text-white! text-white! bg-linear-to-r! from-cyan-700! via-blue-500! to-indigo-600! hover:text-white!"
+                        <!-- Branch Code -->
+                        <div class="md:col-span-3">
+                            <label for="branchCode" class="block text-xs font-medium text-gray-700 mb-1">
+                                Branch Code
+                            </label>
+
+                            <input id="branchCode" type="text" formControlName="branchCode"
+                                (keydown)="onKeyDownPress($event, 'currencyCode', false)" (blur)="onBranchCodeBlur()"
+                                placeholder="Enter branch" class="w-full h-9 text-xs bg-white border border-gray-300 rounded-md px-3
+               placeholder:text-gray-400
+               focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-300" />
+
+                            <!-- reserved space; no '.' fake text -->
+                            <div class=" text-[10px]" [ngClass]="{
+          'text-green-600': branchCodeErrorMessage === 'For All Branch',
+          'text-red-600': branchCodeErrorMessage && branchCodeErrorMessage !== 'For All Branch'
+        }">
+                                {{ branchCodeErrorMessage }}
+                            </div>
+                        </div>
+
+                        <!-- Currency Code -->
+                        <div class="md:col-span-3">
+                            <label for="currency" class="block text-xs font-medium text-gray-700 mb-1">
+                                Currency Code
+                            </label>
+
+                            <input id="currency" type="text" formControlName="currencyCode"
+                                (keydown)="onKeyDownPress($event, 'search', false)" (input)="toUppercase($event)"
+                                placeholder="Enter currency" class="w-full h-9 text-xs bg-white border border-gray-300 rounded-md px-3
+               placeholder:text-gray-400
+               focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-300" />
+
+                            <!-- reserved space without extra bottom gap -->
+                            <div class=" text-[10px] text-red-600">
+                                @if (currencyErrorMessage) { <span>{{ currencyErrorMessage }}</span> }
+                            </div>
+                        </div>
+
+                        <!-- Search Button (aligned, no spacer hacks) -->
+                        <div class="md:col-span-2">
+                            <button id="search" type="submit" class="mt-[22px] w-32 h-9 text-xs font-semibold rounded-full
+               bg-white text-blue-700 border border-gray-300 shadow-sm cursor-pointer
+               hover:bg-gray-50 active:scale-[0.99]
+               focus:outline-none focus:ring-2 focus:ring-blue-300"
                                 (keydown)="onKeyDownPress($event, undefined, true)">
                                 Search
                             </button>
+
+                            <!-- keep row height consistent -->
+                            
                         </div>
+
                     </div>
                 </form>
-                <div class="max-w-6xl mx-auto mb-20">
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
+                <div class="overflow-y-auto overscroll-contain pr-2
+            md:max-h-[calc(2*120px+12px)] !mb-2">
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-2 auto-rows-[120px]">
                         <!-- Total Export Lc open Volume Card -->
                         <app-dashboard-card
                             [value]="totalExportSummary.totalExportOpen"
                             label="Total Export Open"
-                            [cardFixedColor]="true"
-                            [cardWhiteColor]="false"
-                            cardBackgroundColor="bg-purple-100!"
-                            valueColor="text-purple-800"
+                            [cardFixedColor]="true" 
+                            [cardWhiteColor]="false" 
+                            valueColor="text-blue-800!" 
+                            icon="assessment" 
+                            cardBackgroundColor="bg-blue-600!"
                             (buttonClick)="ExportLcOpenDialog()">
                         </app-dashboard-card>
 
@@ -135,10 +109,11 @@
                             [value]="totalExportSummary.totalOrderOpen"
                             label="Total Order/Contact Open"
                             [currencySymbol]="null"
-                            [cardFixedColor]="true"
-                            [cardWhiteColor]="false"
-                            cardBackgroundColor="bg-slate-200!"
-                            valueColor="text-slate-800"
+                            [cardFixedColor]="true" 
+                            [cardWhiteColor]="false" 
+                            valueColor="text-indigo-800!" 
+                            icon="assessment" 
+                            cardBackgroundColor="bg-indigo-600!"
                             (buttonClick)="OrderLcOpenDialog()">
                         </app-dashboard-card>
 
@@ -148,10 +123,11 @@
                             [value]="totalExportSummary.totalBtbOpen"
                             label="Total BTB Open"
                             [currencySymbol]="null"
-                            [cardFixedColor]="true"
-                            [cardWhiteColor]="false"
-                            cardBackgroundColor="bg-orange-100!"
-                            valueColor="text-orange-800"
+                            [cardFixedColor]="true" 
+                            [cardWhiteColor]="false" 
+                            valueColor="text-violet-800!" 
+                            icon="assessment" 
+                            cardBackgroundColor="bg-violet-600!"
                             (buttonClick)="ExpOrdBtbLcOpenDialog()">
                         </app-dashboard-card>
 
@@ -161,10 +137,11 @@
                             [value]="totalExportSummary.totalExportAmount"
                             label="Total Export Volume"
                             [currencySymbol]="getCurrencySymbol()"
-                            [cardFixedColor]="true"
-                            [cardWhiteColor]="false"
-                            cardBackgroundColor="bg-green-100!"
-                            valueColor="text-green-900"
+                            [cardFixedColor]="true" 
+                            [cardWhiteColor]="false" 
+                            valueColor="text-emerald-800!" 
+                            icon="assessment" 
+                            cardBackgroundColor="bg-emerald-600!"
                             (buttonClick)="ExportVolumeOpenDialog()">
                         </app-dashboard-card>
 
@@ -174,10 +151,11 @@
                             [value]="totalExportSummary.totalOrderAmount"
                             label="Total Order/Contact Volume"
                             [currencySymbol]="getCurrencySymbol()"
-                            [cardFixedColor]="true"
-                            [cardWhiteColor]="false"
-                            cardBackgroundColor="bg-amber-100!"
-                            valueColor="text-amber-900"
+                            [cardFixedColor]="true" 
+                            [cardWhiteColor]="false" 
+                            valueColor="text-green-800!" 
+                            icon="assessment" 
+                            cardBackgroundColor="bg-green-600!"
                             (buttonClick)="OrderVolumeOpenDialog()">
                         </app-dashboard-card>
 
@@ -187,10 +165,11 @@
                             [value]="totalExportSummary.totalBtbAmount"
                             label="Total BTB Amount"
                             [currencySymbol]="getCurrencySymbol()"
-                            [cardFixedColor]="true"
-                            [cardWhiteColor]="false"
-                            cardBackgroundColor="bg-emerald-100!"
-                            valueColor="text-emerald-900"
+                            [cardFixedColor]="true" 
+                            [cardWhiteColor]="false" 
+                            valueColor="text-lime-800!" 
+                            icon="assessment" 
+                            cardBackgroundColor="bg-lime-600!"
                             (buttonClick)="ExpOrdBTBVolumeOpenDialog()">
                         </app-dashboard-card>
 
@@ -200,10 +179,11 @@
                             [value]="totalExportSummary.totalBtbOsAmount"
                             label="Total BTB Outstanding Liability"
                             [currencySymbol]="getCurrencySymbol()"
-                            [cardFixedColor]="true"
-                            [cardWhiteColor]="false"
-                            cardBackgroundColor="bg-red-100!"
-                            valueColor="text-red-900"
+                            [cardFixedColor]="true" 
+                            [cardWhiteColor]="false" 
+                            valueColor="text-red-800!" 
+                            icon="rate_review" 
+                            cardBackgroundColor="bg-red-600!"
                             (buttonClick)="ExpOrdBTBOsOpenDialog()">
                         </app-dashboard-card>
                         <!-- Total Export BTB Bill amount Card -->
@@ -212,10 +192,11 @@
                             [value]="totalExportSummary.totalBtbBillAmount"
                             label="Total BTB Bill Amount"
                             [currencySymbol]="getCurrencySymbol()"
-                            [cardFixedColor]="true"
-                            [cardWhiteColor]="false"
-                            cardBackgroundColor="bg-sky-100!"
-                            valueColor="text-sky-900"
+                            [cardFixedColor]="true" 
+                            [cardWhiteColor]="false" 
+                            valueColor="text-teal-800!" 
+                            icon="assessment" 
+                            cardBackgroundColor="bg-teal-600!"
                             (buttonClick)="ExpOrdBtbBillOpenDialog()">
                         </app-dashboard-card>
 
@@ -225,10 +206,11 @@
                             [value]="totalExportSummary.totalBtbPayAmount"
                             label="Total BTB Payment Amount"
                             [currencySymbol]="getCurrencySymbol()"
-                            [cardFixedColor]="true"
-                            [cardWhiteColor]="false"
-                            cardBackgroundColor="bg-blue-100!"
-                            valueColor="text-blue-900"
+                            [cardFixedColor]="true" 
+                            [cardWhiteColor]="false" 
+                            valueColor="text-cyan-800!" 
+                            icon="assessment" 
+                            cardBackgroundColor="bg-cyan-600!"
                             (buttonClick)="ExpOrdBtbBillPayOpenDialog()">
                         </app-dashboard-card>
 
@@ -236,11 +218,12 @@
                         <app-dashboard-card
                             [value]="totalExportSummary.totalBtbPadAmount"
                             label="Total BTB PAD Amount on Payment"
-                            [cardFixedColor]="true"
-                            [cardWhiteColor]="false"
                             currencySymbol="৳"
-                            cardBackgroundColor="bg-teal-100!"
-                            valueColor="text-teal-800!"
+                            [cardFixedColor]="true" 
+                            [cardWhiteColor]="false" 
+                            valueColor="text-violet-800!" 
+                            icon="assessment" 
+                            cardBackgroundColor="bg-violet-600!"
                             
                             (buttonClick)="ExpOrdBtbPadAmtOpenDialog()"
                         >
@@ -250,11 +233,12 @@
                         <app-dashboard-card
                             [value]="totalExportSummary.totalBtbPadOsAmount"
                             label="BTB PAD O/S on Payment"
-                            [cardFixedColor]="true"
-                            [cardWhiteColor]="false"
                             currencySymbol="৳"
-                            cardBackgroundColor="bg-red-100!"
-                            valueColor="text-red-800!"
+                            [cardFixedColor]="true" 
+                            [cardWhiteColor]="false" 
+                            valueColor="text-red-800!" 
+                            icon="rate_review" 
+                            cardBackgroundColor="bg-red-600!"
                             
                             (buttonClick)="ExpOrdBtbPadOsAmtOpenDialog()"
                         >
@@ -266,10 +250,11 @@
                             [value]="totalExportSummary.totalExOrPCAmount"
                             label="Total Packing Credit Amount"
                             currencySymbol="৳"
-                            [cardFixedColor]="true"
-                            [cardWhiteColor]="false"
-                            cardBackgroundColor="bg-indigo-100!"
-                            valueColor="text-indigo-900"
+                            [cardFixedColor]="true" 
+                            [cardWhiteColor]="false" 
+                            valueColor="text-slate-800!" 
+                            icon="assessment" 
+                            cardBackgroundColor="bg-slate-600!"
                             (buttonClick)="ExpOrdPcAmtOpenDialog()">
                         </app-dashboard-card>
 
@@ -279,10 +264,11 @@
                             [value]="totalExportSummary.totalExOrBillAmount"
                             label="Total Export Bill Amount"
                             [currencySymbol]="getCurrencySymbol()"
-                            [cardFixedColor]="true"
-                            [cardWhiteColor]="false"
-                            cardBackgroundColor="bg-violet-100!"
-                            valueColor="text-violet-900"
+                            [cardFixedColor]="true" 
+                            [cardWhiteColor]="false" 
+                            valueColor="text-stone-800!" 
+                            icon="assessment" 
+                            cardBackgroundColor="bg-stone-600!"
                             (buttonClick)="ExpOrdBillAmtOpenDialog()">
                         </app-dashboard-card>
 
@@ -292,10 +278,11 @@
                             [value]="totalExportSummary.totalExOrPLAmount"
                             label="Total Purchase Loan Amount"
                             currencySymbol="৳"
-                            [cardFixedColor]="true"
-                            [cardWhiteColor]="false"
-                            cardBackgroundColor="bg-purple-100!"
-                            valueColor="text-purple-900"
+                            [cardFixedColor]="true" 
+                            [cardWhiteColor]="false" 
+                            valueColor="text-amber-800!" 
+                            icon="assessment" 
+                            cardBackgroundColor="bg-amber-600!"
                             (buttonClick)="ExpOrdPlAmtOpenDialog()">
                         </app-dashboard-card>
                         <!-- Total Payment Disbursement Amount Card -->
@@ -304,10 +291,11 @@
                             [value]="totalExportSummary.totalExOrDisbAmount"
                             label="Total Payment Disbursement Amount"
                             [currencySymbol]="getCurrencySymbol()"
-                            [cardFixedColor]="true"
-                            [cardWhiteColor]="false"
-                            cardBackgroundColor="bg-fuchsia-100!"
-                            valueColor="text-fuchsia-900"
+                            [cardFixedColor]="true" 
+                            [cardWhiteColor]="false" 
+                            valueColor="text-indigo-800!" 
+                            icon="assessment" 
+                            cardBackgroundColor="bg-indigo-600!"
                             (buttonClick)="ExpOrdDisbAmtOpenDialog()">
                         </app-dashboard-card>
 
@@ -317,10 +305,11 @@
                             [value]="totalExportSummary.totalExEdfRecAmount"
                             label="Total EDF Received Amount"
                             currencySymbol="৳"
-                            [cardFixedColor]="true"
-                            [cardWhiteColor]="false"
-                            cardBackgroundColor="bg-teal-100!"
-                            valueColor="text-teal-900"
+                            [cardFixedColor]="true" 
+                            [cardWhiteColor]="false" 
+                            valueColor="text-fuchsia-800!" 
+                            icon="assessment" 
+                            cardBackgroundColor="bg-fuchsia-600!"
                             (buttonClick)="ExpOrdEdfRcAmtOpenDialog()">
                         </app-dashboard-card>
                     </div>
@@ -334,19 +323,19 @@
         <!-- Back Button -->
         <div class="sticky top-0 z-10 mb-4 flex items-center">
             <button mat-icon-button (click)="goBackToCards()" class="cursor-pointer">
-                <mat-icon><span class="font-extrabold">arrow_back</span></mat-icon>
+                <mat-icon><span class="font-extrabold !text-[18px]">arrow_back</span></mat-icon>
             </button>
-            <span class="ml-2 text-gray-700">{{ currentDetailData?.title }}</span>
+            <span class="ml-2 text-gray-700 !text-[12px]">{{ currentDetailData?.title }}</span>
         </div>
 
         <!-- Debug info -->
-        <div *ngIf="!currentDetailData" class="text-red-500 p-4">Error: currentDetailData is null</div>
+        <div *ngIf="!currentDetailData" class="text-red-500 p-4 !text-[12px]">Error: currentDetailData is null</div>
 
-        <div *ngIf="currentDetailData" class="bg-white rounded-xl shadow-lg p-6">
+        <div *ngIf="currentDetailData" class="bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100 rounded-xl shadow-lg p-6">
             <!-- Debug data -->
             <div *ngIf="currentDetailData.tableData && currentDetailData.tableData.length === 0" class="text-yellow-600 p-4">No data available</div>
 
-            <app-dynamic-table-dialog [data]="currentDetailData" (onPage)="onPageChangeHandler($event)"> </app-dynamic-table-dialog>
+            <app-dynamic-table-dialog [data]="currentDetailData" (onPage)="onPageChangeHandler($event)" (detailsClick)="openRowDetails($event)"> </app-dynamic-table-dialog>
         </div>
     </div>
 </div>

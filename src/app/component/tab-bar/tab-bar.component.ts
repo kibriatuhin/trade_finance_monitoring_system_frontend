@@ -34,7 +34,7 @@ export class TabBarComponent {
       if (activeTab) {
         this.router.navigateByUrl(activeTab.route);
       } else if (tabs.length === 0) {
-        this.router.navigateByUrl('/blank');
+        this.router.navigateByUrl('/home');
       }
       
       

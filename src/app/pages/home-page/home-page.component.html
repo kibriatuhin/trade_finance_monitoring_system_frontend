@@ -1,0 +1,40 @@
+<div class="p-0 relative overflow-hidden">
+    <div class="p-6">
+
+        <div class="max-w-6xl mx-auto">
+            <div class="overflow-y-auto overscroll-contain pr-2
+                    md:max-h-[calc(2*160px+12px)] mb-10">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-2 auto-rows-[160px]">
+
+                    <app-dashboard-card [value]="0.00" label="Import Volume" [cardFixedColor]="true"
+                        [cardWhiteColor]="false" valueColor="text-emerald-800!" icon="input"
+                        cardBackgroundColor="bg-emerald-600!" (buttonClick)="ImportVolumeDialog()">
+                    </app-dashboard-card>
+                    <app-dashboard-card [value]="0.00" label="Export Volume" [cardFixedColor]="true"
+                        [cardWhiteColor]="false" valueColor="text-lime-800!" icon="local_shipping"
+                        cardBackgroundColor="bg-lime-600!" (buttonClick)="ImportVolumeDialog()">
+                    </app-dashboard-card>
+                    <app-dashboard-card [value]="0.00" label="Inward Remittance Volume" [cardFixedColor]="true"
+                        [cardWhiteColor]="false" valueColor="text-rose-800!" icon="call_received"
+                        cardBackgroundColor="bg-rose-600!" (buttonClick)="ImportVolumeDialog()">
+                    </app-dashboard-card>
+                    <app-dashboard-card [value]="0.00" label="Outward Remittance Volume" [cardFixedColor]="true"
+                        [cardWhiteColor]="false" valueColor="text-fuchsia-800!" icon="call_made"
+                        cardBackgroundColor="bg-fuchsia-600!" (buttonClick)="ImportVolumeDialog()">
+                    </app-dashboard-card>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- <footer class="relative z-10 px-6 py-6 border-t border-white/10 mt-62">
+   <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-center">
+    
+    <p class="text-gray-400 text-sm">
+      © 2025 Team TF, Sonali Intellect Limited. All rights reserved.
+    </p>
+
+    
+  </div> 
+</footer>  -->

@@ -98,7 +98,11 @@ export class BranchDashboardComponent {
             title: {
                 text: 'Overall Branch Status',
                 left: 'center',
-                top: '2%'
+                top: '2%',
+                textStyle: {
+                fontSize: 12,   
+                fontWeight: 'bold'
+            }
             },
             tooltip: {
                 trigger: 'item',
@@ -113,6 +117,7 @@ export class BranchDashboardComponent {
                     name: 'Status',
                     type: 'pie',
                     radius: ['40%', '70%'],
+                    
                     avoidLabelOverlap: false,
                     itemStyle: {
                         borderRadius: 10,
@@ -127,9 +132,10 @@ export class BranchDashboardComponent {
                             return params.value && params.value !== 0 ? params.value : '';
                         },    
                         color: '#fff',
-                        fontSize: 14,
+                        fontSize: 10,
                         fontWeight: 'bold'
                     },
+                    
                     labelLine: {
                         show: false
                     },
@@ -156,7 +162,11 @@ export class BranchDashboardComponent {
         title: {
             text: 'Sign-In Trend Over Time',
             left: 'center',
-            top: '2%'
+            top: '2%',
+            textStyle: {
+                fontSize: 12,   
+                fontWeight: 'bold'
+            }
         },
         tooltip: {
             trigger: 'axis'

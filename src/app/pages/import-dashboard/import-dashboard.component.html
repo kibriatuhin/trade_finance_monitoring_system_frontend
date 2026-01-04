@@ -1,335 +1,240 @@
 <div class="p-0 relative overflow-hidden">
-    <div [@slideIn] *ngIf="viewMode === 'cards'"
-        class="transition-all duration-300 ease-in-out">
-        <div class="flex flex-col items-center justify-center pb-5! pt-3!">
-            <h5 class="font-bold mb-1! text-blue-700!">Import LC Monitoring</h5>
+    <div [@slideIn] *ngIf="viewMode === 'cards'" class="transition-all duration-300 ease-in-out mb-10!">
+        <div class="flex flex-col  items-center justify-center pb-2! pt-3!">
+            <h5 class="font-bold mb-1! text-gray-700! text-xl!">Import LC Monitoring</h5>
         </div>
-        <div class="bg-gray-600! h-px! mb-1"></div>
+        <div class="bg-gray-400! h-px! mb-1"></div>
 
-        <div class="p-6">
+        <div class="p-6 !pb-12">
             <div class="max-w-6xl mx-auto">
-
                 <form [formGroup]="importForm" (ngSubmit)="onSubmit()"
-                    class="flex flex-col md:flex-row items-center pt-5! gap-3 border-1! border-gray-200! rounded-sm! pl-5!  bg-blue-50! mb-10!">
-                    <!--  
-                   Input Field : Financial  Year
-                   Author : Golam Kibria Tuhin
-                   Date : 21-08-2025
-                     -->
-                    <div class>
-                        <label for="fYear"
-                            class="block text-sm font-medium text-gray-900">Financial
-                            Year</label>
-                        <select
-                            id="fYear"
-                            name="year"
-                            (ngModel)="(selectedYear)"
-                            formControlName="year"
-                            #yearSelect
-                            (keydown)="onKeyDownPress($event, 'branchCode', false)"
-                            (change)="onYearChange()"
-                            aria-label="Financial Year"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg px-3 py-2.5 pr-15! focus:outline-none! focus:ring-2! focus:ring-blue-500!  block w-full p-2.5">
-                            <option *ngFor="let year of years" [value]="year">{{
-                                year }}</option>
-                        </select>
-                        <div class="text-red-800 text-xs min-h-[20px]">
-                            @if ((importForm.get('year')?.dirty ||
-                            importForm.get('year')?.touched) &&
-                            importForm.get('year')?.errors?.['required']) {
-                            <span class="text-red-500">Year is required.</span>
-                            }
-                        </div>
-                    </div>
+                    class=" border border-gray-300 rounded-xl px-4!  py-3 md:px-6 mb-4! overflow-hidden!">
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-4 ">
 
-                    <!--  
-                     Input Field : Branch Code
-                     Author : Golam Kibria Tuhin
-                     Date : 21-08-2025
-                  -->
-                    <div class="max-w-md relative" #wrapper>
-                        <label for="branchCode"
-                            class="block text-sm font-medium text-gray-900ss mb-1">
-                            Branch Code </label>
-                        <div class="relative" #wrapper>
-                            <input
-                                id="branchCode"
-                                type="text"
-                                name="branchCode"
-                                formControlName="branchCode"
-                                autocomplete="off"
-                                (keydown)="onKeyDownPress($event, 'currencyCode', false)"
-                                (blur)="onBranchCodeBlur()"
-                                placeholder="Enter Branch"
-                                class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block px-3 py-2.5 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-                                aria-label="Branch Code" />
-                            <div
-                                class="text-xs min-h-[20px]"
-                                [ngClass]="{
-                                    'text-green-600': branchCodeErrorMessage === 'For All Branch',
-                                    'text-red-500': branchCodeErrorMessage && branchCodeErrorMessage !== 'For All Branch'
+                        <!-- Financial Year -->
+                        <div class="md:col-span-2">
+                            <label for="fYear" class="block text-xs font-medium text-gray-700 mb-1">
+                                Financial Year
+                            </label>
+
+                            <select id="fYear" formControlName="year" #yearSelect
+                                (keydown)="onKeyDownPress($event, 'branchCode', false)" (change)="onYearChange()" class="w-full h-9 text-xs bg-white border border-gray-300 rounded-md px-3
+                             focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-300">
+                                <option *ngFor="let year of years" [value]="year">{{ year }}</option>
+                            </select>
+
+                            <!-- reserved space without extra bottom gap -->
+                            <div class=" text-[10px] text-red-600 ">
+                                @if ((importForm.get('year')?.dirty || importForm.get('year')?.touched) &&
+                                importForm.get('year')?.errors?.['required']) {
+                                <span>Year is required.</span>
+                                }
+                            </div>
+                        </div>
+
+                        <!-- Branch Code -->
+                        <div class="md:col-span-3">
+                            <label for="branchCode" class="block text-xs font-medium text-gray-700 mb-1">
+                                Branch Code
+                            </label>
+
+                            <input id="branchCode" type="text" formControlName="branchCode"
+                                (keydown)="onKeyDownPress($event, 'currencyCode', false)" (blur)="onBranchCodeBlur()"
+                                placeholder="Enter branch" class="w-full h-9 text-xs bg-white border border-gray-300 rounded-md px-3
+                   placeholder:text-gray-400
+                   focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-300" />
+
+                            <!-- reserved space; no '.' fake text -->
+                            <div class=" text-[10px]" [ngClass]="{
+                         'text-green-600': branchCodeErrorMessage === 'For All Branch',
+                           'text-red-600': branchCodeErrorMessage && branchCodeErrorMessage !== 'For All Branch'
                                 }">
                                 {{ branchCodeErrorMessage }}
                             </div>
                         </div>
-                    </div>
 
-                    <!--  
-                      Input Field : Currency Code
-                      Author : Golam Kibria Tuhin
-                      Date : 21-08-2025
-                    -->
-                    <div class="max-w-md relative" #wrapper>
-                        <label for="currency"
-                            class="block text-sm font-medium text-gray-900ss mb-1">
-                            Currency Code </label>
-                        <div class="relative" #wrapper>
-                            <input
-                                id="currency"
-                                type="text"
-                                name="currencyCode"
-                                formControlName="currencyCode"
-                                autocomplete="off"
-                                (keydown)="onKeyDownPress($event, 'search', false)"
-                                (input)="toUppercase($event)"
-                                placeholder="Enter Currency Code"
-                                class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block px-3 py-2.5 pr-5 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-                                aria-label="Currency Code" />
-                            <div class="text-red-800 text-xs min-h-[20px]">
-                                @if (currencyErrorMessage) {
-                                <span class="text-red-500">{{
-                                    currencyErrorMessage }}</span>
+                        <!-- Currency Code -->
+                        <div class="md:col-span-3">
+                            <label for="currency" class="block text-xs font-medium text-gray-700 mb-1">
+                                Currency Code
+                            </label>
 
-                                }
+                            <input id="currency" type="text" formControlName="currencyCode"
+                                (keydown)="onKeyDownPress($event, 'search', false)" (input)="toUppercase($event)"
+                                placeholder="Enter currency" class="w-full h-9 text-xs bg-white border border-gray-300 rounded-md px-3
+                                placeholder:text-gray-400
+                               focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-300" />
+
+                            <!-- reserved space without extra bottom gap -->
+                            <div class=" text-[10px] text-red-600">
+                                @if (currencyErrorMessage) { <span>{{ currencyErrorMessage }}</span> }
                             </div>
                         </div>
-                    </div>
 
-                    <div class="max-w-md relative" #wrapper>
-                        <div class="relative" #wrapper>
-                            <button
-                                id="search"
-                                mat-raised-button
-                                class="px-10! py-5.0! mt-1! rounded-[8px]!  focus:outline-none! focus:ring-2! focus:ring-blue-800! focus:text-white! text-white! bg-linear-to-r! from-cyan-700! via-blue-500! to-indigo-600! hover:text-white!"
+                        <!-- Search Button (aligned, no spacer hacks) -->
+                        <div class="md:col-span-2">
+                            <button id="search" type="submit" class="mt-[22px] w-32 h-9 text-xs font-semibold rounded-full
+                               bg-white text-blue-700 border border-gray-300 shadow-sm cursor-pointer
+                                hover:bg-gray-50 active:scale-[0.99]
+                                focus:outline-none focus:ring-2 focus:ring-blue-300"
                                 (keydown)="onKeyDownPress($event, undefined, true)">
                                 Search
                             </button>
+
+                            <!-- keep row height consistent -->
+
                         </div>
+
                     </div>
                 </form>
-                <div class="max-w-6xl mx-auto mb-20">
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
+
+
+                <div class="overflow-y-auto overscroll-contain pr-2
+                    md:max-h-[calc(2*120px+12px)] !mb-2">
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-2 auto-rows-[120px]">
                         <!-- Total Import  L/Cs open-->
 
-                        <app-dashboard-card
-                            [value]="totalImportLcSummary.importLcOpen"
-                            label="Total LC Open"
-                            [currencySymbol]="null"
-                            [cardFixedColor]="true"
-                            [cardWhiteColor]="false"
-                            cardBackgroundColor="bg-blue-100!"
-                            valueColor="text-blue-800"
-                            (buttonClick)="importLcOpenDialog()">
+                        <app-dashboard-card [value]="totalImportLcSummary.importLcOpen" label="Total LC Open"
+                            [cardFixedColor]="true" [cardWhiteColor]="false" valueColor="text-blue-800!"
+                            icon="assessment" cardBackgroundColor="bg-blue-600!" (buttonClick)="importLcOpenDialog()">
                         </app-dashboard-card>
 
                         <!-- Pending L/Cs Card -->
 
-                        <app-dashboard-card
-                            [value]="totalImportLcSummary.impPendingLc"
-                            label="Pending L/Cs"
-                            [currencySymbol]="null"
-                            [cardFixedColor]="true"
-                            [cardWhiteColor]="false"
-                            cardBackgroundColor="bg-red-100!"
-                            valueColor="text-red-800"
+                        <app-dashboard-card [value]="totalImportLcSummary.impPendingLc" label="Pending L/Cs"
+                            [currencySymbol]="null" [cardFixedColor]="true" [cardWhiteColor]="false"
+                            valueColor="text-red-800!" icon="rate_review" cardBackgroundColor="bg-red-600!"
                             (buttonClick)="pendingLcDialog()">
                         </app-dashboard-card>
 
                         <!-- Total import Lc  Volume Card -->
 
-                        <app-dashboard-card
-                            [value]="totalImportLcSummary.importAmount"
-                            label="Total Trade Volume"
-                            [currencySymbol]="getCurrencySymbol()"
-                            valueColor="text-sky-800!"
-                            [cardFixedColor]="true"
-                            [cardWhiteColor]="false"
-                            cardBackgroundColor="bg-sky-100!"
+                        <app-dashboard-card [value]="totalImportLcSummary.importAmount" label="Total Trade Volume"
+                            [currencySymbol]="getCurrencySymbol()" [cardFixedColor]="true" [cardWhiteColor]="false"
+                            valueColor="text-green-800!" icon="assessment" cardBackgroundColor="bg-green-600!"
                             (buttonClick)="importLcAmountDialog()">
                         </app-dashboard-card>
 
                         <!--total bill amount Card -->
-                        <app-dashboard-card
-                            [value]="totalImportLcSummary.importBillAmt"
-                            label="Total Bill Amount"
-                            [currencySymbol]="getCurrencySymbol()"
-                            [cardFixedColor]="true"
-                            [cardWhiteColor]="false"
-                            cardBackgroundColor="bg-orange-100!"
-                            valueColor="text-orange-800!"
+                        <app-dashboard-card [value]="totalImportLcSummary.importBillAmt" label="Total Bill Amount"
+                            [currencySymbol]="getCurrencySymbol()" [cardFixedColor]="true" [cardWhiteColor]="false"
+                            valueColor="text-slate-800!" icon="assessment" cardBackgroundColor="bg-slate-600!"
                             (buttonClick)="importBillAmtDialog()">
                         </app-dashboard-card>
 
                         <!--total Os Liability Card -->
-                        <app-dashboard-card
-                            [value]="totalImportLcSummary.ImportOsLiab"
-                            label="Outstanding Liability"
-                            [currencySymbol]="getCurrencySymbol()"
-                            [cardFixedColor]="true"
-                            [cardWhiteColor]="false"
-                            cardBackgroundColor="bg-red-100!"
-                            valueColor="text-red-800!"
+                        <app-dashboard-card [value]="totalImportLcSummary.ImportOsLiab" label="Outstanding Liability"
+                            [currencySymbol]="getCurrencySymbol()" [cardFixedColor]="true" [cardWhiteColor]="false"
+                            valueColor="text-red-800!" icon="rate_review" cardBackgroundColor="bg-red-600!"
                             (buttonClick)="importLcOsAmtDialog()">
                         </app-dashboard-card>
 
                         <!-- Active Transactions Card -->
-                        <app-dashboard-card
-                            [value]="totalImportLcSummary.importPayment"
-                            label="Total Payment Amount"
-                            [currencySymbol]="getCurrencySymbol()"
-                            [cardFixedColor]="true"
-                            [cardWhiteColor]="false"
-                            cardBackgroundColor="bg-emerald-100!"
-                            valueColor="text-emerald-800!"
+                        <app-dashboard-card [value]="totalImportLcSummary.importPayment" label="Total Payment Amount"
+                            [currencySymbol]="getCurrencySymbol()" [cardFixedColor]="true" [cardWhiteColor]="false"
+                            valueColor="text-teal-800!" icon="assessment" cardBackgroundColor="bg-teal-600!"
                             (buttonClick)="importPayAmtDialog()">
                         </app-dashboard-card>
 
                         <!-- PAD on Import payment -->
-                        <app-dashboard-card
-                            [value]="totalImportLcSummary.importPadAmt"
-                            label="Total PAD Amount on Payment"
-                            [cardFixedColor]="true"
-                            [cardWhiteColor]="false"
-                            currencySymbol="৳"
-                            cardBackgroundColor="bg-teal-100!"
-                            valueColor="text-teal-800!"
-                            (buttonClick)="importPayPadAmtDialog()">
+                        <app-dashboard-card [value]="totalImportLcSummary.importPadAmt"
+                            label="Total PAD Amount on Payment" [cardFixedColor]="true" [cardWhiteColor]="false"
+                            valueColor="text-sky-800!" icon="assessment" cardBackgroundColor="bg-sky-600!"
+                            currencySymbol="৳" (buttonClick)="importPayPadAmtDialog()">
                         </app-dashboard-card>
 
                         <!-- PAD OS on Import payment -->
-                        <app-dashboard-card
-                            [value]="totalImportLcSummary.importPadOs"
-                            label=" PAD O/S on Payment"
-                            [cardFixedColor]="true"
-                            [cardWhiteColor]="false"
-                            currencySymbol="৳"
-                            cardBackgroundColor="bg-red-100!"
-                            valueColor="text-red-800!"
+                        <app-dashboard-card [value]="totalImportLcSummary.importPadOs" label=" PAD O/S on Payment"
+                            currencySymbol="৳" [cardFixedColor]="true" [cardWhiteColor]="false"
+                            valueColor="text-red-800!" icon="rate_review" cardBackgroundColor="bg-red-600!"
                             (buttonClick)="importPayPadOsDialog()">
                         </app-dashboard-card>
 
                         <!-- total  Import Acc Charge Amount -->
-                        <app-dashboard-card
-                            [value]="totalImportLcSummary.impAccChgAmount"
-                            label=" Acceptance Charge"
-                            [cardFixedColor]="true"
-                            [cardWhiteColor]="false"
-                            currencySymbol="৳"
-                            cardBackgroundColor="bg-slate-100!"
-                            valueColor="text-slate-800!"
+                        <app-dashboard-card [value]="totalImportLcSummary.impAccChgAmount" label=" Acceptance Charge"
+                            currencySymbol="৳" [cardFixedColor]="true" [cardWhiteColor]="false"
+                            valueColor="text-emerald-800!" icon="assessment" cardBackgroundColor="bg-emerald-600!"
                             (buttonClick)="importBillAccAmtDialog()">
                         </app-dashboard-card>
 
                         <!-- total LC open Charge  -->
-                        <app-dashboard-card
-                            [value]="totalImportLcSummary.importOpChg"
-                            label="LC Open Charge"
-                            [cardFixedColor]="true"
-                            [cardWhiteColor]="false"
-                            currencySymbol="৳"
-                            cardBackgroundColor="bg-violet-100!"
-                            valueColor="text-violet-800!"
+                        <app-dashboard-card [value]="totalImportLcSummary.importOpChg" label="LC Open Charge"
+                            currencySymbol="৳" [cardFixedColor]="true" [cardWhiteColor]="false"
+                            valueColor="text-lime-800!" icon="assessment" cardBackgroundColor="bg-lime-600!"
                             (buttonClick)="importOpenChgAmtDialog()">
                         </app-dashboard-card>
 
                         <!-- Import Payment Charge -->
 
-                        <app-dashboard-card
-                            [value]="totalImportLcSummary.impPayChgAmount"
-                            label="Charges on Payment"
-                            [cardFixedColor]="true"
-                            [cardWhiteColor]="false"
-                            currencySymbol="৳"
-                            cardBackgroundColor="bg-lime-100!"
-                            valueColor="text-lime-800!"
+                        <app-dashboard-card [value]="totalImportLcSummary.impPayChgAmount" label="Charges on Payment"
+                            currencySymbol="৳" [cardFixedColor]="true" [cardWhiteColor]="false"
+                            valueColor="text-indigo-800!" icon="assessment" cardBackgroundColor="bg-indigo-600!"
                             (buttonClick)="importPayChgAmtDialog()">
                         </app-dashboard-card>
 
                         <!-- Foreign Lc open Vat Card -->
-                        <app-dashboard-card
-                            [value]="totalImportLcSummary.importVatAmount"
-                            label="Total Vat"
-                            [cardFixedColor]="true"
-                            [cardWhiteColor]="false"
-                            currencySymbol="৳"
-                            cardBackgroundColor="bg-rose-100!"
-                            valueColor="text-rose-800!"
+                        <app-dashboard-card [value]="totalImportLcSummary.importVatAmount" label="Total Vat"
+                            currencySymbol="৳" [cardFixedColor]="true" [cardWhiteColor]="false"
+                            valueColor="text-violet-800!" icon="assessment" cardBackgroundColor="bg-violet-600!"
                             (buttonClick)="importVatAmtDialog()">
                         </app-dashboard-card>
 
                         <!-- Foreign Lc open Tax Card -->
-                        <app-dashboard-card
-                            [value]="totalImportLcSummary.importTaxAmount"
-                            label="Total Tax"
-                            [cardFixedColor]="true"
-                            [cardWhiteColor]="false"
-                            currencySymbol="৳"
-                            cardBackgroundColor="bg-rose-100!"
-                            valueColor="text-rose-800!"
+                        <app-dashboard-card [value]="totalImportLcSummary.importTaxAmount" label="Total Tax"
+                            currencySymbol="৳" [cardFixedColor]="true" [cardWhiteColor]="false"
+                            valueColor="text-rose-800!" icon="assessment" cardBackgroundColor="bg-rose-600!"
                             (buttonClick)="importTaxAmtDialog()">
                         </app-dashboard-card>
 
                     </div>
                 </div>
+
+            <div class="flex flex-col lg:flex-row gap-6 !mb-8  ">
+
+            <!-- Bar Chart -->
+            <div class="flex-1 flex justify-start!">
+                <echarts *ngIf="barChartOption" [options]="barChartOption"
+                    class="w-full h-96 bg-white  rounded-xl shadow-sm border border-slate-200 p-4">
+                </echarts>
+            </div>
+
+            <!-- Pie Chart -->
+            <div class="flex-1 flex justify-center">
+                <echarts *ngIf="importStatusPieChartOption" [options]="importStatusPieChartOption"
+                    class="w-full h-96 bg-white rounded-xl shadow-sm border border-slate-200 p-4">
+                </echarts>
+            </div>
+
+        </div>
+
+                
             </div>
         </div>
-        <div class="flex flex-col items-center overflow-auto mb-5 gap-6">
-            <echarts
-              *ngIf="barChartOption"
-              [options]="barChartOption"
-              class="w-full max-w-3xl h-96 "
-              style="min-width: 80%"
-            ></echarts>
-          </div>
-        <div class="flex justify-center overflow-auto mb-5">
-            <echarts
-                *ngIf="importStatusPieChartOption"
-              [options]="importStatusPieChartOption"
-              class="w-full max-w-3xl h-96"
-              style="min-width: 300px"
-            ></echarts>
-          </div>
+
+        
+
 
     </div>
 
+    
     <!-- Details View -->
-    <div [@slideIn] *ngIf="viewMode === 'details'"
-        class="transition-slide slide-in">
+    <div [@slideIn] *ngIf="viewMode === 'details'" class="transition-slide slide-in">
         <!-- Back Button -->
         <div class="sticky top-0 z-10 mb-4 flex items-center">
-            <button mat-icon-button (click)="goBackToCards()"
-                class="cursor-pointer">
-                <mat-icon><span
-                        class="font-extrabold">arrow_back</span></mat-icon>
+            <button mat-icon-button (click)="goBackToCards()" class="cursor-pointer">
+                <mat-icon><span class="font-extrabold !text-[18px]">arrow_back</span></mat-icon>
             </button>
-            <span class="ml-2 text-gray-700">{{ currentDetailData?.title
-                }}</span>
+            <span class="ml-2 text-gray-700 !text-[12px]">{{ currentDetailData?.title }}</span>
         </div>
 
         <!-- Debug info -->
-        <div *ngIf="!currentDetailData" class="text-red-500 p-4">Error:
-            currentDetailData is null</div>
+        <div *ngIf="!currentDetailData" class="text-red-500 p-4 !text-[12px]">Error: currentDetailData is null</div>
 
-        <div *ngIf="currentDetailData"
-            class="bg-white rounded-xl shadow-lg p-6">
+        <div *ngIf="currentDetailData" class="bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100 rounded-xl shadow-lg p-6">
             <!-- Debug data -->
-            <div
-                *ngIf="currentDetailData.tableData && currentDetailData.tableData.length === 0"
-                class="text-yellow-600 p-4">No data available</div>
+            <div *ngIf="currentDetailData.tableData && currentDetailData.tableData.length === 0" class="text-yellow-600 p-4">No data available</div>
 
-            <app-dynamic-table-dialog [data]="currentDetailData"
-                (onPage)="onPageChangeHandler($event)">
-            </app-dynamic-table-dialog>
+            <app-dynamic-table-dialog [data]="currentDetailData" (onPage)="onPageChangeHandler($event)" (detailsClick)="openRowDetails($event)"> </app-dynamic-table-dialog>
         </div>
     </div>
 </div>

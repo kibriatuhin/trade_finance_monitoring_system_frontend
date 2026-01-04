@@ -14,11 +14,11 @@ import { Router } from '@angular/router';
 export class LoginComponent {
 
 
-  showPassword = false;
+//   showPassword = false;
 
-  togglePassword() {
-  this.showPassword = !this.showPassword;
-}
+//   togglePassword() {
+//   this.showPassword = !this.showPassword;
+// }
   constructor(private el: ElementRef,private router: Router){}
 
   /** Reference to the year select input field for initial focus. */
@@ -41,6 +41,17 @@ export class LoginComponent {
         }, 0);
     }
 
+    showPassword = false;
+  passwordValue = '';
+
+  togglePassword() {
+    this.showPassword = !this.showPassword;
+  }
+
+  onPasswordInput() {
+    // password empty হলে auto hide করে দিচ্ছি
+    if (!this.passwordValue?.length) this.showPassword = false;
+  }
 
   /**
      * Handles keydown events for form navigation and input validation:
@@ -142,7 +153,7 @@ export class LoginComponent {
      */
     onSubmit() {
         console.log("Form submitted press done ");
-        this.router.navigate(['/blank']);
+        this.router.navigate(['/home']);
        // this.loadDashboardData();
     }
 

@@ -3,15 +3,19 @@
 }
 
 .filter-input {
-  height: 43px;
+  height: 37px;
   padding: 10px 20px;
-  border: 2px solid #e0e0e0;
+  border: 1px solid #e0e0e0;
   border-radius: 25px;
   outline: none;
   transition: all 0.3s ease;
   width: 100%;
   max-width: 326px;
   font-size: 0.875rem; /* Optional: also reduce input text size */
+}
+.filter-input::placeholder {
+  font-size: 12px !important;   /* 12px */
+  color: #9ca3af;       /* optional */
 }
 .uppercase-input{
   text-transform: uppercase;
@@ -39,9 +43,28 @@
   color: #9ca3af;     /* optional: slightly muted gray */
 }
 
-/* Adjust search help */
-.mat-toolbar {
-  overflow: visible !important; /* default Material toolbar overflow cuts absolute children */
+
+
+
+/* Reduce toolbar height */
+.custom-toolbar {
+  min-height: 44px !important;   /* pick: 40/44/48 */
+  height: 44px !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+/* Material inner container also needs override */
+.custom-toolbar.mat-toolbar-single-row,
+.custom-toolbar .mat-toolbar-row {
+  height: 48px !important;
+  min-height: 48px !important;
+}
+
+/* Optional: reduce vertical padding of toolbar content */
+.custom-toolbar {
+  padding-left: 16px;   /* keep your px-4 feel */
+  padding-right: 16px;
 }
 
 
